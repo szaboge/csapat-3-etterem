@@ -8,6 +8,12 @@ class Login : View() {
         setPrefSize(800.0,600.0)
         button("Press me") {
             action {
+                println("Hello")
+            }
+        }
+        label("Helloo, I'm a label")
+        button("Connect") {
+            action {
                 controller.writeToDb("Hello")
             }
         }

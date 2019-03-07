@@ -6,16 +6,11 @@ class Login : View() {
     private val controller: LoginController by inject()
     override val root = vbox {
         setPrefSize(800.0,600.0)
-        button("Press me") {
+        button("Insert") {
             action {
-                println("Hello")
+                controller.insert()
             }
         }
-        label("Helloo, I'm a label")
-        button("Connect") {
-            action {
-                controller.writeToDb("Hello")
-            }
-        }
+        label("Ez egy label")
     }
 }

@@ -9,7 +9,7 @@ import tornadofx.Controller
 class RestaurantsController: Controller() {
     var restaurants: ObservableList<RestaurantModel> = FXCollections.observableArrayList<RestaurantModel>()
 
-    fun getRestaurants(){
+    fun getRestaurants() {
         restaurants.setAll(DatabaseManager.getRestaurants())
     }
 

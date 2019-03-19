@@ -1,66 +1,47 @@
 package views
 
 import controllers.RestaurantsController
-import globals.Constants
+import globals.OrderService
+import globals.RouteState
+import globals.RouterService
+import javafx.geometry.Insets
+import javafx.geometry.Pos
 import javafx.scene.paint.Color
-import models.RestaurantModel
 import tornadofx.*
 
 class RestaurantsView: View() {
     private val controller: RestaurantsController by inject()
+    init {
+        controller.getRestaurants()
+    }
     override val root = vbox{
-        setPrefSize(Constants.ScreenWidth, Constants.ScreenHeight)
-
+        useMaxWidth = true
+        useMaxHeight = true
         style {
-            backgroundColor += Color.ALICEBLUE
+            backgroundColor += Color.BISQUE
         }
-
-        flowpane {
-            useMaxWidth = true
-            style {
-                backgroundColor += Color.CYAN
-                paddingAll = 10.0
-            }
-            button("Éttermek"){
-                action {
-                    replaceWith<RestaurantsView>()
-                }
-            }
-            button("Ételek"){
-                action {
-                    replaceWith<FoodsView>()
-                }
-            }
-            button("Login"){
-                action {
-                    replaceWith<LoginView>()
-                }
-            }
-        }
-        vbox {
-            useMaxWidth = true
-            style {
-                backgroundColor += Color.BISQUE
-            }
-            label("Hello RestaurantsView")
-            button("refresh Restaurants") {
-                action {
-                    controller.getRestaurants()
-                }
-            }
+        children.bind(controller.restaurants) {
             hbox {
-                val restaurant = textfield()
-                button("insert restaurant") {
-                    action {
-                        controller.insertRestaurant(restaurant.text)
+                vboxConstraints { margin = Insets(6.0) }
+                style {
+                    backgroundColor += Color.ORANGE
+                    backgroundRadius += box(6.px)
+                    paddingAll = 6.0
+                }
+                flowpane {
+                    alignment = Pos.CENTER_LEFT
+                    label(it.name)
+                }
+                flowpane {
+                    alignment = Pos.CENTER_RIGHT
+                    button("Kiválasztás >") {
+                        action {
+                            OrderService.restaurantID = it.restaurantID
+                            RouterService.navigate(RouteState.FOODS)
+                        }
                     }
                 }
-            }
 
-            tableview(controller.restaurants){
-                useMaxWidth = true
-                column("RestaurantID",RestaurantModel::restaurantID)
-                column("Name",RestaurantModel::name)
             }
         }
     }

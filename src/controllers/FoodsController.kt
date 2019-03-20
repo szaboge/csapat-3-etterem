@@ -4,11 +4,11 @@ import database.DatabaseManager
 import globals.OrderService
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
-import models.FoodsModel
+import models.FoodModel
 import tornadofx.Controller
 
 class FoodsController: Controller() {
-    var foods: ObservableList<FoodsModel> = FXCollections.observableArrayList<FoodsModel>()
+    var foods: ObservableList<FoodModel> = FXCollections.observableArrayList<FoodModel>()
     var restaurantID: Int = OrderService.restaurantID
 
     fun getFoods() {

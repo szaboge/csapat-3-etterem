@@ -8,7 +8,8 @@ class RouteItem(val name: String, val view: View, val state: RouteState)
 enum class RouteState {
     FOODS,
     RESTAURANT,
-    LOGIN
+    LOGIN,
+    ORDERS
 }
 
 object RouterService {

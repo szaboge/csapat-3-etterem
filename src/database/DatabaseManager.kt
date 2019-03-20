@@ -1,8 +1,12 @@
 package database
 
 import database.tables.FoodsTable
+import database.tables.OrderFoods
+import database.tables.OrdersTable
 import database.tables.RestaurantsTable
-import models.FoodsModel
+import globals.Basket
+import models.FoodModel
+import models.OrderModel
 import models.RestaurantModel
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.TransactionManager
@@ -29,14 +33,14 @@ object DatabaseManager {
         return res
     }
 
-    fun getFoods(restaurantID: Int): List<FoodsModel> {
-        var result = listOf<FoodsModel>()
+    fun getFoods(restaurantID: Int): List<FoodModel> {
+        var result = listOf<FoodModel>()
         transaction {
             addLogger(StdOutSqlLogger) // log SQL query
             result = FoodsTable.select {
                 FoodsTable.restaurantID.eq(restaurantID)
             }.map{
-                FoodsModel(it[FoodsTable.foodsID],it[FoodsTable.restaurantID],it[FoodsTable.name])
+                FoodModel(it[FoodsTable.foodsID], it[FoodsTable.restaurantID], it[FoodsTable.name])
             }
         }
         return result
@@ -55,5 +59,39 @@ object DatabaseManager {
             }
             commit()
         }
+    }
+
+    fun order() {
+        transaction {
+            addLogger(StdOutSqlLogger) // log SQL query
+            val id = OrdersTable.insert {
+            } get OrdersTable.orderID
+
+            Basket.foods.forEach {
+                insertFood(id, it.foodID)
+            }
+
+            commit()
+        }
+    }
+
+    private fun insertFood(orderID: Int?, foodID: Int){
+        OrderFoods.insert {
+            it[OrderFoods.orderID] = orderID
+            it[OrderFoods.foodID] = foodID
+        }
+    }
+
+    fun getOrders(): List<OrderModel> {
+        var result = listOf<OrderModel>()
+        transaction {
+            addLogger(StdOutSqlLogger) // log SQL query
+            result = OrdersTable.selectAll()
+                .map{
+                    OrderModel(it[OrdersTable.orderID],it[OrdersTable.date])
+                }
+        }
+        println(result.count())
+        return result
     }
 }

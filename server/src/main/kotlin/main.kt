@@ -24,14 +24,12 @@ fun main() {
 
     app.post("insertuser"){
         val token = it.header("token")?: "Nincs token"
-        insertUser(it.header("username")?:"",it.header("password")?:"")
+        val username = it.header("username")?:""
+        val password = it.header("password")?:""
         it.result(token)
     }
 
     app.get("/foods") {
             ctx ->  ctx.result("Jejjj")
     }
-}
-fun insertUser(un: String, pw: String){
-    // adatbazisba szuras
 }

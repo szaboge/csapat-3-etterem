@@ -18,6 +18,11 @@ object DatabaseManager {
     init {
         DatabaseConnector.connect()
         TransactionManager.manager.defaultIsolationLevel = transactionLevel
+
+        transaction {
+            addLogger(StdOutSqlLogger)
+            SchemaUtils.create(RestaurantsTable, FoodsTable, OrdersTable, OrderFoods)
+        }
     }
 
     fun getRestaurants(): List<RestaurantModel> {

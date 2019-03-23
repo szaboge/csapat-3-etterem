@@ -16,7 +16,7 @@ dependencies {
     compile 'io.javalin:javalin:2.7.0'
     compile "org.slf4j:slf4j-simple:1.7.25"
     compile "com.fasterxml.jackson.core:jackson-databind:2.9.8"
-    compile group: 'org.xerial', name: 'sqlite-jdbc', version: '3.7.2'
+    compile "org.xerial:sqlite-jdbc:3.25.2"
 }
 
 compileKotlin {

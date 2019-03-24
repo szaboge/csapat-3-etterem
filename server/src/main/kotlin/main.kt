@@ -1,5 +1,6 @@
 import database.DatabaseManager
 import io.javalin.Javalin
+import io.javalin.core.util.Header
 
 fun main() {
     val app = Javalin.create().start(7000)
@@ -14,7 +15,8 @@ fun main() {
     }
 
     app.get("/restaurants") {
-        ctx ->  ctx.json(DatabaseManager.getRestaurants())
+        it.header(Header.ACCESS_CONTROL_ALLOW_ORIGIN, "*")
+        it.json(DatabaseManager.getRestaurants())
     }
 
     app.get("/restaurants/:id"){

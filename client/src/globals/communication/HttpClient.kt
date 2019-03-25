@@ -1,4 +1,4 @@
-package globals
+package globals.communication
 
 import org.w3c.xhr.XMLHttpRequest
 

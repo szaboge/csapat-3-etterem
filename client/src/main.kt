@@ -1,5 +1,5 @@
-import globals.RouterService
-import globals.Routes
+import globals.ui.RouterService
+import globals.ui.Routes
 import org.w3c.dom.HTMLDivElement
 import views.MenuView
 import kotlin.browser.document

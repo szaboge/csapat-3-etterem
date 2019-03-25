@@ -1,4 +1,4 @@
-package globals
+package globals.ui
 
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement

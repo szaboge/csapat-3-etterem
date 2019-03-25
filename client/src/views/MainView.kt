@@ -1,15 +1,23 @@
 package views
 
 import abstracts.View
-import globals.ElementFactory.Button
-import globals.Routes
+import globals.ui.ElementFactory.div
+import globals.ui.ElementFactory.label
+import globals.ui.Routes
 
 class MainView: View() {
     override val routeType = Routes.MAIN
 
+    override fun onShow() {
+
+    }
+
     override fun render(): View {
-        val button = Button("Éttermek letöltése")
-        root.appendChild(button)
+        root.div {
+            label {
+                textContent = "HelloMainView"
+            }
+        }
         return this
     }
 }

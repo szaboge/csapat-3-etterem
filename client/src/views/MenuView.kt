@@ -1,12 +1,13 @@
 package views
 
 import abstracts.View
-import globals.ElementFactory.Button
-import globals.RouterService
-import globals.Routes
+import globals.ui.ElementFactory.Button
+import globals.ui.RouterService
+import globals.ui.Routes
 
 class MenuView: View() {
     override val routeType: Routes = Routes.MENU
+    override fun onShow() {}
 
     override fun render(): View {
         val button1 = Button("Main")

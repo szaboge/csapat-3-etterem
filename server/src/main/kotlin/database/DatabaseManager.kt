@@ -5,6 +5,7 @@ import database.tables.OrderFoods
 import database.tables.OrdersTable
 import database.tables.RestaurantsTable
 import models.FoodModel
+import models.OrderFoodsModel
 import models.OrderModel
 import models.RestaurantModel
 import org.jetbrains.exposed.sql.*
@@ -93,5 +94,17 @@ object DatabaseManager {
         }
         println(result.count())
         return result
+    }
+
+    fun getFoodsByOrder(orderID: Int?) {
+        var result = listOf<OrderFoodsModel>()
+        transaction {
+            addLogger(StdOutSqlLogger) // log SQL query
+            result = OrderFoods.select {
+                OrderFoods.orderID.eq(orderID)
+            }.map{
+                OrderFoodsModel(it[OrderFoods.orderID], it[OrderFoods.foodID], it[OrderFoods.orderFoodID])
+            }
+        }
     }
 }

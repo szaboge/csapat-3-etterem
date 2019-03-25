@@ -24,14 +24,41 @@ fun main() {
         it.result("A  id: "+it.pathParam("id"))
     }
 
-    app.post("insertuser"){
+    app.post("insert/user"){
         val token = it.header("token")?: "Nincs token"
         val username = it.header("username")?:""
         val password = it.header("password")?:""
         it.result(token)
     }
 
-    app.get("/foods") {
-            ctx ->  ctx.result("Jejjj")
+    app.post("insert/food"){
+        val token = it.header("token")?: "Nincs token"
+        val restaurantID = it.header("token")?: ""
+        val name = it.header("name")?: ""
+        it.result(token)
+    }
+
+    app.post("insert/restaurant"){
+        val token = it.header("token")?: "Nincs token"
+        val name = it.header("name")?: ""
+        DatabaseManager.insertRestaurant(name)
+        it.result(token)
+    }
+
+    app.get("/foods/:id") {
+        it.header(Header.ACCESS_CONTROL_ALLOW_ORIGIN, "*")
+        val restID = it.pathParam("id")
+        it.json(DatabaseManager.getFoods(restID.toInt()))
+    }
+
+    app.get("/orders"){
+        it.header(Header.ACCESS_CONTROL_ALLOW_ORIGIN, "*")
+        it.json(DatabaseManager.getOrders())
+    }
+
+    app.get("/orders/:id"){
+        it.header(Header.ACCESS_CONTROL_ALLOW_ORIGIN, "*")
+        val oID = it.pathParam("id")
+        it.json(DatabaseManager.getFoodsByOrder(oID.toInt()))
     }
 }

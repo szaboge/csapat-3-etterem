@@ -9,7 +9,8 @@ enum class Routes {
     MAIN,
     RESTAURANTS,
     MENU,
-    FOODS
+    FOODS,
+    BASKET
 }
 
 object RouterService {
@@ -22,6 +23,6 @@ object RouterService {
     }
 
     fun navigate(route: Routes) {
-        routes.find { it.routeType == route }?.build()?.show()
+        routes.find { it.routeType == route }?.show()
     }
 }

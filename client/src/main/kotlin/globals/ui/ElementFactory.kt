@@ -33,4 +33,6 @@ object ElementFactory {
         op.invoke(button)
         return button
     }
+
+    fun div() = document.createElement("div") as HTMLDivElement
 }

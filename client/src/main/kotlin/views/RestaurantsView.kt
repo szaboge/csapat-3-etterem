@@ -2,7 +2,7 @@ package views
 
 import ApiService
 import abstracts.View
-import globals.OrderService
+import globals.order.OrderService
 import globals.ui.ElementFactory.button
 import globals.ui.ElementFactory.div
 import globals.ui.ElementFactory.label
@@ -10,39 +10,38 @@ import globals.ui.RouterService
 import globals.ui.Routes
 import models.database.RestaurantModel
 import org.w3c.dom.HTMLDivElement
-import kotlin.browser.document
 
 class RestaurantsView : View() {
+    override val routeType = Routes.RESTAURANTS
     var restaurants: Array<RestaurantModel> = arrayOf()
-    var destination = document.createElement("div") as HTMLDivElement
+    var destination: HTMLDivElement = div()
 
     override fun onShow() {
         ApiService.getRestaurants {
             restaurants = it
-            build()
+            generateRestaurant()
         }
     }
 
-
     override fun render(): View {
         destination = root.div {
-            restaurants.forEach {
-                div {
-                    label(it.name)
-                    button("Kiválasztás") {
-                        addEventListener("click", { _ -> openRestaurant(it.restaurantID) })
-                    }
-                }
-            }
         }
         return this
     }
 
-    fun openRestaurant(id: Int){
+    private fun generateRestaurant() {
+        restaurants.forEach {
+            destination.div {
+                label(it.name)
+                button("Kiválasztás") {
+                    addEventListener("click", { _ -> openRestaurant(it.restaurantID) })
+                }
+            }
+        }
+    }
+
+    private fun openRestaurant(id: Int){
         OrderService.actualRestaurant = id
         RouterService.navigate(Routes.FOODS)
     }
-
-
-    override val routeType = Routes.RESTAURANTS
 }

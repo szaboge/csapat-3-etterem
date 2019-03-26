@@ -19,7 +19,9 @@ abstract class View() {
         Presenter.present(root)
         onShow()
     }
+
     fun build(): View {
+        println("build started")
         root = document.createElement("div") as HTMLDivElement
         render()
         return this

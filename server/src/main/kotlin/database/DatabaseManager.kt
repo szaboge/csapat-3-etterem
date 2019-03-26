@@ -45,7 +45,7 @@ object DatabaseManager {
             result = FoodsTable.select {
                 FoodsTable.restaurantID.eq(restaurantID)
             }.map{
-                FoodModel(it[FoodsTable.foodsID], it[FoodsTable.restaurantID], it[FoodsTable.name])
+                FoodModel(it[FoodsTable.foodsID], it[FoodsTable.restaurantID], it[FoodsTable.name], it[FoodsTable.count])
             }
         }
         return result
@@ -72,16 +72,17 @@ object DatabaseManager {
             val id = OrdersTable.insert {
             } get OrdersTable.orderID
             list.forEach {
-                insertFood(id, it.foodID)
+                insertFood(id, it.foodID, it.count)
             }
             commit()
         }
     }
 
-    private fun insertFood(orderID: Int?, foodID: Int){
+    private fun insertFood(orderID: Int?, foodID: Int, count: Int){
         OrderFoods.insert {
             it[OrderFoods.orderID] = orderID
             it[OrderFoods.foodID] = foodID
+            it[OrderFoods.count] = count
         }
     }
 
@@ -97,15 +98,22 @@ object DatabaseManager {
         return result
     }
 
-    fun getFoodsByOrder(orderID: Int?) {
-        var result = listOf<OrderFoodsModel>()
+    fun getFoodsByOrder(orderID: Int?): List<Pair<Int, String>> {
+        var result:  List<Pair<Int, String>> = emptyList()
         transaction {
             addLogger(StdOutSqlLogger) // log SQL query
-            result = OrderFoods.select {
+            result = (FoodsTable innerJoin OrderFoods)
+                .slice(FoodsTable.name, FoodsTable.foodsID)
+                .select{ FoodsTable.foodsID eq OrderFoods.foodID}
+                .map {
+                    Pair(it[FoodsTable.foodsID], it[FoodsTable.name])
+                }
+            /*result = OrderFoods.select {
                 OrderFoods.orderID.eq(orderID)
             }.map{
-                OrderFoodsModel(it[OrderFoods.orderID], it[OrderFoods.foodID], it[OrderFoods.orderFoodID])
-            }
+                OrderFoodsModel(it[OrderFoods.orderID], it[OrderFoods.foodID], it[OrderFoods.orderFoodID], it[OrderFoods.count])
+            }*/
         }
+        return result
     }
 }

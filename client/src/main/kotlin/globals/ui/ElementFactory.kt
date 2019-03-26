@@ -34,5 +34,13 @@ object ElementFactory {
         return button
     }
 
+    fun HTMLElement.img(src: String, op: HTMLImageElement.() -> Unit = {}): HTMLImageElement {
+        val item = document.createElement("img") as HTMLImageElement
+        item.src = src
+        this.appendChild(item)
+        op.invoke(item)
+        return item
+    }
+
     fun div() = document.createElement("div") as HTMLDivElement
 }

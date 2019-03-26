@@ -2,12 +2,12 @@ package globals.ui
 
 import abstracts.View
 import views.FoodsView
-import views.MainView
+import views.HomeView
 import views.OrdersView
 import views.RestaurantsView
 
 enum class Routes {
-    MAIN,
+    HOME,
     RESTAURANTS,
     MENU,
     FOODS,
@@ -18,7 +18,7 @@ object RouterService {
     private val routes: MutableList<View> = mutableListOf()
 
     init {
-        routes.add(MainView())
+        routes.add(HomeView())
         routes.add(RestaurantsView())
         routes.add(FoodsView())
         routes.add(OrdersView())

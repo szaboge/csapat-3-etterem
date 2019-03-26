@@ -1,10 +1,23 @@
+@font-face {
+    font-family: RobotoRegular;
+    src: url(font/Roboto-Regular.ttf);
+}
+
 body {
+    font-family: RobotoRegular, sans-serif;
     padding: 0;
     margin: 0;
-    background-color: black;
+    background-color: #212121;
     height: 100vh;
     width: 100vw;
     color: white;
+}
+button, button:active, button:focus {
+    outline:none;
+}
+
+.root {
+    height: 95%
 }
 
 .menu {
@@ -19,14 +32,44 @@ body {
 .menu-item {
     color: white;
     background-color: black;
-    border: 0;
+    border: 0 solid black;
+    border-bottom: 2px solid black;
     padding: 15px;
     font-weight: bold;
     font-size: 1.125rem;
+    transition: color 400ms ease-in, border-bottom-color 400ms ease-in;
+    cursor: pointer;
 }
 
 .menu-item:hover {
-    background-color: #303030;
+    color: #ef6c00;
+    border-bottom-color: #ef6c00;
+    transition: color 300ms ease-in, border-bottom-color 300ms ease-in;
+}
+
+.restaurants-root {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.restaurants-item {
+    color: white;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    margin: 6px;
+    background-color: #424242;
+    border-radius: 4px;
+    transition: background-color 400ms ease-in;
+    max-width: 50%;
+    width: 100%;
+}
+.restaurants-item:hover {
+    background-color: #616161;
+    transition: background-color 200ms ease-in;
 }
 
 .home {
@@ -37,3 +80,92 @@ body {
 .home-image{
     width: 100%;
 }
+
+.default-button {
+    border: 0;
+    text-transform: uppercase;
+    padding: 6px 12px;
+    color: white;
+    background-color: #ef6c00;
+    border-radius: 30px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 400ms ease-in, box-shadow 300ms ease-in-out;
+}
+
+.default-button:hover {
+    background-color: #e65100;
+    transition: background-color 300ms ease-in-out, box-shadow 300ms ease-in-out;
+    box-shadow: 0 0 8px 0 rgba(0,0,0,0.4);
+}
+
+.foods-root {
+    display: flex;
+    flex-direction: row;
+}
+
+.food {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.food-item {
+    color: white;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    margin: 6px;
+    background-color: #424242;
+    border-radius: 4px;
+    transition: background-color 400ms ease-in;
+    max-width: 60%;
+    width: 100%;
+}
+
+.foods-label-wrapper {
+    max-width: 60%;
+    width: 100%;
+    margin: 12px 0;
+}
+.basket {
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+}
+
+.basket-item-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.basket-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    margin: 6px;
+    background-color: #424242;
+    border-radius: 4px;
+    transition: background-color 400ms ease-in;
+    max-width: 90%;
+    width: 100%;
+}
+
+.title {
+    text-transform: uppercase;
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 12px 0;
+}
+
+.order-button-wrapper {
+    display: flex;
+    justify-content: center;
+}
+

@@ -33,6 +33,13 @@ object ElementFactory {
         op.invoke(button)
         return button
     }
+    fun HTMLElement.span(text: String = "", op: HTMLSpanElement.() -> Unit = {}): HTMLSpanElement {
+        val item = document.createElement("span") as HTMLSpanElement
+        item.textContent = text
+        this.appendChild(item)
+        op.invoke(item)
+        return item
+    }
 
     fun HTMLElement.img(src: String, op: HTMLImageElement.() -> Unit = {}): HTMLImageElement {
         val item = document.createElement("img") as HTMLImageElement

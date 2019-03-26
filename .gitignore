@@ -71,6 +71,10 @@ cmake-build-*/
 # IntelliJ
 out/
 build/
+!client/build/classes/kotlin/main/client.js
+!client/build/classes/kotlin/main/client.meta.js
+!client/build/classes/kotlin/main/lib/kotlin.js
+!client/build/classes/kotlin/main/lib/kotlin.meta.js
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/

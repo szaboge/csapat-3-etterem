@@ -10,6 +10,7 @@ import globals.ui.ElementFactory.label
 import globals.ui.Routes
 import models.database.FoodModel
 import org.w3c.dom.HTMLDivElement
+import kotlin.dom.addClass
 
 class FoodsView: View() {
     override val routeType: Routes = Routes.FOODS
@@ -25,16 +26,32 @@ class FoodsView: View() {
     }
 
     override fun render(): View {
+        root.addClass("foods-root")
         foodDest = root.div {
+            addClass("food")
+            div {
+                addClass("foods-label-wrapper")
+                label("FOODS") {
+                    addClass("title")
+                }
+            }
         }
         root.div{
-            label("Kosár")
-            basketDest = div {
+            label("BASKET") {
+                addClass("title")
             }
-            button("Rendelés") {
-                addEventListener("click", {
-                    OrderService.makeOrder()
-                })
+            addClass("basket")
+            basketDest = div {
+                addClass("basket-item-container")
+            }
+            div {
+                addClass("order-button-wrapper")
+                button("ORDER") {
+                    addClass("default-button")
+                    addEventListener("click", {
+                        OrderService.makeOrder()
+                    })
+                }
             }
         }
         return this
@@ -43,8 +60,10 @@ class FoodsView: View() {
     private fun generateFoods() {
         foods.forEach {
             foodDest.div {
+                addClass("food-item")
                 label(it.name)
-                button("Kosárba") {
+                button("TO BASKET") {
+                    addClass("default-button")
                     addEventListener("click", {event -> addToBasket(it)})
                 }
             }
@@ -54,6 +73,7 @@ class FoodsView: View() {
         while (basketDest.firstChild != null) basketDest.removeChild(basketDest.firstChild!!)
         Basket.basket.forEach {
             basketDest.div {
+                addClass("basket-item")
                 label(it.name)
             }
         }

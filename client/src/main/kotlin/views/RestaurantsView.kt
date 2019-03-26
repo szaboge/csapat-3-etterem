@@ -10,6 +10,7 @@ import globals.ui.RouterService
 import globals.ui.Routes
 import models.database.RestaurantModel
 import org.w3c.dom.HTMLDivElement
+import kotlin.dom.addClass
 
 class RestaurantsView : View() {
     override val routeType = Routes.RESTAURANTS
@@ -24,16 +25,17 @@ class RestaurantsView : View() {
     }
 
     override fun render(): View {
-        destination = root.div {
-        }
+        root.addClass("restaurants-root")
         return this
     }
 
     private fun generateRestaurant() {
         restaurants.forEach {
-            destination.div {
+            root.div {
+                addClass("restaurants-item")
                 label(it.name)
-                button("Kiválasztás") {
+                button("select") {
+                    addClass("default-button")
                     addEventListener("click", { _ -> openRestaurant(it.restaurantID) })
                 }
             }

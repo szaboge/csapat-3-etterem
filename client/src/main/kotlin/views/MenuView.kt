@@ -2,7 +2,7 @@ package views
 
 import abstracts.View
 import globals.ui.ElementFactory.button
-import globals.ui.ElementFactory.div
+import globals.ui.ElementFactory.span
 import globals.ui.RouterService
 import globals.ui.Routes
 import kotlin.dom.addClass

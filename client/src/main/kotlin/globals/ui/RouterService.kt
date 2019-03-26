@@ -3,6 +3,7 @@ package globals.ui
 import abstracts.View
 import views.FoodsView
 import views.MainView
+import views.OrdersView
 import views.RestaurantsView
 
 enum class Routes {
@@ -10,7 +11,7 @@ enum class Routes {
     RESTAURANTS,
     MENU,
     FOODS,
-    BASKET
+    ORDERS
 }
 
 object RouterService {
@@ -20,6 +21,7 @@ object RouterService {
         routes.add(MainView())
         routes.add(RestaurantsView())
         routes.add(FoodsView())
+        routes.add(OrdersView())
     }
 
     fun navigate(route: Routes) {

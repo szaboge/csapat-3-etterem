@@ -15,9 +15,16 @@ object HttpClient {
         xmlHttp.open("GET", makeUrl(url))
         xmlHttp.onload = {
             callback.invoke(xmlHttp.responseText)
-           /* if (xmlHttp.readyState == 4.toShort() && xmlHttp.status == 200.toShort()) {
-            }*/
         }
         xmlHttp.send()
     }
+    fun post(url: String, obj: Any, callback: (String) -> Unit) {
+        val xmlHttp = XMLHttpRequest()
+        xmlHttp.open("POST", makeUrl(url))
+        xmlHttp.onload = {
+            callback.invoke(xmlHttp.responseText)
+        }
+        xmlHttp.send(JSON.stringify(obj))
+    }
+
 }

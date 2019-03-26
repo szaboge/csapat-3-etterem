@@ -1,5 +1,6 @@
 import globals.communication.HttpClient
 import models.database.FoodModel
+import models.database.OrderModel
 import models.database.RestaurantModel
 
 object ApiService {
@@ -13,6 +14,17 @@ object ApiService {
         HttpClient.get("restaurants/$restaurantID") {
             val foods = JSON.parse<Array<FoodModel>>(it)
             callback.invoke(foods)
+        }
+    }
+    fun makeOrder(obj: Any,callback: (String) -> Unit) {
+        HttpClient.post("makeorder", obj) {
+            callback.invoke(it)
+        }
+    }
+    fun getOrders(callback: (Array<OrderModel>) -> Unit) {
+        HttpClient.get("orders") {
+            val orders = JSON.parse<Array<OrderModel>>(it)
+            callback.invoke(orders)
         }
     }
 }

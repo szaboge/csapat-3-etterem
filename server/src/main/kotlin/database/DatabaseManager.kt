@@ -1,13 +1,13 @@
 package database
 
-import database.tables.FoodsTable
-import database.tables.OrderFoods
-import database.tables.OrdersTable
-import database.tables.RestaurantsTable
 import models.FoodModel
 import models.OrderFoodsModel
 import models.OrderModel
 import models.RestaurantModel
+import database.tables.FoodsTable
+import database.tables.OrderFoods
+import database.tables.OrdersTable
+import database.tables.RestaurantsTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -66,12 +66,14 @@ object DatabaseManager {
         }
     }
 
-    fun order() {
+    fun order(list: Array<FoodModel>) {
         transaction {
             addLogger(StdOutSqlLogger) // log SQL query
             val id = OrdersTable.insert {
             } get OrdersTable.orderID
-
+            list.forEach {
+                insertFood(id, it.foodID)
+            }
             commit()
         }
     }
@@ -92,7 +94,6 @@ object DatabaseManager {
                     OrderModel(it[OrdersTable.orderID],it[OrdersTable.date])
                 }
         }
-        println(result.count())
         return result
     }
 

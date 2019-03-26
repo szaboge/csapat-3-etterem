@@ -14,7 +14,8 @@ import org.w3c.dom.HTMLDivElement
 class FoodsView: View() {
     override val routeType: Routes = Routes.FOODS
     var foods: Array<FoodModel> = arrayOf()
-    var destination: HTMLDivElement = div()
+    var foodDest: HTMLDivElement = div()
+    var basketDest: HTMLDivElement = div()
 
     override fun onShow() {
         ApiService.getFoods(OrderService.actualRestaurant) {
@@ -24,17 +25,24 @@ class FoodsView: View() {
     }
 
     override fun render(): View {
-        destination = root.div {
+        foodDest = root.div {
         }
         root.div{
-            label("Basket")
+            label("Kosár")
+            basketDest = div {
+            }
+            button("Rendelés") {
+                addEventListener("click", {
+                    OrderService.makeOrder()
+                })
+            }
         }
         return this
     }
 
     private fun generateFoods() {
         foods.forEach {
-            destination.div {
+            foodDest.div {
                 label(it.name)
                 button("Kosárba") {
                     addEventListener("click", {event -> addToBasket(it)})
@@ -42,8 +50,17 @@ class FoodsView: View() {
             }
         }
     }
+    private fun generateBasket() {
+        while (basketDest.firstChild != null) basketDest.removeChild(basketDest.firstChild!!)
+        Basket.basket.forEach {
+            basketDest.div {
+                label(it.name)
+            }
+        }
+    }
 
-    fun addToBasket(food: FoodModel) {
+    private fun addToBasket(food: FoodModel) {
         Basket.addFood(food)
+        generateBasket()
     }
 }

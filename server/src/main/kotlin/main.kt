@@ -1,27 +1,22 @@
+import com.beust.klaxon.Klaxon
 import database.DatabaseManager
+import models.FoodModel
 import io.javalin.Javalin
 import io.javalin.core.util.Header
 
+
 fun main() {
     val app = Javalin.create().start(7000)
-    app.get("/") { ctx -> ctx.result("Hello World") }
-
-    app.error(404) { ctx ->
-        ctx.result("Nincs ilyen oldal")
-    }
-
-    app.error(403) { ctx ->
-        ctx.result("Nincs hozzá jogod")
-    }
 
     app.get("/restaurants") {
         it.header(Header.ACCESS_CONTROL_ALLOW_ORIGIN, "*")
         it.json(DatabaseManager.getRestaurants())
     }
 
-    app.get("/restaurants/:id"){
-        it.status(403)
-        it.result("A  id: "+it.pathParam("id"))
+    app.get("/restaurants/:id") {
+        it.header(Header.ACCESS_CONTROL_ALLOW_ORIGIN, "*")
+        val restID = it.pathParam("id")
+        it.json(DatabaseManager.getFoods(restID.toInt()))
     }
 
     app.post("insert/user"){
@@ -45,10 +40,13 @@ fun main() {
         it.result(token)
     }
 
-    app.get("/foods/:id") {
+    app.post("/makeorder"){
         it.header(Header.ACCESS_CONTROL_ALLOW_ORIGIN, "*")
-        val restID = it.pathParam("id")
-        it.json(DatabaseManager.getFoods(restID.toInt()))
+        val body = Klaxon().parse<Array<FoodModel>>(it.body())
+        when (body) {
+            null -> it.status(400)
+            else -> DatabaseManager.order(body)
+        }
     }
 
     app.get("/orders"){

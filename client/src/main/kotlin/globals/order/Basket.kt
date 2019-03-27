@@ -6,13 +6,13 @@ object Basket {
     var basket: MutableList<Triple<Int, FoodModel, Int>> = mutableListOf()
 
     fun addFood(food: FoodModel) {
-        var filteredList = basket.filter { it.first == food.foodID }
+        val filteredList = basket.filter { it.first == food.foodID }
         if (filteredList.count() > 0) {
             val oldTriple = filteredList[0]
             val newTriple = oldTriple.copy(third = oldTriple.third+1)
             basket.remove(oldTriple)
             basket.add(newTriple)
-        }else {
+        } else {
             basket.add(Triple(food.foodID, food, 1))
         }
     }

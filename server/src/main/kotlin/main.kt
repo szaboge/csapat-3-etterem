@@ -1,8 +1,8 @@
-import com.beust.klaxon.Klaxon
 import database.DatabaseManager
+import globals.Endpoint
 import io.javalin.Javalin
 import io.javalin.core.util.Header
-import models.FoodModel
+import java.util.*
 
 
 fun main() {
@@ -26,22 +26,20 @@ fun main() {
         it.result(token)
     }
 
-    app.post("/makeorder"){
-        it.header(Header.ACCESS_CONTROL_ALLOW_ORIGIN, "*")
-        val body = Klaxon().parse<Array<FoodModel>>(it.body())
+    app.post("/order"){
+        Endpoint.order(it)
+    }
 
-
-        /*val result: Array<FoodModel>
-        va*r i: Int = 0
-        for(a in it.body()){
-            result[i] = Klaxon().parse<FoodModel>(a)
-            i.inc()
-        }*/
-
-        when (body) {
-            null -> it.status(400)
-            else -> DatabaseManager.order(body)
+    app.get("/authentication") {
+        try {
+            val cookie: String = it.cookieStore("token")
+            it.result(cookie)
+        }catch (e: Exception) {
+            it.status(401)
         }
+    }
+    app.get("/login") {
+        it.cookieStore("token", UUID.randomUUID().toString())
     }
 
     app.get("/orders"){

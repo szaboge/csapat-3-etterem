@@ -1,9 +1,8 @@
 package database
 
-import models.FoodModel
-import models.OrderFoodsModel
-import models.OrderModel
-import models.RestaurantModel
+import models.database.FoodModel
+import models.database.OrderModel
+import models.database.RestaurantModel
 import database.tables.FoodsTable
 import database.tables.OrderFoods
 import database.tables.OrdersTable
@@ -35,7 +34,7 @@ object DatabaseManager {
             addLogger(StdOutSqlLogger) // log SQL query
             res = RestaurantsTable.selectAll()
                 .map{
-                    RestaurantModel(it[RestaurantsTable.restaurantID],it[RestaurantsTable.name])
+                    RestaurantModel(it[RestaurantsTable.restaurantID], it[RestaurantsTable.name])
                 }
         }
         return res
@@ -96,7 +95,7 @@ object DatabaseManager {
             addLogger(StdOutSqlLogger) // log SQL query
             result = OrdersTable.selectAll()
                 .map{
-                    OrderModel(it[OrdersTable.orderID],fmt.print(it[OrdersTable.date]))
+                    OrderModel(it[OrdersTable.orderID], fmt.print(it[OrdersTable.date]))
                 }
         }
         return result

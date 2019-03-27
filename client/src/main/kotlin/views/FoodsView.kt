@@ -47,7 +47,7 @@ class FoodsView: View() {
             }
             div {
                 addClass("order-button-wrapper")
-                button("ORDER") {
+                button("Proceed to Checkout") {
                     addClass("default-button")
                     addEventListener("click", {
                         OrderService.makeOrder()
@@ -63,7 +63,7 @@ class FoodsView: View() {
             foodDest.div {
                 addClass("food-item")
                 label(it.name)
-                button("TO BASKET") {
+                button("Add to Basket") {
                     addClass("default-button")
                     addEventListener("click", {event -> addToBasket(it)})
                 }

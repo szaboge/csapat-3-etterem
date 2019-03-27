@@ -19,7 +19,7 @@ class MenuView: View() {
                 RouterService.navigate(Routes.HOME)
             })
         }
-        root.button("Restaurant") {
+        root.button("Restaurants") {
             addClass("menu-item")
             addEventListener("click", {
                 RouterService.navigate(Routes.RESTAURANTS)

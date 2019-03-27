@@ -12,6 +12,9 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.sql.Connection
+import org.joda.time.format.DateTimeFormat
+
+
 
 object DatabaseManager {
     private const val transactionLevel = Connection.TRANSACTION_READ_UNCOMMITTED
@@ -45,7 +48,7 @@ object DatabaseManager {
             result = FoodsTable.select {
                 FoodsTable.restaurantID.eq(restaurantID)
             }.map{
-                FoodModel(it[FoodsTable.foodsID], it[FoodsTable.restaurantID], it[FoodsTable.name], it[FoodsTable.count])
+                FoodModel(it[FoodsTable.foodsID], it[FoodsTable.restaurantID], it[FoodsTable.name])
             }
         }
         return result
@@ -72,7 +75,7 @@ object DatabaseManager {
             val id = OrdersTable.insert {
             } get OrdersTable.orderID
             list.forEach {
-                insertFood(id, it.foodID, it.count)
+                //insertFood(id, it.foodID)
             }
             commit()
         }
@@ -87,12 +90,13 @@ object DatabaseManager {
     }
 
     fun getOrders(): List<OrderModel> {
+        val fmt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
         var result = listOf<OrderModel>()
         transaction {
             addLogger(StdOutSqlLogger) // log SQL query
             result = OrdersTable.selectAll()
                 .map{
-                    OrderModel(it[OrdersTable.orderID],it[OrdersTable.date])
+                    OrderModel(it[OrdersTable.orderID],fmt.print(it[OrdersTable.date]))
                 }
         }
         return result

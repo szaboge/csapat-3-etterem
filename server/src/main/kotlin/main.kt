@@ -1,11 +1,8 @@
-import com.beust.klaxon.Json
-import com.beust.klaxon.JsonArray
-import com.beust.klaxon.JsonObject
 import com.beust.klaxon.Klaxon
 import database.DatabaseManager
-import models.FoodModel
 import io.javalin.Javalin
 import io.javalin.core.util.Header
+import models.FoodModel
 
 
 fun main() {
@@ -20,20 +17,6 @@ fun main() {
         it.header(Header.ACCESS_CONTROL_ALLOW_ORIGIN, "*")
         val restID = it.pathParam("id")
         it.json(DatabaseManager.getFoods(restID.toInt()))
-    }
-
-    app.post("insert/user"){
-        val token = it.header("token")?: "Nincs token"
-        val username = it.header("username")?:""
-        val password = it.header("password")?:""
-        it.result(token)
-    }
-
-    app.post("insert/food"){
-        val token = it.header("token")?: "Nincs token"
-        val restaurantID = it.header("token")?: ""
-        val name = it.header("name")?: ""
-        it.result(token)
     }
 
     app.post("insert/restaurant"){

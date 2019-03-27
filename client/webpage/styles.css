@@ -17,7 +17,7 @@ button, button:active, button:focus {
 }
 
 .root {
-    height: 95%
+    height: 93%
 }
 
 .menu {
@@ -26,7 +26,7 @@ button, button:active, button:focus {
     justify-content: center;
     background-color: black;
     width: 100%;
-    height: 5%;
+    height: 7%;
 }
 
 .menu-item {
@@ -73,7 +73,7 @@ button, button:active, button:focus {
 }
 
 .home {
-    height: 95%;
+    height: 100%;
     width: 100%;
     overflow: hidden;
 }

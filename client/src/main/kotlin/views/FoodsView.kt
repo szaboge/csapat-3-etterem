@@ -19,6 +19,7 @@ class FoodsView: View() {
     var basketDest: HTMLDivElement = div()
 
     override fun onShow() {
+        Basket.clear()
         ApiService.getFoods(OrderService.actualRestaurant) {
             foods = it
             generateFoods()
@@ -71,10 +72,11 @@ class FoodsView: View() {
     }
     private fun generateBasket() {
         while (basketDest.firstChild != null) basketDest.removeChild(basketDest.firstChild!!)
-        Basket.basket.forEach {
+        Basket.getFoods().forEach {
             basketDest.div {
                 addClass("basket-item")
-                label(it.name)
+                label(it.second.name)
+                label(it.third.toString())
             }
         }
     }

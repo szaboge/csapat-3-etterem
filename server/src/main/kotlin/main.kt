@@ -33,11 +33,14 @@ fun main() {
             get(Endpoints::login, roles(ApiRole.ANYONE))
         }
         path("order") {
-            post(Endpoints::order, roles(ApiRole.ANYONE))
+            //post(Endpoints::order, roles(ApiRole.ANYONE))
         }
         path("insert") {
             path("restaurant") {
                 post(Endpoints::insertRestaurant, roles(ApiRole.ANYONE))
+            }
+            path("order"){
+                post(Endpoints::insertOrder, roles(ApiRole.ANYONE))
             }
         }
     }

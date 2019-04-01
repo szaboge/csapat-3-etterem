@@ -7,6 +7,12 @@ import models.communication.UserByTokenModel
 import models.database.FoodModel
 import models.database.OrderModel
 import models.database.RestaurantModel
+import database.tables.FoodsTable
+import database.tables.FoodsOfOrderTable
+import database.tables.OrdersTable
+import database.tables.RestaurantsTable
+import models.communication.MakeOrderModel
+import models.database.FoodsOfOrderModel
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -21,8 +27,8 @@ object DatabaseManager {
 
         transaction {
             addLogger(StdOutSqlLogger)
-            SchemaUtils.create(RestaurantsTable, FoodsTable, OrdersTable, OrderFoods, SessionsTable, UsersTable)
-        }
+            SchemaUtils.create(RestaurantsTable, FoodsTable, OrdersTable, FoodsOfOrderTable, SessionsTable, UsersTable)
+
     }
 
     fun getRestaurants(): List<RestaurantModel> {
@@ -65,23 +71,26 @@ object DatabaseManager {
         }
     }
 
-    fun order(list: Array<FoodModel>) {
+    fun insertOrder(myModel: MakeOrderModel) {
         transaction {
             addLogger(StdOutSqlLogger) // log SQL query
+            val list = myModel.foods
             val id = OrdersTable.insert {
+                it[OrdersTable.name] = myModel.name
+                it[OrdersTable.phone] = myModel.phone
             } get OrdersTable.orderID
             list.forEach {
-                //insertFood(id, it.foodID)
+                insertFood(id, it.foodID, it.count)
             }
             commit()
         }
     }
 
     private fun insertFood(orderID: Int?, foodID: Int, count: Int){
-        OrderFoods.insert {
-            it[OrderFoods.orderID] = orderID
-            it[OrderFoods.foodID] = foodID
-            it[OrderFoods.count] = count
+        FoodsOfOrderTable.insert {
+            it[FoodsOfOrderTable.orderID] = orderID
+            it[FoodsOfOrderTable.foodID] = foodID
+            it[FoodsOfOrderTable.count] = count
         }
     }
 
@@ -92,7 +101,7 @@ object DatabaseManager {
             addLogger(StdOutSqlLogger) // log SQL query
             result = OrdersTable.selectAll()
                 .map{
-                    OrderModel(it[OrdersTable.orderID], it[OrdersTable.date].format())
+                    OrderModel(it[OrdersTable.orderID], it[OrdersTable.date].format(), it[OrdersTable.name], it[OrdersTable.phone])
                 }
         }
         return result
@@ -102,16 +111,16 @@ object DatabaseManager {
         var result:  List<Pair<Int, String>> = emptyList()
         transaction {
             addLogger(StdOutSqlLogger) // log SQL query
-            result = (FoodsTable innerJoin OrderFoods)
+            result = (FoodsTable innerJoin FoodsOfOrderTable)
                 .slice(FoodsTable.name, FoodsTable.foodsID)
-                .select{ FoodsTable.foodsID eq OrderFoods.foodID}
+                .select{ FoodsTable.foodsID eq FoodsOfOrderTable.foodID}
                 .map {
                     Pair(it[FoodsTable.foodsID], it[FoodsTable.name])
                 }
-            /*result = OrderFoods.select {
-                OrderFoods.orderID.eq(orderID)
+            /*result = FoodsOfOrderTable.select {
+                FoodsOfOrderTable.orderID.eq(orderID)
             }.map{
-                OrderFoodsModel(it[OrderFoods.orderID], it[OrderFoods.foodID], it[OrderFoods.orderFoodID], it[OrderFoods.count])
+                FoodsOfOrderModel(it[FoodsOfOrderTable.orderID], it[FoodsOfOrderTable.foodID], it[FoodsOfOrderTable.orderFoodID], it[FoodsOfOrderTable.count])
             }*/
         }
         return result

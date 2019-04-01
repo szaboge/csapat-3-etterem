@@ -18,7 +18,7 @@ object ApiService {
     }
     fun makeOrder(obj: Any,callback: (String) -> Unit) {
         println(JSON.stringify(obj))
-        HttpClient.post("order", obj) {
+        HttpClient.post("insert/order", obj) {
             callback.invoke(it)
         }
     }

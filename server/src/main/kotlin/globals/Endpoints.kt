@@ -6,27 +6,14 @@ import com.beust.klaxon.JsonObject
 import com.beust.klaxon.Klaxon
 import database.DatabaseManager
 import io.javalin.Context
+import models.communication.FoodsCountModel
+import models.communication.MakeOrderModel
 import java.io.StringReader
 import java.util.*
 
-object Endpoints {
+//fun Any?.toInt(): Int = this.toString().toInt()
 
-    fun order(ctx: Context) {
-        val body = ctx.body()
-        try {
-            val json = Klaxon().parseJsonObject(StringReader(body))
-            val array = json["foods"] as JsonArray<*>
-            array.forEach { food ->
-                if (food is JsonObject) {
-                    println(food["name"])
-                    println(food["count"])
-                }
-            }
-            ctx.status(200)
-        }catch (e: RuntimeException) {
-            ctx.status(400)
-        }
-    }
+object Endpoints {
 
     fun getRestaurants(ctx: Context) {
         ctx.json(DatabaseManager.getRestaurants())
@@ -61,4 +48,25 @@ object Endpoints {
         ctx.result(token)
     }
 
+    fun insertOrder(ctx: Context){
+        val body = ctx.body()
+        val myOrderModel: MakeOrderModel?
+        val myFoodsList: MutableList<FoodsCountModel> = mutableListOf()
+        try {
+            val json = Klaxon().parseJsonObject(StringReader(body))
+            val array = json["foods"] as JsonArray<*>
+            array.forEach { food ->
+                if (food is JsonObject) {
+                    myFoodsList.add(FoodsCountModel(food["foodID"].toString().toInt(), food["restaurantID"].toString().toInt(),
+                        food["name"].toString(), food["count"].toString().toInt()))
+                }
+            }
+            myOrderModel = MakeOrderModel(json["name"].toString(), json["phone"].toString(), myFoodsList)
+            DatabaseManager.insertOrder(myOrderModel)
+            ctx.status(200)
+        }catch (e: RuntimeException) {
+            ctx.status(400)
+            e.printStackTrace()
+        }
+    }
 }

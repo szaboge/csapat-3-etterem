@@ -4,10 +4,11 @@ import org.w3c.xhr.XMLHttpRequest
 
 object HttpClient {
     const val ip = "localhost"
-    const val port = "7000"
+    const val port = "8080"
+    const val path = "api"
 
     private fun makeUrl(url: String): String {
-        return "http://$ip:$port/$url"
+        return "http://$ip:$port/$path/$url"
     }
 
     fun get(url: String, callback: (String) -> Unit) {

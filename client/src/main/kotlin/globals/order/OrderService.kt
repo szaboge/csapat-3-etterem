@@ -13,7 +13,7 @@ object OrderService {
         }
         val order = MakeOrderModel("Proba", "0620XXXXXXX", foodsCount)
         ApiService.makeOrder(order) {
-            println(it)
+            println(it.status)
         }
     }
 }

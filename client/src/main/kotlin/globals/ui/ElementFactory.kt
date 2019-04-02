@@ -41,6 +41,14 @@ object ElementFactory {
         return item
     }
 
+    fun HTMLElement.textfield(type: String = "", op: HTMLInputElement.() -> Unit = {}): HTMLInputElement {
+        val item = document.createElement("input") as HTMLInputElement
+        item.type = type
+        this.appendChild(item)
+        op.invoke(item)
+        return item
+    }
+
     fun HTMLElement.img(src: String, op: HTMLImageElement.() -> Unit = {}): HTMLImageElement {
         val item = document.createElement("img") as HTMLImageElement
         item.src = src

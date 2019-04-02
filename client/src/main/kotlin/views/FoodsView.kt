@@ -26,7 +26,7 @@ class FoodsView: View() {
         }
     }
 
-    override fun render(): View {
+    override fun render() {
         root.addClass("foods-root")
         foodDest = root.div {
             addClass("food")
@@ -55,7 +55,6 @@ class FoodsView: View() {
                 }
             }
         }
-        return this
     }
 
     private fun generateFoods() {

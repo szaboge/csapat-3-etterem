@@ -40,15 +40,15 @@ object DatabaseManager {
         return res
     }
 
-    fun getFoods(restaurantID: Int): List<FoodModel> {
-        var result = listOf<FoodModel>()
+    fun getFoods(restaurantID: Int): MutableList<FoodModel> {
+        var result = mutableListOf<FoodModel>()
         transaction {
             addLogger(StdOutSqlLogger)
-            result = FoodsTable.select {
+            result.addAll(FoodsTable.select {
                 FoodsTable.restaurantID.eq(restaurantID)
             }.map {
                 FoodModel(it[FoodsTable.foodsID], it[FoodsTable.restaurantID], it[FoodsTable.name])
-            }
+            })
         }
         return result
     }
@@ -108,16 +108,16 @@ object DatabaseManager {
         return result
     }
 
-    fun getFoodsByOrder(orderID: Int?): List<Pair<Int, String>> {
-        var result: List<Pair<Int, String>> = emptyList()
+    fun getFoodsByOrder(orderID: Int?): MutableList<Pair<Int, String>> {
+        val result: MutableList<Pair<Int, String>> = mutableListOf()
         transaction {
             addLogger(StdOutSqlLogger) // log SQL query
-            result = (FoodsTable innerJoin FoodsOfOrderTable)
+            result.addAll((FoodsTable innerJoin FoodsOfOrderTable)
                 .slice(FoodsTable.name, FoodsTable.foodsID)
                 .select { FoodsTable.foodsID eq FoodsOfOrderTable.foodID }
                 .map {
                     Pair(it[FoodsTable.foodsID], it[FoodsTable.name])
-                }
+                })
         }
         return result
     }

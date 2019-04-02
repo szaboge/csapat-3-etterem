@@ -13,11 +13,10 @@ class HomeView: View() {
     override fun onShow() {
     }
 
-    override fun render(): View {
+    override fun render() {
         root.addClass("home")
         root.img("img/home.jpg") {
             addClass("home-image")
         }
-        return this
     }
 }

@@ -5,9 +5,11 @@ import com.beust.klaxon.JsonArray
 import com.beust.klaxon.JsonObject
 import com.beust.klaxon.Klaxon
 import database.DatabaseManager
+import io.javalin.BadRequestResponse
 import io.javalin.Context
 import models.communication.FoodsCountModel
 import models.communication.MakeOrderModel
+import models.communication.UserByTokenModel
 import java.io.StringReader
 import java.util.*
 
@@ -36,7 +38,19 @@ object Endpoints {
     }
 
     fun login(ctx: Context) {
-        ctx.cookieStore("token", UUID.randomUUID().toString())
+        val username: String = ctx.header("username")?: throw BadRequestResponse()
+        val password: String = ctx.header("password")?: throw BadRequestResponse()
+
+        val userList = DatabaseManager.getLoginUser(username,Utils.createPassword(password))
+
+        if(userList.count() > 0) {
+            val user = userList.last()
+            val sessionID = Auth.login(user.userID, ctx)
+            ctx.json(UserByTokenModel(user.userID, user.role, sessionID))
+        } else {
+            throw BadRequestResponse()
+        }
+
     }
 
     fun insertRestaurant(ctx: Context) {

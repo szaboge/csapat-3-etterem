@@ -15,29 +15,29 @@ fun main() {
 
     app.routes {
         path("restaurants") {
-            get(Endpoints::getRestaurants, roles(ApiRole.GUEST))
+            get(Endpoints::getRestaurants, roles(ApiRole.GUEST, ApiRole.ADMIN))
             path(":id") {
                 get(Endpoints::getFoods, roles(ApiRole.GUEST))
             }
         }
         path("orders") {
-            get(Endpoints::getOrders, roles(ApiRole.ANYONE))
+            get(Endpoints::getOrders, roles(ApiRole.GUEST))
             path(":id") {
-                get(Endpoints::getOrdersById, roles(ApiRole.ANYONE))
+                get(Endpoints::getOrdersById, roles(ApiRole.GUEST))
             }
         }
         path("user") {
-            get(Endpoints::getUser, roles(ApiRole.ANYONE))
+            get(Endpoints::getUser, roles(ApiRole.GUEST))
         }
         path("login") {
-            get(Endpoints::login, roles(ApiRole.ANYONE))
+            post(Endpoints::login, roles(ApiRole.ANYONE))
         }
         path("insert") {
             path("restaurant") {
-                post(Endpoints::insertRestaurant, roles(ApiRole.ANYONE))
+                post(Endpoints::insertRestaurant, roles(ApiRole.GUEST))
             }
             path("order"){
-                post(Endpoints::insertOrder, roles(ApiRole.ANYONE))
+                post(Endpoints::insertOrder, roles(ApiRole.GUEST))
             }
         }
     }

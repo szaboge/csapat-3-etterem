@@ -15,33 +15,35 @@ object Auth {
 
     fun accessManager(handler: Handler, ctx: Context, permittedRoles: Set<Role>) {
         ctx.header(Header.ACCESS_CONTROL_ALLOW_ORIGIN, "*")
-        val user = authentication(ctx)
-        val role = ApiRole.valueOf(user.role)
         when {
-            permittedRoles.contains(role) -> handler.handle(ctx)
-            else -> ctx.status(401).json("Unauthorized")
+            permittedRoles.contains(ApiRole.ANYONE) -> handler.handle(ctx)
+            permittedRoles.contains(ApiRole.valueOf(authentication(ctx).role)) -> handler.handle(ctx)
+            else -> ctx.status(403).json("Forbidden")
         }
     }
 
     fun authentication(ctx: Context): UserByTokenModel {
         val token = getToken(ctx)
         return if (token == "") { //no token
-            DatabaseManager.startSession(startSession(ctx))
+            DatabaseManager.startGuestSession(setToken(ctx))
         } else {
             val list = DatabaseManager.getUserByToken(token)
             if (list.count() > 0) { // have token and have user
                 list.last()
             } else { // have token but not have user for token in database
-                DatabaseManager.startSession(startSession(ctx))
+                DatabaseManager.startGuestSession(setToken(ctx))
             }
         }
     }
+
+    fun login(userID: Int, ctx: Context): String =  DatabaseManager.startSession(setToken(ctx), userID)
+
 
     private fun getToken(ctx: Context): String {
         return ctx.cookie(tokenKey)?:""
     }
 
-    private fun startSession(ctx: Context): String {
+    private fun setToken(ctx: Context): String {
         val token = UUID.randomUUID().toString()
         ctx.cookie(tokenKey, token)
         return token

@@ -3,11 +3,13 @@ package database
 import auth.ApiRole
 import database.tables.*
 import globals.format
+import io.javalin.InternalServerErrorResponse
 import models.communication.MakeOrderModel
 import models.communication.UserByTokenModel
 import models.database.FoodModel
 import models.database.OrderModel
 import models.database.RestaurantModel
+import models.database.UserModel
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -81,7 +83,7 @@ object DatabaseManager {
         }
     }
 
-    fun insertFood(orderID: Int?, foodID: Int, count: Int) {
+    private fun insertFood(orderID: Int?, foodID: Int, count: Int) {
         FoodsOfOrderTable.insert {
             it[FoodsOfOrderTable.orderID] = orderID
             it[FoodsOfOrderTable.foodID] = foodID
@@ -90,7 +92,6 @@ object DatabaseManager {
     }
 
     fun getOrders(): List<OrderModel> {
-
         var result = listOf<OrderModel>()
         transaction {
             addLogger(StdOutSqlLogger) // log SQL query
@@ -121,7 +122,7 @@ object DatabaseManager {
         return result
     }
 
-    fun startSession(token: String): UserByTokenModel {
+    fun startGuestSession(token: String): UserByTokenModel {
         var userID = 0
         transaction {
             userID = insertGuest()
@@ -133,10 +134,10 @@ object DatabaseManager {
         return UserByTokenModel(userID, ApiRole.GUEST.toString(), token)
     }
 
-    fun insertGuest(): Int {
+    private fun insertGuest(): Int {
         return UsersTable.insert {
             it[role] = ApiRole.GUEST.toString()
-        } get UsersTable.userID ?: throw Exception()
+        } get UsersTable.userID ?: throw InternalServerErrorResponse()
     }
 
     fun getUserByToken(token: String): MutableList<UserByTokenModel> {
@@ -155,5 +156,35 @@ object DatabaseManager {
         }
         return result
     }
+
+    fun getLoginUser(username: String, pw: String): MutableList<UserModel> {
+        val result = mutableListOf<UserModel>()
+        transaction {
+            addLogger(StdOutSqlLogger)
+            result.addAll(UsersTable.select { (UsersTable.email eq username) and (UsersTable.password eq pw) }
+                .map {
+                    UserModel(
+                        it[UsersTable.userID],
+                        it[UsersTable.name],
+                        it[UsersTable.email],
+                        it[UsersTable.password],
+                        it[UsersTable.role]
+                    )
+                })
+        }
+        return result
+    }
+
+    fun startSession(token: String, userID: Int): String {
+        var sessionID: String = ""
+        transaction {
+            sessionID = SessionsTable.insert {
+                it[SessionsTable.sessionID] = token
+                it[SessionsTable.userID] = userID
+            } get SessionsTable.sessionID ?: throw InternalServerErrorResponse()
+        }
+        return sessionID
+    }
+
 
 }

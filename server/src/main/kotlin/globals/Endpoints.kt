@@ -1,5 +1,6 @@
 package globals
 
+import auth.Auth
 import com.beust.klaxon.JsonArray
 import com.beust.klaxon.JsonObject
 import com.beust.klaxon.Klaxon
@@ -13,7 +14,8 @@ object Endpoints {
     fun order(ctx: Context) {
         val body = ctx.body()
         try {
-            val array = Klaxon().parseJsonObject(StringReader(body))["foods"] as JsonArray<*>
+            val json = Klaxon().parseJsonObject(StringReader(body))
+            val array = json["foods"] as JsonArray<*>
             array.forEach { food ->
                 if (food is JsonObject) {
                     println(food["name"])
@@ -45,12 +47,7 @@ object Endpoints {
     }
 
     fun authentication(ctx: Context) {
-        try {
-            val cookie: String = ctx.cookieStore("token")
-            ctx.result(cookie)
-        }catch (e: Exception) {
-            ctx.status(401)
-        }
+        Auth.authentication(ctx)
     }
 
     fun login(ctx: Context) {

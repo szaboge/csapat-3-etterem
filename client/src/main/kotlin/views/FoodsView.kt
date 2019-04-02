@@ -14,9 +14,9 @@ import kotlin.dom.addClass
 
 class FoodsView: View() {
     override val routeType: Routes = Routes.FOODS
-    var foods: Array<FoodModel> = arrayOf()
-    var foodDest: HTMLDivElement = div()
-    var basketDest: HTMLDivElement = div()
+    private var foods: Array<FoodModel> = arrayOf()
+    private var foodDest: HTMLDivElement = div()
+    private var basketDest: HTMLDivElement = div()
 
     override fun onShow() {
         Basket.clear()

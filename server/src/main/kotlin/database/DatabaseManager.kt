@@ -1,19 +1,16 @@
 package database
 
+import auth.ApiRole
+import database.tables.*
+import globals.format
+import models.communication.UserByTokenModel
 import models.database.FoodModel
 import models.database.OrderModel
 import models.database.RestaurantModel
-import database.tables.FoodsTable
-import database.tables.OrderFoods
-import database.tables.OrdersTable
-import database.tables.RestaurantsTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.sql.Connection
-import org.joda.time.format.DateTimeFormat
-
-
 
 object DatabaseManager {
     private const val transactionLevel = Connection.TRANSACTION_READ_UNCOMMITTED
@@ -24,14 +21,14 @@ object DatabaseManager {
 
         transaction {
             addLogger(StdOutSqlLogger)
-            SchemaUtils.create(RestaurantsTable, FoodsTable, OrdersTable, OrderFoods)
+            SchemaUtils.create(RestaurantsTable, FoodsTable, OrdersTable, OrderFoods, SessionsTable, UsersTable)
         }
     }
 
     fun getRestaurants(): List<RestaurantModel> {
         var res = listOf<RestaurantModel>()
         transaction {
-            addLogger(StdOutSqlLogger) // log SQL query
+            addLogger(StdOutSqlLogger)
             res = RestaurantsTable.selectAll()
                 .map{
                     RestaurantModel(it[RestaurantsTable.restaurantID], it[RestaurantsTable.name])
@@ -43,7 +40,7 @@ object DatabaseManager {
     fun getFoods(restaurantID: Int): List<FoodModel> {
         var result = listOf<FoodModel>()
         transaction {
-            addLogger(StdOutSqlLogger) // log SQL query
+            addLogger(StdOutSqlLogger)
             result = FoodsTable.select {
                 FoodsTable.restaurantID.eq(restaurantID)
             }.map{
@@ -89,13 +86,13 @@ object DatabaseManager {
     }
 
     fun getOrders(): List<OrderModel> {
-        val fmt = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss")
+
         var result = listOf<OrderModel>()
         transaction {
             addLogger(StdOutSqlLogger) // log SQL query
             result = OrdersTable.selectAll()
                 .map{
-                    OrderModel(it[OrdersTable.orderID], fmt.print(it[OrdersTable.date]))
+                    OrderModel(it[OrdersTable.orderID], it[OrdersTable.date].format())
                 }
         }
         return result
@@ -116,6 +113,33 @@ object DatabaseManager {
             }.map{
                 OrderFoodsModel(it[OrderFoods.orderID], it[OrderFoods.foodID], it[OrderFoods.orderFoodID], it[OrderFoods.count])
             }*/
+        }
+        return result
+    }
+
+    fun startSession(token: String) {
+        transaction {
+            val userID: Int = insertGuest()
+            SessionsTable.insert {
+                it[SessionsTable.sessionID] = token
+                it[SessionsTable.userID] = userID
+            }
+        }
+    }
+
+    private fun insertGuest(): Int {
+        return UsersTable.insert {
+            it[role] = ApiRole.GUEST.toString()
+        } get UsersTable.userID ?: throw Exception()
+    }
+
+    fun getUserByToken(token: String): MutableList<UserByTokenModel> {
+        var result = mutableListOf<UserByTokenModel>()
+        transaction {
+            result.addAll((SessionsTable innerJoin UsersTable)
+                .slice(UsersTable.userID, UsersTable.role, SessionsTable.expiration)
+                .select { SessionsTable.sessionID eq token }
+                .map { UserByTokenModel(it[UsersTable.userID], it[UsersTable.role], it[SessionsTable.expiration]) })
         }
         return result
     }

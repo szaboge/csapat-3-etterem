@@ -1,5 +1,6 @@
 import auth.ApiRole
 import auth.Auth
+import auth.Auth.authentication
 import globals.Endpoints
 import io.javalin.Javalin
 import io.javalin.apibuilder.ApiBuilder.*

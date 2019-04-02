@@ -15,9 +15,9 @@ fun main() {
 
     app.routes {
         path("restaurants") {
-            get(Endpoints::getRestaurants, roles(ApiRole.ANYONE))
+            get(Endpoints::getRestaurants, roles(ApiRole.GUEST))
             path(":id") {
-                get(Endpoints::getFoods, roles(ApiRole.ANYONE))
+                get(Endpoints::getFoods, roles(ApiRole.GUEST))
             }
         }
         path("orders") {
@@ -26,14 +26,11 @@ fun main() {
                 get(Endpoints::getOrdersById, roles(ApiRole.ANYONE))
             }
         }
-        path("authentication") {
-            get(Endpoints::authentication, roles(ApiRole.ANYONE))
+        path("user") {
+            get(Endpoints::getUser, roles(ApiRole.ANYONE))
         }
         path("login") {
             get(Endpoints::login, roles(ApiRole.ANYONE))
-        }
-        path("order") {
-            //post(Endpoints::order, roles(ApiRole.ANYONE))
         }
         path("insert") {
             path("restaurant") {

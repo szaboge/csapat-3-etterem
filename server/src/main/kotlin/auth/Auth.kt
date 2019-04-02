@@ -1,7 +1,6 @@
 package auth
 
 import database.DatabaseManager
-import globals.format
 import io.javalin.Context
 import io.javalin.Handler
 import io.javalin.core.util.Header
@@ -9,28 +8,30 @@ import io.javalin.security.Role
 import models.communication.UserByTokenModel
 import java.util.*
 
-enum class ApiRole(val value: String): Role { ANYONE("anyone"), USER("user"), ADMIN("admin"), KITCHEN("kitchen"), GUEST("guest") }
+enum class ApiRole: Role { ANYONE, USER, ADMIN, KITCHEN, GUEST }
 
 object Auth {
-    val tokenKey = "token"
+    const val tokenKey = "token"
 
     fun accessManager(handler: Handler, ctx: Context, permittedRoles: Set<Role>) {
         ctx.header(Header.ACCESS_CONTROL_ALLOW_ORIGIN, "*")
+        val user = authentication(ctx)
+        val role = ApiRole.valueOf(user.role)
         when {
-            permittedRoles.contains(ApiRole.ANYONE) -> handler.handle(ctx)
+            permittedRoles.contains(role) -> handler.handle(ctx)
             else -> ctx.status(401).json("Unauthorized")
         }
     }
 
-    fun authentication(ctx: Context) {
+    fun authentication(ctx: Context): UserByTokenModel {
         val token = getToken(ctx)
-        if (token == "") { // nincs tokenja > uj session
+        return if (token == "") { //no token
             DatabaseManager.startSession(startSession(ctx))
         } else {
-            val result = DatabaseManager.getUserByToken(token)
-            if (result.count() > 0) {
-
-            } else { // van tokenja de nincs az adatbazisban
+            val list = DatabaseManager.getUserByToken(token)
+            if (list.count() > 0) { // have token and have user
+                list.last()
+            } else { // have token but not have user for token in database
                 DatabaseManager.startSession(startSession(ctx))
             }
         }

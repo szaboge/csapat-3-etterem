@@ -3,16 +3,11 @@ package database
 import auth.ApiRole
 import database.tables.*
 import globals.format
+import models.communication.MakeOrderModel
 import models.communication.UserByTokenModel
 import models.database.FoodModel
 import models.database.OrderModel
 import models.database.RestaurantModel
-import database.tables.FoodsTable
-import database.tables.FoodsOfOrderTable
-import database.tables.OrdersTable
-import database.tables.RestaurantsTable
-import models.communication.MakeOrderModel
-import models.database.FoodsOfOrderModel
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -28,7 +23,7 @@ object DatabaseManager {
         transaction {
             addLogger(StdOutSqlLogger)
             SchemaUtils.create(RestaurantsTable, FoodsTable, OrdersTable, FoodsOfOrderTable, SessionsTable, UsersTable)
-
+        }
     }
 
     fun getRestaurants(): List<RestaurantModel> {
@@ -36,7 +31,7 @@ object DatabaseManager {
         transaction {
             addLogger(StdOutSqlLogger)
             res = RestaurantsTable.selectAll()
-                .map{
+                .map {
                     RestaurantModel(it[RestaurantsTable.restaurantID], it[RestaurantsTable.name])
                 }
         }
@@ -49,14 +44,14 @@ object DatabaseManager {
             addLogger(StdOutSqlLogger)
             result = FoodsTable.select {
                 FoodsTable.restaurantID.eq(restaurantID)
-            }.map{
+            }.map {
                 FoodModel(it[FoodsTable.foodsID], it[FoodsTable.restaurantID], it[FoodsTable.name])
             }
         }
         return result
     }
 
-    fun insertRestaurant(restaurantName: String){
+    fun insertRestaurant(restaurantName: String) {
         transaction {
             addLogger(StdOutSqlLogger) // log SQL query
             val id = RestaurantsTable.insert {
@@ -86,7 +81,7 @@ object DatabaseManager {
         }
     }
 
-    private fun insertFood(orderID: Int?, foodID: Int, count: Int){
+    fun insertFood(orderID: Int?, foodID: Int, count: Int) {
         FoodsOfOrderTable.insert {
             it[FoodsOfOrderTable.orderID] = orderID
             it[FoodsOfOrderTable.foodID] = foodID
@@ -100,56 +95,65 @@ object DatabaseManager {
         transaction {
             addLogger(StdOutSqlLogger) // log SQL query
             result = OrdersTable.selectAll()
-                .map{
-                    OrderModel(it[OrdersTable.orderID], it[OrdersTable.date].format(), it[OrdersTable.name], it[OrdersTable.phone])
+                .map {
+                    OrderModel(
+                        it[OrdersTable.orderID],
+                        it[OrdersTable.date].format(),
+                        it[OrdersTable.name],
+                        it[OrdersTable.phone]
+                    )
                 }
         }
         return result
     }
 
     fun getFoodsByOrder(orderID: Int?): List<Pair<Int, String>> {
-        var result:  List<Pair<Int, String>> = emptyList()
+        var result: List<Pair<Int, String>> = emptyList()
         transaction {
             addLogger(StdOutSqlLogger) // log SQL query
             result = (FoodsTable innerJoin FoodsOfOrderTable)
                 .slice(FoodsTable.name, FoodsTable.foodsID)
-                .select{ FoodsTable.foodsID eq FoodsOfOrderTable.foodID}
+                .select { FoodsTable.foodsID eq FoodsOfOrderTable.foodID }
                 .map {
                     Pair(it[FoodsTable.foodsID], it[FoodsTable.name])
                 }
-            /*result = FoodsOfOrderTable.select {
-                FoodsOfOrderTable.orderID.eq(orderID)
-            }.map{
-                FoodsOfOrderModel(it[FoodsOfOrderTable.orderID], it[FoodsOfOrderTable.foodID], it[FoodsOfOrderTable.orderFoodID], it[FoodsOfOrderTable.count])
-            }*/
         }
         return result
     }
 
-    fun startSession(token: String) {
+    fun startSession(token: String): UserByTokenModel {
+        var userID = 0
         transaction {
-            val userID: Int = insertGuest()
+            userID = insertGuest()
             SessionsTable.insert {
                 it[SessionsTable.sessionID] = token
                 it[SessionsTable.userID] = userID
             }
         }
+        return UserByTokenModel(userID, ApiRole.GUEST.toString(), token)
     }
 
-    private fun insertGuest(): Int {
+    fun insertGuest(): Int {
         return UsersTable.insert {
             it[role] = ApiRole.GUEST.toString()
         } get UsersTable.userID ?: throw Exception()
     }
 
     fun getUserByToken(token: String): MutableList<UserByTokenModel> {
-        var result = mutableListOf<UserByTokenModel>()
+        val result = mutableListOf<UserByTokenModel>()
         transaction {
             result.addAll((SessionsTable innerJoin UsersTable)
-                .slice(UsersTable.userID, UsersTable.role, SessionsTable.expiration)
+                .slice(UsersTable.userID, UsersTable.role, SessionsTable.sessionID)
                 .select { SessionsTable.sessionID eq token }
-                .map { UserByTokenModel(it[UsersTable.userID], it[UsersTable.role], it[SessionsTable.expiration]) })
+                .map {
+                    UserByTokenModel(
+                        it[UsersTable.userID],
+                        it[UsersTable.role],
+                        it[SessionsTable.sessionID]
+                    )
+                })
         }
         return result
     }
+
 }

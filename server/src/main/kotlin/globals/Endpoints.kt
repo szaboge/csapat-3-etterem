@@ -11,8 +11,6 @@ import models.communication.MakeOrderModel
 import java.io.StringReader
 import java.util.*
 
-//fun Any?.toInt(): Int = this.toString().toInt()
-
 object Endpoints {
 
     fun getRestaurants(ctx: Context) {
@@ -33,8 +31,8 @@ object Endpoints {
         ctx.json(DatabaseManager.getFoodsByOrder(oID.toInt()))
     }
 
-    fun authentication(ctx: Context) {
-        Auth.authentication(ctx)
+    fun getUser(ctx: Context) {
+
     }
 
     fun login(ctx: Context) {

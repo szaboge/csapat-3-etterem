@@ -40,5 +40,8 @@ fun main() {
                 post(Endpoints::insertOrder, roles(ApiRole.GUEST))
             }
         }
+        path("registry"){
+            post(Endpoints::registry, roles(ApiRole.ANYONE))
+        }
     }
 }

@@ -186,5 +186,12 @@ object DatabaseManager {
         return sessionID
     }
 
-
+    fun makeUser(name: String, email: String, password: String){
+        UsersTable.insert {
+            it[UsersTable.name] = name
+            it[UsersTable.email] = email
+            it[UsersTable.password] = password
+            it[UsersTable.role] = "GUEST"
+        }
+    }
 }

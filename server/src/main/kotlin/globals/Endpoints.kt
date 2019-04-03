@@ -78,10 +78,21 @@ object Endpoints {
             }
             myOrderModel = MakeOrderModel(json["name"].toString(), json["phone"].toString(), myFoodsList)
             DatabaseManager.insertOrder(myOrderModel)
-            ctx.status(200)
         }catch (e: RuntimeException) {
-            ctx.status(400)
-            e.printStackTrace()
+            throw BadRequestResponse()
         }
+    }
+
+    fun registry(ctx: Context){
+        val body = ctx.body()
+        val json = try {
+            Klaxon().parseJsonObject(StringReader(body))
+        } catch (e: Exception) {
+            throw BadRequestResponse()
+        }
+        val name: String = json["name"].toString()
+        val email: String = json["email"].toString()
+        val password: String = json["password"].toString()
+        DatabaseManager.makeUser(name, email, Utils.createPassword(password))
     }
 }

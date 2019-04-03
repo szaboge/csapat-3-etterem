@@ -24,9 +24,8 @@ class RestaurantsView : View() {
         }
     }
 
-    override fun render(): View {
+    override fun render(){
         root.addClass("restaurants-root")
-        return this
     }
 
     private fun generateRestaurant() {

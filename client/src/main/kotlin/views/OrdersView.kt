@@ -11,12 +11,11 @@ class OrdersView: View() {
     var orders: Array<OrderModel> = arrayOf()
     var orderDiv = div()
 
-    override fun render(): View {
+    override fun render() {
         root.div {
             label("Rendelések")
             orderDiv = div {}
         }
-        return this
     }
 
     override fun onShow() {

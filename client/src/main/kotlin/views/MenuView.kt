@@ -11,7 +11,7 @@ class MenuView: View() {
     override val routeType: Routes = Routes.MENU
     override fun onShow() {}
 
-    override fun render(): View {
+    override fun render() {
         root.addClass("menu")
         root.button("Home") {
             addClass("menu-item")
@@ -19,7 +19,7 @@ class MenuView: View() {
                 RouterService.navigate(Routes.HOME)
             })
         }
-        root.button("Restaurant") {
+        root.button("Restaurants") {
             addClass("menu-item")
             addEventListener("click", {
                 RouterService.navigate(Routes.RESTAURANTS)
@@ -31,6 +31,11 @@ class MenuView: View() {
                 RouterService.navigate(Routes.ORDERS)
             })
         }
-        return this
+        root.button("Login") {
+            addClass("menu-item")
+            addEventListener("click", {
+                RouterService.navigate(Routes.LOGIN)
+            })
+        }
     }
 }

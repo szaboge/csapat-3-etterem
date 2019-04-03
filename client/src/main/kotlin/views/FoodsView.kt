@@ -14,18 +14,19 @@ import kotlin.dom.addClass
 
 class FoodsView: View() {
     override val routeType: Routes = Routes.FOODS
-    var foods: Array<FoodModel> = arrayOf()
-    var foodDest: HTMLDivElement = div()
-    var basketDest: HTMLDivElement = div()
+    private var foods: Array<FoodModel> = arrayOf()
+    private var foodDest: HTMLDivElement = div()
+    private var basketDest: HTMLDivElement = div()
 
     override fun onShow() {
+        Basket.clear()
         ApiService.getFoods(OrderService.actualRestaurant) {
             foods = it
             generateFoods()
         }
     }
 
-    override fun render(): View {
+    override fun render() {
         root.addClass("foods-root")
         foodDest = root.div {
             addClass("food")
@@ -46,7 +47,7 @@ class FoodsView: View() {
             }
             div {
                 addClass("order-button-wrapper")
-                button("ORDER") {
+                button("Proceed to Checkout") {
                     addClass("default-button")
                     addEventListener("click", {
                         OrderService.makeOrder()
@@ -54,7 +55,6 @@ class FoodsView: View() {
                 }
             }
         }
-        return this
     }
 
     private fun generateFoods() {
@@ -62,7 +62,7 @@ class FoodsView: View() {
             foodDest.div {
                 addClass("food-item")
                 label(it.name)
-                button("TO BASKET") {
+                button("Add to Basket") {
                     addClass("default-button")
                     addEventListener("click", {event -> addToBasket(it)})
                 }
@@ -71,10 +71,11 @@ class FoodsView: View() {
     }
     private fun generateBasket() {
         while (basketDest.firstChild != null) basketDest.removeChild(basketDest.firstChild!!)
-        Basket.basket.forEach {
+        Basket.getFoods().forEach {
             basketDest.div {
                 addClass("basket-item")
-                label(it.name)
+                label(it.second.name)
+                label(it.third.toString())
             }
         }
     }

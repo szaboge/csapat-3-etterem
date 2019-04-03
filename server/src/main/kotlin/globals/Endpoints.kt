@@ -11,6 +11,7 @@ import models.communication.FoodsCountModel
 import models.communication.MakeOrderModel
 import models.communication.UserByTokenModel
 import java.io.StringReader
+import java.util.regex.Pattern
 
 object Endpoints {
 
@@ -93,6 +94,28 @@ object Endpoints {
         val name: String = json["name"].toString()
         val email: String = json["email"].toString()
         val password: String = json["password"].toString()
-        DatabaseManager.makeUser(name, email, Utils.createPassword(password))
+
+        //check validation
+        val validEmail: Boolean
+        validEmail = Utils.isEmailValid(email)
+
+        val validPsw: Boolean
+        validPsw = Utils.isPasswordValid(password)
+
+        if (name.isNotEmpty() && name.length < 41){
+            if(validEmail && email.length < 41){
+                if(validPsw){
+                    DatabaseManager.makeUser(name, email, Utils.createPassword(password))
+                } else {
+                    throw BadRequestResponse()
+                }
+            } else {
+                throw BadRequestResponse()
+            }
+        } else {
+            throw BadRequestResponse()
+        }
+
+        //DatabaseManager.makeUser(name, email, Utils.createPassword(password))
     }
 }

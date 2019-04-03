@@ -2,6 +2,7 @@ package auth
 
 import database.DatabaseManager
 import io.javalin.Context
+import io.javalin.ForbiddenResponse
 import io.javalin.Handler
 import io.javalin.core.util.Header
 import io.javalin.security.Role
@@ -24,29 +25,23 @@ object Auth {
 
     fun authentication(ctx: Context): UserByTokenModel {
         val token = getToken(ctx)
-        return if (token == "") { //no token
-            DatabaseManager.startGuestSession(setToken(ctx))
+        println(token)
+        if (token == "") {
+            throw ForbiddenResponse()
         } else {
             val list = DatabaseManager.getUserByToken(token)
-            if (list.count() > 0) { // have token and have user
-                list.last()
-            } else { // have token but not have user for token in database
-                DatabaseManager.startGuestSession(setToken(ctx))
+            if (list.count() > 0) {
+                return list.last()
+            } else {
+                throw ForbiddenResponse()
             }
         }
     }
 
-    fun login(userID: Int, ctx: Context): String =  DatabaseManager.startSession(setToken(ctx), userID)
+    fun login(userID: Int, ctx: Context): String =  DatabaseManager.startSession(genToken(), userID)
 
 
-    private fun getToken(ctx: Context): String {
-        return ctx.cookie(tokenKey)?:""
-    }
-
-    private fun setToken(ctx: Context): String {
-        val token = UUID.randomUUID().toString()
-        ctx.cookie(tokenKey, token)
-        return token
-    }
+    fun getToken(ctx: Context): String = ctx.header(tokenKey)?: ""
+    fun genToken(): String = UUID.randomUUID().toString()
 
 }

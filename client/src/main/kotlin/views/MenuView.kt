@@ -18,10 +18,12 @@ import kotlin.dom.addClass
 class MenuView: View(), UserChangeListener{
     override fun onUserChange(newValue: UserByTokenModel) {
         userRole.textContent = newValue.role
+        if (newValue.role == "GUEST") return
         destButton.innerHTML = ""
         destButton.button("LOGOUT") {
             addClass("default-button")
             addEventListener("click", {
+                UserService.logout()
                 destButton.innerHTML = ""
                 destButton.button("LOGIN") {
                     addClass("default-button")

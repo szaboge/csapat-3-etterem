@@ -1,9 +1,7 @@
 package views
 
 import abstracts.View
-import globals.ui.ElementFactory.div
 import globals.ui.ElementFactory.img
-import globals.ui.ElementFactory.label
 import globals.ui.Routes
 import kotlin.dom.addClass
 

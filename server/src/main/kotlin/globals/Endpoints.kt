@@ -7,6 +7,7 @@ import com.beust.klaxon.Klaxon
 import database.DatabaseManager
 import io.javalin.BadRequestResponse
 import io.javalin.Context
+import io.javalin.ForbiddenResponse
 import models.communication.FoodsCountModel
 import models.communication.MakeOrderModel
 import models.communication.UserByTokenModel
@@ -35,6 +36,22 @@ object Endpoints {
 
     fun getUser(ctx: Context) {
 
+    }
+
+    fun authentication(ctx: Context) {
+        val token = Auth.getToken(ctx)
+
+        val result:UserByTokenModel = if (token == "") {
+            DatabaseManager.startGuestSession(Auth.genToken())
+        } else {
+            val list = DatabaseManager.getUserByToken(token)
+            if (list.count() > 0) {
+                list.last()
+            } else {
+                DatabaseManager.startGuestSession(Auth.genToken())
+            }
+        }
+        ctx.json(result)
     }
 
     fun login(ctx: Context) {

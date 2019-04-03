@@ -7,6 +7,7 @@ import globals.order.OrderService
 import globals.ui.ElementFactory.button
 import globals.ui.ElementFactory.div
 import globals.ui.ElementFactory.label
+import globals.ui.RouterService
 import globals.ui.Routes
 import models.database.FoodModel
 import org.w3c.dom.HTMLDivElement
@@ -50,7 +51,7 @@ class FoodsView: View() {
                 button("Proceed to Checkout") {
                     addClass("default-button")
                     addEventListener("click", {
-                        OrderService.makeOrder()
+                        RouterService.navigate(Routes.CHECKOUT)
                     })
                 }
             }

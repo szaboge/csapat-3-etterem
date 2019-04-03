@@ -1,3 +1,4 @@
+import globals.UserService
 import globals.communication.HttpClient
 import models.database.FoodModel
 import models.database.OrderModel
@@ -29,10 +30,14 @@ object ApiService {
             callback.invoke(orders)
         }
     }
-
     fun login(obj: Any? = null,callback: (XMLHttpRequest) -> Unit) {
         HttpClient.post("login", obj) {
             callback.invoke(it)
+        }
+    }
+    fun authentication() {
+        HttpClient.get("authentication") {
+            UserService.setUser(JSON.parse(it.responseText))
         }
     }
 }

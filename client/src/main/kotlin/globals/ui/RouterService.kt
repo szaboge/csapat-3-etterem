@@ -9,7 +9,8 @@ enum class Routes {
     MENU,
     FOODS,
     ORDERS,
-    LOGIN
+    LOGIN,
+    USERCONTROL
 }
 
 object RouterService {

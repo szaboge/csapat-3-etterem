@@ -1,41 +1,64 @@
 package views
 
 import abstracts.View
+import globals.UserChangeListener
+import globals.UserService
 import globals.ui.ElementFactory.button
-import globals.ui.ElementFactory.span
+import globals.ui.ElementFactory.div
 import globals.ui.RouterService
 import globals.ui.Routes
+import models.communication.UserByTokenModel
+import org.w3c.dom.HTMLElement
 import kotlin.dom.addClass
 
-class MenuView: View() {
+class MenuView: View(), UserChangeListener{
+    override fun onUserChange(newValue: UserByTokenModel) {
+        println(newValue.role)
+    }
+
     override val routeType: Routes = Routes.MENU
-    override fun onShow() {}
+
+    lateinit var userControl: HTMLElement
+    override fun onShow() {
+
+    }
 
     override fun render() {
-        root.addClass("menu")
-        root.button("Home") {
-            addClass("menu-item")
-            addEventListener("click", {
-                RouterService.navigate(Routes.HOME)
-            })
+        UserService.subscribe(this)
+        root.addClass("menu-content")
+
+        root.div {
+
         }
-        root.button("Restaurants") {
-            addClass("menu-item")
-            addEventListener("click", {
-                RouterService.navigate(Routes.RESTAURANTS)
-            })
+        root.div {
+            button("Home") {
+                addClass("menu-item")
+                addEventListener("click", {
+                    RouterService.navigate(Routes.HOME)
+                })
+            }
+            button("Restaurants") {
+                addClass("menu-item")
+                addEventListener("click", {
+                    RouterService.navigate(Routes.RESTAURANTS)
+                })
+            }
+            button("Orders") {
+                addClass("menu-item")
+                addEventListener("click", {
+                    RouterService.navigate(Routes.ORDERS)
+                })
+            }
         }
-        root.button("Orders") {
-            addClass("menu-item")
-            addEventListener("click", {
-                RouterService.navigate(Routes.ORDERS)
-            })
-        }
-        root.button("Login") {
-            addClass("menu-item")
-            addEventListener("click", {
-                RouterService.navigate(Routes.LOGIN)
-            })
+        root.div {
+            userControl = div {
+                button("LOGIN") {
+                    addClass("default-button")
+                    addEventListener("click", {
+                        RouterService.navigate(Routes.LOGIN)
+                    })
+                }
+            }
         }
     }
 }

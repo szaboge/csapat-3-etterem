@@ -64,7 +64,7 @@ class FoodsView: View() {
                 label(it.name)
                 button("Add to Basket") {
                     addClass("default-button")
-                    addEventListener("click", {event -> addToBasket(it)})
+                    addEventListener("click", { _ -> addToBasket(it)})
                 }
             }
         }

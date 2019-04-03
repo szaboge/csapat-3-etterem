@@ -1,10 +1,13 @@
 package views
 
 import abstracts.View
+import globals.UserService
 import globals.ui.ElementFactory.button
 import globals.ui.ElementFactory.div
 import globals.ui.ElementFactory.textfield
+import globals.ui.RouterService
 import globals.ui.Routes
+import models.communication.UserByTokenModel
 import org.w3c.dom.HTMLInputElement
 import kotlin.dom.addClass
 
@@ -38,7 +41,10 @@ class LoginView : View() {
             val password: String = passwordField.value
         }
         ApiService.login(data) {
-            println(it.status)
+            if (it.status.toInt() == 200) {
+                UserService.setUser(JSON.parse(it.responseText))
+                RouterService.navigate(Routes.HOME)
+            }
         }
     }
 

@@ -8,7 +8,7 @@ import io.javalin.security.Role
 import models.communication.UserByTokenModel
 import java.util.*
 
-enum class ApiRole: Role { ANYONE, USER, ADMIN, KITCHEN, GUEST }
+enum class ApiRole: Role { ANYONE, USER, ADMIN, KITCHEN, GUEST, RIDER }
 
 object Auth {
     const val tokenKey = "token"

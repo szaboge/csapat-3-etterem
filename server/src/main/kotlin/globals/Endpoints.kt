@@ -91,7 +91,7 @@ object Endpoints {
             array.forEach { food ->
                 if (food is JsonObject) {
                     myFoodsList.add(FoodsCountModel(food["foodID"].toString().toInt(), food["restaurantID"].toString().toInt(),
-                        food["name"].toString(), food["count"].toString().toInt()))
+                        food["name"].toString(), food["count"].toString().toInt(), food["price"].toString().toInt()))
                 }
             }
             myOrderModel = MakeOrderModel(json["name"].toString(), json["phone"].toString(), myFoodsList)

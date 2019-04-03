@@ -47,7 +47,7 @@ object DatabaseManager {
             result.addAll(FoodsTable.select {
                 FoodsTable.restaurantID.eq(restaurantID)
             }.map {
-                FoodModel(it[FoodsTable.foodsID], it[FoodsTable.restaurantID], it[FoodsTable.name])
+                FoodModel(it[FoodsTable.foodsID], it[FoodsTable.restaurantID], it[FoodsTable.name], it[FoodsTable.price])
             })
         }
         return result
@@ -72,22 +72,29 @@ object DatabaseManager {
         transaction {
             addLogger(StdOutSqlLogger) // log SQL query
             val list = myModel.foods
+            var sum = 0
+            list.forEach {
+                sum += it.price * it.count
+            }
             val id = OrdersTable.insert {
                 it[OrdersTable.name] = myModel.name
                 it[OrdersTable.phone] = myModel.phone
+                it[OrdersTable.amount] = sum
+                it[OrdersTable.userID] = 1
             } get OrdersTable.orderID
             list.forEach {
-                insertFood(id, it.foodID, it.count)
+                insertFood(id, it.foodID, it.count, it.price)
             }
             commit()
         }
     }
 
-    private fun insertFood(orderID: Int?, foodID: Int, count: Int) {
+    private fun insertFood(orderID: Int?, foodID: Int, count: Int, price: Int) {
         FoodsOfOrderTable.insert {
             it[FoodsOfOrderTable.orderID] = orderID
             it[FoodsOfOrderTable.foodID] = foodID
             it[FoodsOfOrderTable.count] = count
+            it[FoodsOfOrderTable.price] = price
         }
     }
 
@@ -101,7 +108,9 @@ object DatabaseManager {
                         it[OrdersTable.orderID],
                         it[OrdersTable.date].format(),
                         it[OrdersTable.name],
-                        it[OrdersTable.phone]
+                        it[OrdersTable.phone],
+                        it[OrdersTable.amount],
+                        it[OrdersTable.userID]
                     )
                 }
         }

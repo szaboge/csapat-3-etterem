@@ -1,46 +1,34 @@
 package views
 
 import abstracts.View
+import components.DropdownMenu
 import globals.UserChangeListener
 import globals.UserService
-import globals.ui.ElementFactory
 import globals.ui.ElementFactory.button
 import globals.ui.ElementFactory.div
+import globals.ui.ElementFactory.icon
 import globals.ui.ElementFactory.label
 import globals.ui.RouterService
 import globals.ui.Routes
 import models.communication.UserByTokenModel
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
-import org.w3c.dom.HTMLLabelElement
 import kotlin.dom.addClass
 
 class MenuView: View(), UserChangeListener{
     override fun onUserChange(newValue: UserByTokenModel) {
-        userRole.textContent = newValue.role
-        if (newValue.role == "GUEST") return
-        destButton.innerHTML = ""
-        destButton.button("LOGOUT") {
-            addClass("default-button")
-            addEventListener("click", {
-                UserService.logout()
-                destButton.innerHTML = ""
-                destButton.button("LOGIN") {
-                    addClass("default-button")
-                    addEventListener("click", {
-                        RouterService.navigate(Routes.LOGIN)
-                    })
-                }
-                userRole.textContent = ""
-            })
+        userMenu.innerHTML = ""
+        userMenu.div {
+            label(newValue.role)
+            icon("chevron-down")
         }
     }
 
     override val routeType: Routes = Routes.MENU
 
     lateinit var userControl: HTMLElement
-    lateinit var userRole: HTMLLabelElement
-    lateinit var destButton: HTMLDivElement
+    lateinit var userMenu: HTMLDivElement
+    var dropdownMenu: DropdownMenu = DropdownMenu()
     override fun onShow() {
 
     }
@@ -74,10 +62,7 @@ class MenuView: View(), UserChangeListener{
         }
         userControl = root.div {
             addClass("user-control")
-            userRole = label("") {
-                addClass("role")
-            }
-            destButton = div {
+            userMenu = div {
                 button("LOGIN") {
                     addClass("default-button")
                     addEventListener("click", {

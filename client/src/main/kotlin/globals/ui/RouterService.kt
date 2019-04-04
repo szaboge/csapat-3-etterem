@@ -10,8 +10,8 @@ enum class Routes {
     FOODS,
     ORDERS,
     LOGIN,
-    USERCONTROL,
-    CHECKOUT
+    CHECKOUT,
+    REGISTRATION
 }
 
 object RouterService {
@@ -24,6 +24,7 @@ object RouterService {
         routes.add(OrdersView())
         routes.add(LoginView())
         routes.add(CheckoutView())
+        routes.add(RegistrationView())
     }
 
     fun navigate(route: Routes) {

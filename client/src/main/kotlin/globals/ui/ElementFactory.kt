@@ -2,6 +2,7 @@ package globals.ui
 
 import org.w3c.dom.*
 import kotlin.browser.document
+import kotlin.dom.addClass
 
 
 object ElementFactory {
@@ -36,6 +37,14 @@ object ElementFactory {
     fun HTMLElement.span(text: String = "", op: HTMLSpanElement.() -> Unit = {}): HTMLSpanElement {
         val item = document.createElement("span") as HTMLSpanElement
         item.textContent = text
+        this.appendChild(item)
+        op.invoke(item)
+        return item
+    }
+
+    fun HTMLElement.icon(icon: String = "", op: HTMLSpanElement.() -> Unit = {}): HTMLSpanElement {
+        val item = document.createElement("span") as HTMLSpanElement
+        item.addClass("mdi mdi-$icon")
         this.appendChild(item)
         op.invoke(item)
         return item

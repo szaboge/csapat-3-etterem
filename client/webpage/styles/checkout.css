@@ -1,0 +1,38 @@
+/*.ck{
+    float: bottom;
+}*/
+
+.checkout{
+    text-align: center;
+}
+
+.checkout-label-title
+{
+    padding: 6px;
+    text-align: center;
+}
+
+.checkout-textfield {
+    width: 20%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.checkout-continue-button {
+    background-color: #ef6c00;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    float: bottom;
+    text-align: right;
+}
+
+.checkout-continue-button:hover{
+    background-color: #ef5300;
+}

@@ -23,12 +23,6 @@
     transition: color 300ms ease-in, border-bottom-color 300ms ease-in;
 }
 
-.user-control {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-}
-
-.role {
-    margin-right: 12px;
+.user-item {
+    user-select: none;
 }

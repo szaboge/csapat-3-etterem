@@ -33,8 +33,9 @@
     background-color: #ef5300;
 }
 
-.payment-image{
-
+.checkout-image{
+    font-size: 32px;
+    color: black;
 }
 
 .bad {

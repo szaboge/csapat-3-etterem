@@ -5,6 +5,7 @@ import globals.UserService
 import globals.order.OrderService
 import globals.ui.ElementFactory.button
 import globals.ui.ElementFactory.div
+import globals.ui.ElementFactory.icon
 import globals.ui.ElementFactory.label
 import globals.ui.ElementFactory.radiobutton
 import globals.ui.ElementFactory.textfield
@@ -20,7 +21,7 @@ import org.w3c.dom.HTMLMenuItemElement
 import kotlin.dom.addClass
 import kotlin.dom.removeClass
 
-class CheckoutView: View() {
+class CheckoutView : View() {
     override val routeType: Routes = Routes.CHECKOUT
     lateinit var nevField: HTMLInputElement
     lateinit var emailField: HTMLInputElement
@@ -31,7 +32,7 @@ class CheckoutView: View() {
     lateinit var hazszamField: HTMLInputElement
     lateinit var cash: HTMLInputElement
     lateinit var card: HTMLInputElement
-    lateinit var pay : String
+    lateinit var pay: String
 
 
     override fun render() {
@@ -43,7 +44,7 @@ class CheckoutView: View() {
                     addClass("title")
                 }
             }
-            div{
+            div {
                 addClass("ck")
                 nevField = textfield {
                     //Név
@@ -167,25 +168,23 @@ class CheckoutView: View() {
                 label("PAYMENT")
                 div {
                     addClass("ck")
-                    img("img/checkoutview/creditcardicon.png")
-                    {
-                        addClass("payment-image")
+                    icon("credit-card") {
+                        addClass("checkout-image")
                     }
                     label("CREDIT CARD")
                     cash = radiobutton("payment", true)
                 }
                 div {
                     addClass("ck")
-                    img("img/checkoutview/cashicon.png")
-                    {
-                        addClass("payment-image")
+                    icon("cash-multiple") {
+                        addClass("checkout-image")
                     }
                     label("CASH")
                     card = radiobutton("payment", false)
                 }
             }
 
-            if(cash.checked)
+            if (cash.checked)
                 pay = "keszpenz"
             else
                 pay = "kartya"
@@ -202,8 +201,7 @@ class CheckoutView: View() {
         }//div: checkout
     }
 
-    fun continue_checkout()
-    {
+    fun continue_checkout() {
         val name: String = nevField.value
         val email: String = emailField.value
         val phone: String = telefonszamField.value
@@ -225,43 +223,38 @@ class CheckoutView: View() {
             val strnumber: String = hazszamField.value
             val payment: String = pay
         }
-        if(nevField.validate("name") && emailField.validate("email") && telefonszamField.validate("phone") && irszamField.validate("zipcode") && telepulesField.validate("city")
-            && utcaField.validate("street") && hazszamField.validate("street_number"))
-        {
-            OrderService.makeOrder(name,email, phone, zipcode, city, street, strnumber, payment)
-        }else{
-            if(!nevField.validate("name"))
-            {
+        if (nevField.validate("name") && emailField.validate("email") && telefonszamField.validate("phone") && irszamField.validate(
+                "zipcode"
+            ) && telepulesField.validate("city")
+            && utcaField.validate("street") && hazszamField.validate("street_number")
+        ) {
+            OrderService.makeOrder(name, email, phone, zipcode, city, street, strnumber, payment)
+        } else {
+            if (!nevField.validate("name")) {
                 nevField.removeClass("good")
                 nevField.addClass("bad")
             }
-            if(!emailField.validate("email"))
-            {
+            if (!emailField.validate("email")) {
                 emailField.removeClass("good")
                 emailField.addClass("bad")
             }
-            if(!telefonszamField.validate("phone"))
-            {
+            if (!telefonszamField.validate("phone")) {
                 telefonszamField.removeClass("good")
                 telefonszamField.addClass("bad")
             }
-            if(!irszamField.validate("phone"))
-            {
+            if (!irszamField.validate("phone")) {
                 irszamField.removeClass("good")
                 irszamField.addClass("bad")
             }
-            if(!telepulesField.validate("phone"))
-            {
+            if (!telepulesField.validate("phone")) {
                 telepulesField.removeClass("good")
                 telepulesField.addClass("bad")
             }
-            if(!utcaField.validate("phone"))
-            {
+            if (!utcaField.validate("phone")) {
                 utcaField.removeClass("good")
                 utcaField.addClass("bad")
             }
-            if(!hazszamField.validate("phone"))
-            {
+            if (!hazszamField.validate("phone")) {
                 hazszamField.removeClass("good")
                 hazszamField.addClass("bad")
             }

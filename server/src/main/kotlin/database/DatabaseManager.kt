@@ -215,4 +215,16 @@ object DatabaseManager {
             it[UsersTable.role] = "GUEST"
         }
     }
+
+    fun getPriceByFoodID(): List<Pair<Int, Int>> {
+        var result: List<Pair<Int, Int>> = listOf<Pair<Int, Int>>()
+        transaction {
+            addLogger(StdOutSqlLogger) // log SQL query
+            result = FoodsTable.selectAll().map {
+                Pair(it[FoodsTable.foodsID].toInt(), it[FoodsTable.price].toInt())
+            }
+            commit()
+        }
+        return result
+    }
 }

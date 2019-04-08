@@ -85,13 +85,15 @@ object Endpoints {
         val body = ctx.body()
         val myOrderModel: MakeOrderModel?
         val myFoodsList: MutableList<FoodsCountModel> = mutableListOf()
+        val pricesOfFoods: List<Pair<Int, Int>> = DatabaseManager.getPriceByFoodID()
         try {
             val json = Klaxon().parseJsonObject(StringReader(body))
             val array = json["foods"] as JsonArray<*>
             array.forEach { food ->
                 if (food is JsonObject) {
+                    println(food.toJsonString(true))
                     myFoodsList.add(FoodsCountModel(food["foodID"].toString().toInt(), food["restaurantID"].toString().toInt(),
-                        food["name"].toString(), food["count"].toString().toInt(), food["price"].toString().toInt()))
+                        food["name"].toString(), food["count"].toString().toInt(), pricesOfFoods.indexOf(food["foodID"])))
                 }
             }
             myOrderModel = MakeOrderModel(json["name"].toString(),
@@ -105,7 +107,9 @@ object Endpoints {
                                         myFoodsList)
             DatabaseManager.insertOrder(myOrderModel)
         }catch (e: RuntimeException) {
+            e.printStackTrace()
             throw BadRequestResponse()
+
         }
     }
 

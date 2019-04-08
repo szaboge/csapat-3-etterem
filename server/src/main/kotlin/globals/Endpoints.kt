@@ -94,7 +94,15 @@ object Endpoints {
                         food["name"].toString(), food["count"].toString().toInt(), food["price"].toString().toInt()))
                 }
             }
-            myOrderModel = MakeOrderModel(json["name"].toString(), json["phone"].toString(), myFoodsList)
+            myOrderModel = MakeOrderModel(json["name"].toString(),
+                                        json["email"].toString(),
+                                        json["phone"].toString(),
+                                        json["zipcode"].toString().toInt(),
+                                        json["city"].toString(),
+                                        json["street"].toString(),
+                                        json["strnumber"].toString(),
+                                        json["payment"].toString(),
+                                        myFoodsList)
             DatabaseManager.insertOrder(myOrderModel)
         }catch (e: RuntimeException) {
             throw BadRequestResponse()

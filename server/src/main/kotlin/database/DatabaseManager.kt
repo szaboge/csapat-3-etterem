@@ -41,7 +41,7 @@ object DatabaseManager {
     }
 
     fun getFoods(restaurantID: Int): MutableList<FoodModel> {
-        var result = mutableListOf<FoodModel>()
+        val result = mutableListOf<FoodModel>()
         transaction {
             addLogger(StdOutSqlLogger)
             result.addAll(FoodsTable.select {
@@ -78,7 +78,13 @@ object DatabaseManager {
             }
             val id = OrdersTable.insert {
                 it[OrdersTable.name] = myModel.name
+                it[OrdersTable.email] = myModel.email
                 it[OrdersTable.phone] = myModel.phone
+                it[OrdersTable.zipcode] = myModel.zipcode
+                it[OrdersTable.city] = myModel.city
+                it[OrdersTable.street] = myModel.street
+                it[OrdersTable.strnumber] = myModel.strnumber
+                it[OrdersTable.payment] = myModel.payment
                 it[OrdersTable.amount] = sum
                 it[OrdersTable.userID] = 1
             } get OrdersTable.orderID

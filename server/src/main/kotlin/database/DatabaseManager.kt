@@ -114,7 +114,13 @@ object DatabaseManager {
                         it[OrdersTable.orderID],
                         it[OrdersTable.date].format(),
                         it[OrdersTable.name],
+                        it[OrdersTable.email],
                         it[OrdersTable.phone],
+                        it[OrdersTable.zipcode],
+                        it[OrdersTable.city],
+                        it[OrdersTable.street],
+                        it[OrdersTable.strnumber],
+                        it[OrdersTable.payment],
                         it[OrdersTable.amount],
                         it[OrdersTable.userID]
                     )

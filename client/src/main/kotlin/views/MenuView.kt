@@ -8,6 +8,7 @@ import globals.ui.ElementFactory.button
 import globals.ui.ElementFactory.div
 import globals.ui.ElementFactory.icon
 import globals.ui.ElementFactory.span
+import globals.ui.Lang
 import globals.ui.RouterService
 import globals.ui.Routes
 import models.communication.UserByTokenModel
@@ -19,7 +20,7 @@ class MenuView: View(), UserChangeListener {
         userControl.innerHTML = ""
         if (newValue.role == "GUEST" || newValue.role == "UNAUTHORIZED") {
             with(userControl) {
-                button("LOGIN") {
+                button(Lang.getText("login")) {
                     addClass("default-button")
                     addEventListener("click", {
                         RouterService.navigate(Routes.LOGIN)
@@ -55,19 +56,19 @@ class MenuView: View(), UserChangeListener {
             addClass("menu-content")
             div()
             div {
-                button("Home") {
+                button(Lang.getText("home")) {
                     addClass("menu-item")
                     addEventListener("click", {
                         RouterService.navigate(Routes.HOME)
                     })
                 }
-                button("Restaurants") {
+                button(Lang.getText("restaurants")) {
                     addClass("menu-item")
                     addEventListener("click", {
                         RouterService.navigate(Routes.RESTAURANTS)
                     })
                 }
-                button("Orders") {
+                button(Lang.getText("menu-orders")) {
                     addClass("menu-item")
                     addEventListener("click", {
                         RouterService.navigate(Routes.ORDERS)
@@ -76,7 +77,7 @@ class MenuView: View(), UserChangeListener {
             }
             userControl = div {
                 addClass("user-control")
-                button("LOGIN") {
+                button(Lang.getText("login")) {
                     addClass("default-button")
                     addEventListener("click", {
                         RouterService.navigate(Routes.LOGIN)

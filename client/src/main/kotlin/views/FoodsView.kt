@@ -7,6 +7,7 @@ import globals.order.OrderService
 import globals.ui.ElementFactory.button
 import globals.ui.ElementFactory.div
 import globals.ui.ElementFactory.label
+import globals.ui.Lang
 import globals.ui.RouterService
 import globals.ui.Routes
 import models.database.FoodModel
@@ -33,13 +34,13 @@ class FoodsView: View() {
             addClass("food")
             div {
                 addClass("foods-label-wrapper")
-                label("FOODS") {
+                label(Lang.getText("foods-foods")) {
                     addClass("title")
                 }
             }
         }
         root.div{
-            label("BASKET") {
+            label(Lang.getText("foods-basket")) {
                 addClass("title")
             }
             addClass("basket")
@@ -48,7 +49,7 @@ class FoodsView: View() {
             }
             div {
                 addClass("order-button-wrapper")
-                button("Proceed to Checkout") {
+                button(Lang.getText("foods-checkout")) {
                     addClass("default-button")
                     addEventListener("click", {
                         RouterService.navigate(Routes.CHECKOUT)
@@ -63,7 +64,7 @@ class FoodsView: View() {
             foodDest.div {
                 addClass("food-item")
                 label(it.name)
-                button("Add to Basket") {
+                button(Lang.getText("foods-add-to")) {
                     addClass("default-button")
                     addEventListener("click", { _ -> addToBasket(it)})
                 }

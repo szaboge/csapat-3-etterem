@@ -6,6 +6,7 @@ import globals.ui.ElementFactory.icon
 import globals.ui.ElementFactory.img
 import globals.ui.ElementFactory.label
 import globals.ui.ElementFactory.span
+import globals.ui.Lang
 import globals.ui.RouterService
 import globals.ui.Routes
 import org.w3c.dom.HTMLDivElement
@@ -49,18 +50,17 @@ object DropdownMenu {
 
 
     fun logout(): HTMLDivElement {
-        val div = div()
-        with(div) {
+        return with(div()) {
             icon("logout")
-            span("LOGOUT")
+            span(Lang.getText("logout"))
             addClass("dropdown-item")
             addEventListener("click", {
                 UserService.logout()
                 RouterService.navigate(Routes.HOME)
                 hide()
             })
+            this
         }
-        return div
     }
 
     fun show() {

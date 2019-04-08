@@ -11,6 +11,7 @@ import globals.ui.ElementFactory.radiobutton
 import globals.ui.ElementFactory.textfield
 import globals.ui.ElementFactory.img
 import globals.ui.ElementFactory.validate
+import globals.ui.Lang
 import globals.ui.RouterService
 import globals.ui.Routes
 import models.communication.FoodsCountModel
@@ -40,7 +41,7 @@ class CheckoutView : View() {
             addClass("checkout")
             div {
                 addClass("checkout-label-title")
-                label("CHECKOUT YOUR ORDER") {
+                label(Lang.getText("checkout-checkout-your-order")) {
                     addClass("title")
                 }
             }
@@ -165,13 +166,13 @@ class CheckoutView : View() {
             }
             div {
                 addClass("ck")
-                label("PAYMENT")
+                label(Lang.getText("checkout-payment" ))
                 div {
                     addClass("ck")
                     icon("credit-card") {
                         addClass("checkout-image")
                     }
-                    label("CREDIT CARD")
+                    label(Lang.getText("checkout-credit-card" ))
                     cash = radiobutton("payment", true)
                 }
                 div {
@@ -179,19 +180,16 @@ class CheckoutView : View() {
                     icon("cash-multiple") {
                         addClass("checkout-image")
                     }
-                    label("CASH")
+                    label(Lang.getText("checkout-cash" ))
                     card = radiobutton("payment", false)
                 }
             }
 
-            if (cash.checked)
-                pay = "keszpenz"
-            else
-                pay = "kartya"
+            pay = if (cash.checked) "cash" else "credit-card"
 
             div {
                 addClass("ck")
-                button("CONTINUE") {
+                button(Lang.getText("checkout-order" )) {
                     addClass("default-button")
                     addEventListener("click", {
                         continue_checkout()
@@ -210,8 +208,6 @@ class CheckoutView : View() {
         val street: String = utcaField.value
         val strnumber: String = hazszamField.value
         val payment: String = pay
-
-        println(emailField.validate("email"))
 
         val data = object {
             val name: String = nevField.value

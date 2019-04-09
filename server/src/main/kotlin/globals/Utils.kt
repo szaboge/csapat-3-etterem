@@ -45,7 +45,7 @@ object Utils {
     }
 
     fun isPasswordValid(password: String): Boolean {
-        return  Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%!\\-_?&])(?=\\S+$).{8,64}$")
+        return  Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,40}$")
             .matcher(password).matches()
     }
 }

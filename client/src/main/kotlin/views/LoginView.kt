@@ -35,6 +35,12 @@ class LoginView : View() {
                     })
                 }
             }
+            button(Lang.getText("registration")) {
+                addClass("default-flat-button registration-button")
+                addEventListener("click", {
+                    RouterService.navigate(Routes.REGISTRATION)
+                })
+            }
         }
     }
 

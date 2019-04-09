@@ -1,6 +1,7 @@
 package components
 
 import globals.UserService
+import globals.ui.ElementFactory
 import globals.ui.ElementFactory.div
 import globals.ui.ElementFactory.icon
 import globals.ui.ElementFactory.img

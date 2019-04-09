@@ -8,6 +8,7 @@ import database.DatabaseManager
 import io.javalin.BadRequestResponse
 import io.javalin.Context
 import io.javalin.ForbiddenResponse
+import io.javalin.UnauthorizedResponse
 import models.communication.FoodsCountModel
 import models.communication.MakeOrderModel
 import models.communication.UserByTokenModel
@@ -40,18 +41,15 @@ object Endpoints {
 
     fun authentication(ctx: Context) {
         val token = Auth.getToken(ctx)
-
-        val result:UserByTokenModel = if (token == "") {
-            DatabaseManager.startGuestSession(Auth.genToken())
-        } else {
+        //DatabaseManager.startGuestSession(Auth.genToken())
+        if (token != "") {
             val list = DatabaseManager.getUserByToken(token)
             if (list.count() > 0) {
-                list.last()
-            } else {
-                DatabaseManager.startGuestSession(Auth.genToken())
+                ctx.json(list.last())
             }
+        } else {
+            throw UnauthorizedResponse()
         }
-        ctx.json(result)
     }
 
     fun login(ctx: Context) {
@@ -113,7 +111,7 @@ object Endpoints {
         }
     }
 
-    fun registry(ctx: Context){
+    fun register(ctx: Context){
         val body = ctx.body()
         val json = try {
             Klaxon().parseJsonObject(StringReader(body))
@@ -125,26 +123,12 @@ object Endpoints {
         val password: String = json["password"].toString()
 
         //check validation
-        val validEmail: Boolean
-        validEmail = Utils.isEmailValid(email)
+        val validEmail: Boolean = Utils.isEmailValid(email)
+        val validPsw: Boolean = Utils.isPasswordValid(password)
 
-        val validPsw: Boolean
-        validPsw = Utils.isPasswordValid(password)
-
-        if (name.isNotEmpty() && name.length < 41){
-            if(validEmail && email.length < 41){
-                if(validPsw){
-                    DatabaseManager.makeUser(name, email, Utils.createPassword(password))
-                } else {
-                    throw BadRequestResponse()
-                }
-            } else {
-                throw BadRequestResponse()
-            }
-        } else {
-            throw BadRequestResponse()
+        when(name.isNotEmpty() && name.length < 41 && validEmail && email.length < 41 && validPsw) {
+            true -> DatabaseManager.makeUser(name, email, Utils.createPassword(password))
+            else -> throw BadRequestResponse()
         }
-
-        //DatabaseManager.makeUser(name, email, Utils.createPassword(password))
     }
 }

@@ -1,10 +1,11 @@
+@import "styles/default-components.css";
 @import "styles/usermenu.css";
 @import "styles/restaurants.css";
 @import "styles/menu.css";
 @import "styles/login.css";
+@import "styles/registration.css";
 @import "styles/home.css";
 @import "styles/foods.css";
-@import "styles/default-components.css";
 @import "styles/checkout.css";
 
 @font-face {
@@ -21,7 +22,7 @@ body {
     width: 100vw;
     color: white;
 }
-button, button:active, button:focus {
+button, button:active, button:focus, input, input:active, input:focus {
     outline:none;
 }
 
@@ -36,4 +37,4 @@ button, button:active, button:focus {
 
 .menu { grid-area: menu; }
 
-.root { grid-area: root; }
+.root { grid-area: root; overflow: hidden}

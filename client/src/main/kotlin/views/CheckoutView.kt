@@ -209,16 +209,6 @@ class CheckoutView : View() {
         val strnumber: String = hazszamField.value
         val payment: String = pay
 
-        val data = object {
-            val name: String = nevField.value
-            val email: String = emailField.value
-            val phone: String = telefonszamField.value
-            val zipcode: String = irszamField.value
-            val city: String = telepulesField.value
-            val street: String = utcaField.value
-            val strnumber: String = hazszamField.value
-            val payment: String = pay
-        }
         if (nevField.validate("name") && emailField.validate("email") && telefonszamField.validate("phone") && irszamField.validate(
                 "zipcode"
             ) && telepulesField.validate("city")

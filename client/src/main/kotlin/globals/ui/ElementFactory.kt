@@ -1,17 +1,13 @@
 package globals.ui
 
+import globals.validation.Validators
 import org.w3c.dom.*
 import kotlin.browser.document
 import kotlin.dom.addClass
-import kotlin.js.RegExp
+import kotlin.dom.removeClass
 
 
 object ElementFactory {
-    fun Button(name: String): HTMLButtonElement {
-        val button = document.createElement("button") as HTMLButtonElement
-        button.innerText = name
-        return button
-    }
 
     fun HTMLElement.label(text: String = "", op: HTMLLabelElement.() -> Unit = {}): HTMLLabelElement {
         val item = document.createElement("label") as HTMLLabelElement
@@ -77,38 +73,27 @@ object ElementFactory {
         return item
     }
 
-    fun HTMLInputElement.validate(type: String): Boolean {
-        var valid = true
+    fun HTMLInputElement.validate(type: String): Boolean =
+    when(type) {
+        "name" -> Validators.oneCharOrMore(this.value)
+        "email" -> Validators.email(this.value)
+        "phone" -> Validators.phone(this.value)
+        "zipcode" -> Validators.zipcode(this.value)
+        "city" -> Validators.oneCharOrMore(this.value)
+        "street" -> Validators.oneCharOrMore(this.value)
+        "street_number" -> Validators.streetnumber(this.value)
+        "password" -> Validators.password(this.value)
+        else -> false
+    }
 
-        val name_regex = RegExp("\\w+")
-
-        val email_regex = RegExp("^(([\\w-]+\\.)+[\\w-]+|([a-zA-Z]|[\\w-]{2,}))@"
-                + "((([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
-                + "[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\."
-                + "([0-1]?[0-9]{1,2}|25[0-5]|2[0-4][0-9])\\.([0-1]?"
-                + "[0-9]{1,2}|25[0-5]|2[0-4][0-9]))|"
-                + "([a-zA-Z]+[\\w-]+\\.)+[a-zA-Z]{2,4})$")
-
-        val phone_regex = RegExp("^[0][6]\\d{9}$|" + "^[1-9]\\d{9}$")
-
-        val zipcode_regex = RegExp("^\\d\\d\\d\\d$")
-
-        val city_regex = RegExp("^[A-Za-áéíóöőúüűÁÉÍÓÖŐÚÜŰ]+$")
-
-        val street_regex = RegExp("^[A-Za-áéíóöőúüűÁÉÍÓÖŐÚÜŰ]+$")
-
-        val streetnumber_regex = RegExp("^\\d+$")
-
-        when(type){
-            "name" -> valid = name_regex.exec(this.value) != null
-            "email" -> valid = email_regex.exec(this.value) != null
-            "phone" -> valid = phone_regex.exec(this.value) != null
-            "zipcode" -> valid = zipcode_regex.exec(this.value) != null
-            "city" -> valid = city_regex.exec(this.value) != null
-            "street" -> valid = street_regex.exec(this.value) != null
-            "street_number" -> valid = streetnumber_regex.exec(this.value) != null
+    fun HTMLInputElement.validateByClass(type: String, validClass: String, invalidClass: String): Boolean {
+        val valid = validate(type)
+        when(valid) {
+            true -> apply { addClass(validClass)
+                            removeClass(invalidClass) }
+            false -> apply { addClass(invalidClass)
+                            removeClass(validClass) }
         }
-
         return valid
     }
 

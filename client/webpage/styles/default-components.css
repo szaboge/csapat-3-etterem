@@ -56,6 +56,22 @@
     box-shadow: none;
 }
 
+.icon-button {
+    color: #ef6c00;
+    transition: color 300ms ease-in-out;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.icon-button:hover {
+    color: #e65100;
+    transition: color 300ms ease-in-out;
+}
+
+.icon-button:active {
+    color: #f57c00;
+}
+
 .title {
     text-transform: uppercase;
     font-size: 2rem;
@@ -65,11 +81,10 @@
 
 .default-textfield {
     background-image:none;
-    background-color: lightgrey;
     box-shadow: none;
     margin-bottom: 12px;
     padding: 12px;
-    font-size: 16px;
+    font-size: 14px;
     border-radius: 4px;
     border: 1px solid transparent;
 }
@@ -88,4 +103,17 @@
 }
 .with-hint {
     margin-bottom: 0;
+}
+
+.bold {
+    font-weight: bold;
+}
+.invalid {
+    border: 1px solid rgba(244, 67, 54,0.9);
+    box-shadow: inset 0 0 4px 0 #ef5350;
+    transition: box-shadow 200ms ease-in-out, border 200ms ease-in-out;
+}
+
+.valid {
+    transition: box-shadow 200ms ease-in-out, border 200ms ease-in-out;
 }

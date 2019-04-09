@@ -11,6 +11,7 @@ import globals.ui.ElementFactory.radiobutton
 import globals.ui.ElementFactory.textfield
 import globals.ui.ElementFactory.img
 import globals.ui.ElementFactory.validate
+import globals.ui.ElementFactory.validateByClass
 import globals.ui.Lang
 import globals.ui.RouterService
 import globals.ui.Routes
@@ -48,119 +49,70 @@ class CheckoutView : View() {
             div {
                 addClass("ck")
                 nevField = textfield {
-                    //Név
-                    addClass("checkout-textfield ")
+                    addClass("default-textfield")
                     placeholder = "Név"
                     addEventListener("keyup", {
-                        if (!validate("name")) {
-                            removeClass("good")
-                            addClass("bad")
-                        } else {
-                            removeClass("bad")
-                            addClass("good")
-                        }
+                        validateByClass("name", "valid", "invalid")
                     })
                 }
             }
             div {
                 addClass("ck")
                 emailField = textfield {
-                    //Email
-                    addClass("checkout-textfield ")
+                    addClass("default-textfield")
                     placeholder = "Email"
                     addEventListener("keyup", {
-                        if (!validate("email")) {
-                            removeClass("good")
-                            addClass("bad")
-                        } else {
-                            removeClass("bad")
-                            addClass("good")
-                        }
+                        validateByClass("email", "valid", "invalid")
                     })
                 }
             }
             div {
                 addClass("ck")
                 telefonszamField = textfield {
-                    //Telefonszám
-                    addClass("checkout-textfield ")
+                    addClass("default-textfield")
                     placeholder = "Telefonszám"
                     addEventListener("keyup", {
-                        if (!validate("phone")) {
-                            removeClass("good")
-                            addClass("bad")
-                        } else {
-                            removeClass("bad")
-                            addClass("good")
-                        }
+                        validateByClass("phone", "valid", "invalid")
                     })
                 }
             }
             div {
                 addClass("ck")
                 irszamField = textfield {
-                    //Irányítószám
-                    addClass("checkout-textfield ")
+                    addClass("default-textfield")
                     placeholder = "Irányítószám"
                     addEventListener("keyup", {
-                        if (!validate("zipcode")) {
-                            removeClass("good")
-                            addClass("bad")
-                        } else {
-                            removeClass("bad")
-                            addClass("good")
-                        }
+                        validateByClass("zipcode", "valid", "invalid")
                     })
                 }
             }
             div {
                 addClass("ck")
                 telepulesField = textfield {
-                    //Település
-                    addClass("checkout-textfield ")
+                    addClass("default-textfield")
                     placeholder = "Település"
                     addEventListener("keyup", {
-                        if (!validate("city")) {
-                            removeClass("good")
-                            addClass("bad")
-                        } else {
-                            removeClass("bad")
-                            addClass("good")
-                        }
+                        validateByClass("city", "valid", "invalid")
                     })
                 }
             }
             div {
                 addClass("ck")
                 utcaField = textfield {
-                    //Utca
-                    addClass("checkout-textfield ")
+                    addClass("default-textfield")
                     placeholder = "Utca"
                     addEventListener("keyup", {
-                        if (!validate("street")) {
-                            removeClass("good")
-                            addClass("bad")
-                        } else {
-                            removeClass("bad")
-                            addClass("good")
-                        }
+                        validateByClass("street", "valid", "invalid")
                     })
                 }
             }
             div {
                 addClass("ck")
                 hazszamField = textfield {
-                    //Házszám
-                    addClass("checkout-textfield ")
+                    addClass("default-textfield")
                     placeholder = "Házszám"
                     addEventListener("keyup", {
-                        if (!validate("street_number")) {
-                            removeClass("good")
-                            addClass("bad")
-                        } else {
-                            removeClass("bad")
-                            addClass("good")
-                        }
+                        validateByClass("street_number", "valid", "invalid")
                     })
                 }
             }
@@ -209,41 +161,15 @@ class CheckoutView : View() {
         val strnumber: String = hazszamField.value
         val payment: String = pay
 
-        if (nevField.validate("name") && emailField.validate("email") && telefonszamField.validate("phone") && irszamField.validate(
-                "zipcode"
-            ) && telepulesField.validate("city")
-            && utcaField.validate("street") && hazszamField.validate("street_number")
+        if (nevField.validateByClass("name", "valid", "invalid")
+            && emailField.validateByClass("email", "valid", "invalid")
+            && telefonszamField.validateByClass("phone", "valid", "invalid")
+            && irszamField.validateByClass("zipcode", "valid", "invalid")
+            && telepulesField.validateByClass("city", "valid", "invalid")
+            && utcaField.validateByClass("street", "valid", "invalid")
+            && hazszamField.validateByClass("street_number", "valid", "invalid")
         ) {
             OrderService.makeOrder(name, email, phone, zipcode, city, street, strnumber, payment)
-        } else {
-            if (!nevField.validate("name")) {
-                nevField.removeClass("good")
-                nevField.addClass("bad")
-            }
-            if (!emailField.validate("email")) {
-                emailField.removeClass("good")
-                emailField.addClass("bad")
-            }
-            if (!telefonszamField.validate("phone")) {
-                telefonszamField.removeClass("good")
-                telefonszamField.addClass("bad")
-            }
-            if (!irszamField.validate("phone")) {
-                irszamField.removeClass("good")
-                irszamField.addClass("bad")
-            }
-            if (!telepulesField.validate("phone")) {
-                telepulesField.removeClass("good")
-                telepulesField.addClass("bad")
-            }
-            if (!utcaField.validate("phone")) {
-                utcaField.removeClass("good")
-                utcaField.addClass("bad")
-            }
-            if (!hazszamField.validate("phone")) {
-                hazszamField.removeClass("good")
-                hazszamField.addClass("bad")
-            }
         }
     }
 

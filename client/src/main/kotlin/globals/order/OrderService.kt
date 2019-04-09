@@ -13,13 +13,10 @@ object OrderService {
             foodsCount.add(FoodsCountModel(food.second.foodID, food.second.restaurantID,food.second.name,food.third))
         }
         val order = MakeOrderModel(name, email,phone,zipcode,city,street,strnumber, payment, foodsCount)
-        //println(JSON.stringify(order))
 
          ApiService.makeOrder(order) {
-            // println(it.status.toString())
              if (it.status.toInt() == 200) {
                 RouterService.navigate(Routes.CHECKOUTDONE)
-                //println(it.responseText)
             }
         }
     }

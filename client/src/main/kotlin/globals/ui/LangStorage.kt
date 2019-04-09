@@ -31,6 +31,7 @@ object LangStorage {
         "foods-basket"                  to  Word("Kosár", "Basket"),
         "foods-checkout"                to  Word("Tovább a fizetéshez", "Proceed to Checkout"),
         "foods-add-to"                  to  Word("Kosárba", "Add to Basket"),
+        "foods-sum"                     to  Word("Összesen", "Amount"),
 
         "restaurants-select"            to  Word("kiválasztás", "select"),
 

@@ -42,7 +42,7 @@ class RegistrationView: View() {
                         addClass("default-textfield")
                         placeholder = Lang.getText("name")
                         addEventListener("keyup", {
-                            validateByClass("name", "reg-valid", "reg-invalid")
+                            validateByClass("name", "valid", "invalid")
                             checkAll()
                         })
                         maxLength = 40
@@ -51,7 +51,7 @@ class RegistrationView: View() {
                         addClass("default-textfield")
                         placeholder = Lang.getText("email")
                         addEventListener("keyup", {
-                            validateByClass("email", "reg-valid", "reg-invalid")
+                            validateByClass("email", "valid", "invalid")
                             checkAll()
                         })
                         maxLength = 40
@@ -60,7 +60,7 @@ class RegistrationView: View() {
                         addClass("default-textfield")
                         placeholder = Lang.getText("password")
                         addEventListener("keyup", {
-                            validateByClass("password", "reg-valid", "reg-invalid")
+                            validateByClass("password", "valid", "invalid")
                             checkAll()
                         })
                         maxLength = 40
@@ -69,7 +69,7 @@ class RegistrationView: View() {
                         addClass("default-textfield with-hint")
                         placeholder = Lang.getText("repassword")
                         addEventListener("keyup", {
-                            validateByClass("password", "reg-valid", "reg-invalid")
+                            validateByClass("password", "valid", "invalid")
                             checkAll()
                         })
                         maxLength = 40

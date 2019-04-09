@@ -86,7 +86,7 @@ object DatabaseManager {
                 it[OrdersTable.strnumber] = myModel.strnumber
                 it[OrdersTable.payment] = myModel.payment
                 it[OrdersTable.amount] = sum
-                it[OrdersTable.userID] = 1
+                it[OrdersTable.userID] = myModel.userID
             } get OrdersTable.orderID
             list.forEach {
                 insertFood(id, it.foodID, it.count, it.price)
@@ -143,22 +143,17 @@ object DatabaseManager {
         return result
     }
 
-    fun startGuestSession(token: String): UserByTokenModel {
-        var userID = 0
+    fun insertGuest(name: String, email: String): Int {
+        var id = 0
         transaction {
-            userID = insertGuest()
-            SessionsTable.insert {
-                it[SessionsTable.sessionID] = token
-                it[SessionsTable.userID] = userID
-            }
+            id = UsersTable.insert {
+                it[UsersTable.name] = name
+                it[UsersTable.email] = email
+                it[UsersTable.role] = ApiRole.GUEST.toString()
+            } get UsersTable.userID ?: throw InternalServerErrorResponse()
+            commit()
         }
-        return UserByTokenModel(userID, ApiRole.GUEST.toString(), token)
-    }
-
-    private fun insertGuest(): Int {
-        return UsersTable.insert {
-            it[role] = ApiRole.GUEST.toString()
-        } get UsersTable.userID ?: throw InternalServerErrorResponse()
+        return id
     }
 
     fun getUserByToken(token: String): MutableList<UserByTokenModel> {
@@ -218,12 +213,12 @@ object DatabaseManager {
         }
     }
 
-    fun getPriceByFoodID(): List<Pair<Int, Int>> {
-        var result: List<Pair<Int, Int>> = listOf<Pair<Int, Int>>()
-        transaction {
+    fun getPriceByFoodID(): Map<Int, Int> {
+        val result: MutableMap<Int, Int> = mutableMapOf()
+            transaction {
             addLogger(StdOutSqlLogger) // log SQL query
-            result = FoodsTable.selectAll().map {
-                Pair(it[FoodsTable.foodsID].toInt(), it[FoodsTable.price].toInt())
+            FoodsTable.selectAll().map {
+                result[it[FoodsTable.foodsID].toInt()] = it[FoodsTable.price].toInt()
             }
             commit()
         }

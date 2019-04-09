@@ -25,9 +25,6 @@ fun main() {
                 get(Endpoints::getOrdersById, roles(ApiRole.ANYONE))
             }
         }
-        path("user") {
-            get(Endpoints::getUser, roles(ApiRole.ANYONE))
-        }
         path("login") {
             post(Endpoints::login, roles(ApiRole.ANYONE))
         }

@@ -8,4 +8,5 @@ class MakeOrderModel(var name: String,
                      var street: String,
                      var strnumber: String,
                      var payment: String,
+                     var userID: Int,
                      var foods: List<FoodsCountModel>)

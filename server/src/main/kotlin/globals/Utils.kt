@@ -45,7 +45,41 @@ object Utils {
     }
 
     fun isPasswordValid(password: String): Boolean {
-        return  Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,40}$")
+        return Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,40}$")
             .matcher(password).matches()
+    }
+
+    fun isNameValid(name: String): Boolean{
+        return Pattern.compile("^[A-Za-áéíóöőúüűÁÉÍÓÖŐÚÜŰ]+[A-Za-áéíóöőúüűÁÉÍÓÖŐÚÜŰ ]*$")
+            .matcher(name).matches()
+    }
+
+    fun isPhoneValid(phone: String): Boolean{
+        return Pattern.compile("^[0][6]\\d{9}$|" + "^[1-9]\\d{9}$")
+            .matcher(phone).matches()
+    }
+
+    fun isZipcodeValid(zipcode: Int): Boolean{
+        return Pattern.compile("^\\d\\d\\d\\d$")
+            .matcher(zipcode.toString()).matches()
+    }
+
+    fun isCityValid(city: String): Boolean{
+        return Pattern.compile("^[A-Za-áéíóöőúüűÁÉÍÓÖŐÚÜŰ]+[A-Za-áéíóöőúüűÁÉÍÓÖŐÚÜŰ ]*$")
+            .matcher(city).matches()
+    }
+
+    fun isStreetValid(street: String): Boolean{
+        return Pattern.compile("^[A-Za-áéíóöőúüűÁÉÍÓÖŐÚÜŰ]+[A-Za-áéíóöőúüűÁÉÍÓÖŐÚÜŰ ]*$")
+            .matcher(street).matches()
+    }
+
+    fun isStrnumberValid(strnumber: String): Boolean{
+        return Pattern.compile("^\\d+$").matcher(strnumber).matches()
+    }
+
+    fun isPaymentValid(payment: String): Boolean{
+        return if (payment == "cash") true
+        else payment == "credit-card"
     }
 }

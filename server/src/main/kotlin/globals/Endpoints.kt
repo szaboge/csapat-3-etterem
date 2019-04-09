@@ -35,17 +35,28 @@ object Endpoints {
         ctx.json(DatabaseManager.getFoodsByOrder(oID.toInt()))
     }
 
-    fun getUser(ctx: Context) {
-
+    fun getUser(ctx: Context): Int? {
+        val token = Auth.getToken(ctx)
+        return if (token != "") {
+            val list = DatabaseManager.getUserByToken(token)
+            if (list.count() > 0) {
+                list.last().userID
+            } else {
+                null
+            }
+        } else {
+            null
+        }
     }
 
     fun authentication(ctx: Context) {
         val token = Auth.getToken(ctx)
-        //DatabaseManager.startGuestSession(Auth.genToken())
         if (token != "") {
             val list = DatabaseManager.getUserByToken(token)
             if (list.count() > 0) {
                 ctx.json(list.last())
+            } else {
+                throw UnauthorizedResponse()
             }
         } else {
             throw UnauthorizedResponse()
@@ -80,18 +91,42 @@ object Endpoints {
     }
 
     fun insertOrder(ctx: Context){
+        var userID = 0
         val body = ctx.body()
         val myOrderModel: MakeOrderModel?
         val myFoodsList: MutableList<FoodsCountModel> = mutableListOf()
-        val pricesOfFoods: List<Pair<Int, Int>> = DatabaseManager.getPriceByFoodID()
+        val pricesOfFoods: Map<Int, Int> = DatabaseManager.getPriceByFoodID()
         try {
             val json = Klaxon().parseJsonObject(StringReader(body))
+
+            when(json.keys.contains("name") && json.keys.contains("email")
+                    && json.keys.contains("phone") && json.keys.contains("zipcode") && json.keys.contains("city")
+                    && json.keys.contains("street") && json.keys.contains("strnumber") && json.keys.contains("payment")) {
+                false -> throw BadRequestResponse()
+            }
+
+            val validName = Utils.isNameValid(json["name"].toString())
+            val validEmail = Utils.isEmailValid(json["email"].toString())
+            val validPhone = Utils.isPhoneValid(json["phone"].toString())
+            val validZipcode = Utils.isZipcodeValid(json["zipcode"].toString().toInt())
+            val validCity = Utils.isCityValid(json["city"].toString())
+            val validStreet = Utils.isStreetValid(json["street"].toString())
+            val validStrnumber = Utils.isStrnumberValid(json["strnumber"].toString())
+            val validPayment = Utils.isPaymentValid(json["payment"].toString())
+
+            when (validName && validEmail && validPhone && validZipcode && validCity && validStreet
+                && validStrnumber && validPayment) {
+                false -> throw BadRequestResponse()
+            }
+
+            userID = getUser(ctx) ?: DatabaseManager.insertGuest(json["name"].toString(), json["email"].toString())
             val array = json["foods"] as JsonArray<*>
             array.forEach { food ->
                 if (food is JsonObject) {
                     println(food.toJsonString(true))
                     myFoodsList.add(FoodsCountModel(food["foodID"].toString().toInt(), food["restaurantID"].toString().toInt(),
-                        food["name"].toString(), food["count"].toString().toInt(), pricesOfFoods.indexOf(food["foodID"])))
+                        food["name"].toString(), food["count"].toString().toInt(),
+                        pricesOfFoods[food["foodID"].toString().toInt()] ?: throw BadRequestResponse()))
                 }
             }
             myOrderModel = MakeOrderModel(json["name"].toString(),
@@ -102,12 +137,12 @@ object Endpoints {
                                         json["street"].toString(),
                                         json["strnumber"].toString(),
                                         json["payment"].toString(),
+                                        userID,
                                         myFoodsList)
             DatabaseManager.insertOrder(myOrderModel)
         }catch (e: RuntimeException) {
             e.printStackTrace()
             throw BadRequestResponse()
-
         }
     }
 

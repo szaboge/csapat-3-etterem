@@ -47,100 +47,103 @@ class CheckoutView : View() {
                 }
             }
             div {
-                addClass("ck")
-                nevField = textfield {
-                    addClass("default-textfield")
-                    placeholder = "Név"
-                    addEventListener("keyup", {
-                        validateByClass("name", "valid", "invalid")
-                    })
+                addClass("checkout-section")
+                label("Személyes adatok")
+                div{
+                    addClass("checkout-section-items")
+                    nevField = textfield {
+                        addClass("default-textfield")
+                        placeholder = "Név"
+                        addEventListener("keyup", {
+                            validateByClass("name", "valid", "invalid")
+                        })
+                    }
+                    emailField = textfield {
+                        addClass("default-textfield")
+                        placeholder = "Email"
+                        addEventListener("keyup", {
+                            validateByClass("email", "valid", "invalid")
+                        })
+                    }
+                    telefonszamField = textfield {
+                        addClass("default-textfield")
+                        placeholder = "Telefonszám"
+                        addEventListener("keyup", {
+                            validateByClass("phone", "valid", "invalid")
+                        })
+                    }
                 }
             }
             div {
-                addClass("ck")
-                emailField = textfield {
-                    addClass("default-textfield")
-                    placeholder = "Email"
-                    addEventListener("keyup", {
-                        validateByClass("email", "valid", "invalid")
-                    })
+                addClass("checkout-section")
+                label("Szállítási cím")
+                div {
+                    addClass("checkout-section-items")
+                    irszamField = textfield {
+                        addClass("default-textfield")
+                        placeholder = "Irányítószám"
+                        addEventListener("keyup", {
+                            validateByClass("zipcode", "valid", "invalid")
+                        })
+                    }
+                    telepulesField = textfield {
+                        addClass("default-textfield")
+                        placeholder = "Település"
+                        addEventListener("keyup", {
+                            validateByClass("city", "valid", "invalid")
+                        })
+                    }
+                    utcaField = textfield {
+                        addClass("default-textfield")
+                        placeholder = "Utca"
+                        addEventListener("keyup", {
+                            validateByClass("street", "valid", "invalid")
+                        })
+                    }
+                    hazszamField = textfield {
+                        addClass("default-textfield")
+                        placeholder = "Házszám"
+                        addEventListener("keyup", {
+                            validateByClass("street_number", "valid", "invalid")
+                        })
+                    }
                 }
             }
             div {
-                addClass("ck")
-                telefonszamField = textfield {
-                    addClass("default-textfield")
-                    placeholder = "Telefonszám"
-                    addEventListener("keyup", {
-                        validateByClass("phone", "valid", "invalid")
-                    })
-                }
-            }
-            div {
-                addClass("ck")
-                irszamField = textfield {
-                    addClass("default-textfield")
-                    placeholder = "Irányítószám"
-                    addEventListener("keyup", {
-                        validateByClass("zipcode", "valid", "invalid")
-                    })
-                }
-            }
-            div {
-                addClass("ck")
-                telepulesField = textfield {
-                    addClass("default-textfield")
-                    placeholder = "Település"
-                    addEventListener("keyup", {
-                        validateByClass("city", "valid", "invalid")
-                    })
-                }
-            }
-            div {
-                addClass("ck")
-                utcaField = textfield {
-                    addClass("default-textfield")
-                    placeholder = "Utca"
-                    addEventListener("keyup", {
-                        validateByClass("street", "valid", "invalid")
-                    })
-                }
-            }
-            div {
-                addClass("ck")
-                hazszamField = textfield {
-                    addClass("default-textfield")
-                    placeholder = "Házszám"
-                    addEventListener("keyup", {
-                        validateByClass("street_number", "valid", "invalid")
-                    })
-                }
-            }
-            div {
-                addClass("ck")
+                addClass("checkout-section")
                 label(Lang.getText("checkout-payment" ))
                 div {
-                    addClass("ck")
-                    icon("credit-card") {
-                        addClass("checkout-image")
+                    addClass("checkout-section-items")
+                    div {
+                        addClass("checkout-radiobutton")
+                        icon("credit-card") {
+                            addClass("checkout-image")
+                        }
+                        label(Lang.getText("checkout-credit-card" )) {
+                            setAttribute("for", "cash")
+                        }
+                        cash = radiobutton("payment", true) {
+                            id = "cash"
+                        }
                     }
-                    label(Lang.getText("checkout-credit-card" ))
-                    cash = radiobutton("payment", true)
-                }
-                div {
-                    addClass("ck")
-                    icon("cash-multiple") {
-                        addClass("checkout-image")
+                    div {
+                        addClass("checkout-radiobutton")
+                        icon("cash-multiple") {
+                            addClass("checkout-image")
+                        }
+                        label(Lang.getText("checkout-cash")) {
+                            setAttribute("for", "card")
+                        }
+                        card = radiobutton("payment", false) {
+                            id = "card"
+                        }
                     }
-                    label(Lang.getText("checkout-cash" ))
-                    card = radiobutton("payment", false)
                 }
             }
 
             pay = if (cash.checked) "cash" else "credit-card"
 
             div {
-                addClass("ck")
                 button(Lang.getText("checkout-order" )) {
                     addClass("default-button")
                     addEventListener("click", {
@@ -148,7 +151,7 @@ class CheckoutView : View() {
                     })
                 }
             }
-        }//div: checkout
+        }
     }
 
     fun continue_checkout() {

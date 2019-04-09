@@ -42,7 +42,7 @@ object LangStorage {
         "registration-done"             to  Word("SIKERES REGISZTRÁCIÓ", "REGISTRATION SUCCESSFUL"),
 
         "checkout-checkout-your-order"  to  Word("RENDELÉS BEFEJEZÉSE", "CHECKOUT YOUR ORDER"),
-        "checkout-payment"              to  Word("FIZETÉSI MÓD", "PAYMENT"),
+        "checkout-payment"              to  Word("Fizetési mód", "Payment"),
         "checkout-credit-card"          to  Word("BANKKÁRTYA", "CREDIT CARD"),
         "checkout-cash"                 to  Word("KÉSZPÉNZ", "CASH"),
         "checkout-order"                to  Word("RENDELÉS", "MAKE ORDER")

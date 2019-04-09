@@ -1,11 +1,31 @@
 .checkout{
-    text-align: center;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 }
 
 .checkout-label-title
 {
     padding: 6px;
-    text-align: center;
+}
+
+.checkout-section {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 600px;
+}
+.checkout-section-items {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    padding: 20px;
+}
+
+.checkout-radiobutton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .checkout-textfield {
@@ -35,21 +55,6 @@
 
 .checkout-image{
     font-size: 32px;
-    color: black;
-}
-
-.bad {
-    border: 1px solid red;
-    /*
-    box-shadow: 0px 0px 8px 0px rgba(255,0,0,1);
-    */
-    box-shadow: inset 0px 0px 35px 1px rgba(237,21,50,1);
-}
-
-.good {
-    border: 1px solid green;
-    /*
-    box-shadow: 0px 0px 8px 0px rgba(15,219,80,1);
-    */
-    box-shadow: inset 0px 0px 35px 1px rgba(15,219,80,1);
+    color: white;
+    margin-right: 6px;
 }

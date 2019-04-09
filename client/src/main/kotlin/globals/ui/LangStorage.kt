@@ -22,11 +22,24 @@ object LangStorage {
         "logout"                        to  Word("Kijelentkezés", "Logout"),
         "menu-orders"                   to  Word("Rendelések", "Orders"),
         "home"                          to  Word("Kezdőlap", "Home"),
+        "name"                          to  Word("Név", "Name"),
+        "email"                         to  Word("Email cím", "Email"),
+        "password"                      to  Word("Jelszó", "Password"),
+        "repassword"                    to  Word("Jelszó megerősítése", "Confirm password"),
+
         "foods-foods"                   to  Word("Ételek", "Foods"),
         "foods-basket"                  to  Word("Kosár", "Basket"),
         "foods-checkout"                to  Word("Tovább a fizetéshez", "Proceed to Checkout"),
         "foods-add-to"                  to  Word("Kosárba", "Add to Basket"),
+
         "restaurants-select"            to  Word("kiválasztás", "select"),
+
+        "home-title"                    to  Word("RENDELÉS KEZDÉSE", "START ORDER"),
+
+        "registration-hint"             to  Word("Legalább 8 karakter, kis- és nagybetű, szám", "At least 8 characters, lower- and uppercase, number"),
+        "registration-error"            to  Word("Sikertelen regisztrálás, próbálja újra.", "Failed to register, try again."),
+        "registration-done"             to  Word("SIKERES REGISZTRÁCIÓ", "REGISTRATION SUCCESSFUL"),
+
         "checkout-checkout-your-order"  to  Word("RENDELÉS BEFEJEZÉSE", "CHECKOUT YOUR ORDER"),
         "checkout-payment"              to  Word("FIZETÉSI MÓD", "PAYMENT"),
         "checkout-credit-card"          to  Word("BANKKÁRTYA", "CREDIT CARD"),

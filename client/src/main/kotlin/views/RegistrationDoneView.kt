@@ -2,7 +2,6 @@ package views
 
 import abstracts.View
 import globals.ui.ElementFactory.button
-import globals.ui.ElementFactory.div
 import globals.ui.ElementFactory.span
 import globals.ui.Lang
 import globals.ui.RouterService
@@ -15,7 +14,7 @@ class RegistrationDoneView: View() {
     override fun render() {
         with(root) {
             addClass("registration-done-view-container")
-            span("SIKERES REGISZTRÁCIÓ") {
+            span(Lang.getText("registration-done")) {
                 addClass("registration-done-title")
             }
             button(Lang.getText("login")) {

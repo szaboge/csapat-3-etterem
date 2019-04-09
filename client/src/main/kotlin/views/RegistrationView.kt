@@ -40,7 +40,7 @@ class RegistrationView: View() {
                     addClass("registration-fields")
                     nameField = textfield {
                         addClass("default-textfield")
-                        placeholder = "Név"
+                        placeholder = Lang.getText("name")
                         addEventListener("keyup", {
                             validateByClass("name", "reg-valid", "reg-invalid")
                             checkAll()
@@ -49,7 +49,7 @@ class RegistrationView: View() {
                     }
                     emailField = textfield {
                         addClass("default-textfield")
-                        placeholder = "Email cím"
+                        placeholder = Lang.getText("email")
                         addEventListener("keyup", {
                             validateByClass("email", "reg-valid", "reg-invalid")
                             checkAll()
@@ -58,7 +58,7 @@ class RegistrationView: View() {
                     }
                     passwordField = textfield {
                         addClass("default-textfield")
-                        placeholder = "Jelszó"
+                        placeholder = Lang.getText("password")
                         addEventListener("keyup", {
                             validateByClass("password", "reg-valid", "reg-invalid")
                             checkAll()
@@ -67,14 +67,14 @@ class RegistrationView: View() {
                     }
                     repasswordField = textfield {
                         addClass("default-textfield with-hint")
-                        placeholder = "Jelszó megerősítése"
+                        placeholder = Lang.getText("repassword")
                         addEventListener("keyup", {
                             validateByClass("password", "reg-valid", "reg-invalid")
                             checkAll()
                         })
                         maxLength = 40
                     }
-                    span("Legalább 8 karakter, kis- és nagybetű, szám") {
+                    span(Lang.getText("registration-hint")) {
                         addClass("hint")
                     }
                 }
@@ -111,7 +111,7 @@ class RegistrationView: View() {
             if (status == 200) {
                 RouterService.navigate(Routes.REGISTRATIONDONE)
             } else {
-                error.textContent = "Sikertelen regisztrálás, próbálja újra."
+                error.textContent = Lang.getText("registration-error")
                 checkAll()
             }
         }

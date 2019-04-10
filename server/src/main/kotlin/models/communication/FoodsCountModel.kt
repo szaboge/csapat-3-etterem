@@ -1,3 +1,3 @@
 package models.communication
 
-class FoodsCountModel(val foodID: Int, val restaurantID: Int, val name: String, val count: Int)
+class FoodsCountModel(val foodID: Int, val restaurantID: Int, val name: String, val count: Int, val price: Int)

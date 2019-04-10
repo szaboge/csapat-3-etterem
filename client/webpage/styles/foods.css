@@ -1,0 +1,88 @@
+.foods-root {
+    display: flex;
+    flex-direction: row;
+}
+
+.food {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+}
+.food-item {
+    color: white;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    margin: 6px;
+    background-color: #424242;
+    border-radius: 4px;
+    transition: background-color 400ms ease-in;
+    max-width: 80%;
+    width: 100%;
+}
+
+.title-container {
+    padding: 12px;
+}
+
+.food-item-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.basket {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+}
+
+.basket-item-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 265px;
+    overflow: scroll;
+}
+
+.basket-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    margin: 6px;
+    background-color: #424242;
+    border-radius: 4px;
+    transition: background-color 400ms ease-in;
+    max-width: 80%;
+    width: 100%;
+}
+
+.order-button-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.to-basket {
+    margin-left: 6px;
+}
+
+.add-to-cart-container {
+    display: flex;
+    align-items: center;
+}
+
+.price-dest {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    width: 100%;
+    height: 30px;
+}
+
+.price-sum {
+    padding-right: 10%;
+}

@@ -6,6 +6,7 @@ import globals.order.OrderService
 import globals.ui.ElementFactory.button
 import globals.ui.ElementFactory.div
 import globals.ui.ElementFactory.label
+import globals.ui.Lang
 import globals.ui.RouterService
 import globals.ui.Routes
 import models.database.RestaurantModel
@@ -15,7 +16,6 @@ import kotlin.dom.addClass
 class RestaurantsView : View() {
     override val routeType = Routes.RESTAURANTS
     var restaurants: Array<RestaurantModel> = arrayOf()
-    var destination: HTMLDivElement = div()
 
     override fun onShow() {
         ApiService.getRestaurants {
@@ -33,7 +33,7 @@ class RestaurantsView : View() {
             root.div {
                 addClass("restaurants-item")
                 label(it.name)
-                button("select") {
+                button(Lang.getText("restaurants-select")) {
                     addClass("default-button")
                     addEventListener("click", { _ -> openRestaurant(it.restaurantID) })
                 }

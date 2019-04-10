@@ -1,0 +1,28 @@
+.menu-content {
+    background-color: black;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.menu-item {
+    color: white;
+    background-color: black;
+    border: 0 solid black;
+    border-bottom: 2px solid black;
+    padding: 15px;
+    font-weight: bold;
+    font-size: 1.125rem;
+    transition: color 400ms ease-in, border-bottom-color 400ms ease-in;
+    cursor: pointer;
+}
+
+.menu-item:hover {
+    color: #ef6c00;
+    border-bottom-color: #ef6c00;
+    transition: color 300ms ease-in, border-bottom-color 300ms ease-in;
+}
+
+.user-item {
+    user-select: none;
+}

@@ -1,5 +1,6 @@
 package globals.communication
 
+import globals.Storage
 import org.w3c.xhr.XMLHttpRequest
 
 object HttpClient {
@@ -11,24 +12,35 @@ object HttpClient {
         return "http://$ip:$port/$path/$url"
     }
 
+    fun setHeader(request: XMLHttpRequest) {
+        with(request) {
+            setRequestHeader("token", Storage.getToken())
+        }
+    }
+
     fun get(url: String, callback: (XMLHttpRequest) -> Unit) {
         val xmlHttp = XMLHttpRequest()
-        xmlHttp.open("GET", makeUrl(url))
-        xmlHttp.onload = {
-            callback.invoke(xmlHttp)
+        with(xmlHttp) {
+            open("GET", makeUrl(url),true)
+            onload = {
+                callback.invoke(this)
+            }
+            setHeader(xmlHttp)
+            send()
         }
-        xmlHttp.send()
     }
     fun post(url: String, obj: Any? = null, callback: (XMLHttpRequest) -> Unit) {
         val xmlHttp = XMLHttpRequest()
-        xmlHttp.open("POST", makeUrl(url))
-        xmlHttp.onload = {
-            callback.invoke(xmlHttp)
-        }
-
-        when {
-            obj != null -> xmlHttp.send(JSON.stringify(obj))
-            else -> xmlHttp.send()
+        with(xmlHttp) {
+            open("POST", makeUrl(url), true)
+            onload = {
+                callback.invoke(xmlHttp)
+            }
+            setHeader(this)
+            when {
+                obj != null -> send(JSON.stringify(obj))
+                else -> send()
+            }
         }
     }
 

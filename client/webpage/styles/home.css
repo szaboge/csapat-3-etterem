@@ -1,0 +1,15 @@
+.home {
+    width: 100vw;
+    height: 100%;
+    overflow: hidden;
+    background-image: url("../img/home.jpg");
+    background-size: cover;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 30px;
+}
+.get-started {
+    font-size: 24px;
+    margin-right: 10%;
+}

@@ -41,13 +41,13 @@ object DatabaseManager {
     }
 
     fun getFoods(restaurantID: Int): MutableList<FoodModel> {
-        var result = mutableListOf<FoodModel>()
+        val result = mutableListOf<FoodModel>()
         transaction {
             addLogger(StdOutSqlLogger)
             result.addAll(FoodsTable.select {
                 FoodsTable.restaurantID.eq(restaurantID)
             }.map {
-                FoodModel(it[FoodsTable.foodsID], it[FoodsTable.restaurantID], it[FoodsTable.name])
+                FoodModel(it[FoodsTable.foodsID], it[FoodsTable.restaurantID], it[FoodsTable.name], it[FoodsTable.price])
             })
         }
         return result
@@ -72,22 +72,35 @@ object DatabaseManager {
         transaction {
             addLogger(StdOutSqlLogger) // log SQL query
             val list = myModel.foods
+            var sum = 0
+            list.forEach {
+                sum += it.price * it.count
+            }
             val id = OrdersTable.insert {
                 it[OrdersTable.name] = myModel.name
+                it[OrdersTable.email] = myModel.email
                 it[OrdersTable.phone] = myModel.phone
+                it[OrdersTable.zipcode] = myModel.zipcode
+                it[OrdersTable.city] = myModel.city
+                it[OrdersTable.street] = myModel.street
+                it[OrdersTable.strnumber] = myModel.strnumber
+                it[OrdersTable.payment] = myModel.payment
+                it[OrdersTable.amount] = sum
+                it[OrdersTable.userID] = myModel.userID
             } get OrdersTable.orderID
             list.forEach {
-                insertFood(id, it.foodID, it.count)
+                insertFood(id, it.foodID, it.count, it.price)
             }
             commit()
         }
     }
 
-    private fun insertFood(orderID: Int?, foodID: Int, count: Int) {
+    private fun insertFood(orderID: Int?, foodID: Int, count: Int, price: Int) {
         FoodsOfOrderTable.insert {
             it[FoodsOfOrderTable.orderID] = orderID
             it[FoodsOfOrderTable.foodID] = foodID
             it[FoodsOfOrderTable.count] = count
+            it[FoodsOfOrderTable.price] = price
         }
     }
 
@@ -101,7 +114,15 @@ object DatabaseManager {
                         it[OrdersTable.orderID],
                         it[OrdersTable.date].format(),
                         it[OrdersTable.name],
-                        it[OrdersTable.phone]
+                        it[OrdersTable.email],
+                        it[OrdersTable.phone],
+                        it[OrdersTable.zipcode],
+                        it[OrdersTable.city],
+                        it[OrdersTable.street],
+                        it[OrdersTable.strnumber],
+                        it[OrdersTable.payment],
+                        it[OrdersTable.amount],
+                        it[OrdersTable.userID]
                     )
                 }
         }
@@ -122,22 +143,17 @@ object DatabaseManager {
         return result
     }
 
-    fun startGuestSession(token: String): UserByTokenModel {
-        var userID = 0
+    fun insertGuest(name: String, email: String): Int {
+        var id = 0
         transaction {
-            userID = insertGuest()
-            SessionsTable.insert {
-                it[SessionsTable.sessionID] = token
-                it[SessionsTable.userID] = userID
-            }
+            id = UsersTable.insert {
+                it[UsersTable.name] = name
+                it[UsersTable.email] = email
+                it[UsersTable.role] = ApiRole.GUEST.toString()
+            } get UsersTable.userID ?: throw InternalServerErrorResponse()
+            commit()
         }
-        return UserByTokenModel(userID, ApiRole.GUEST.toString(), token)
-    }
-
-    private fun insertGuest(): Int {
-        return UsersTable.insert {
-            it[role] = ApiRole.GUEST.toString()
-        } get UsersTable.userID ?: throw InternalServerErrorResponse()
+        return id
     }
 
     fun getUserByToken(token: String): MutableList<UserByTokenModel> {
@@ -186,5 +202,26 @@ object DatabaseManager {
         return sessionID
     }
 
+    fun makeUser(name: String, email: String, password: String){
+        transaction {
+            UsersTable.insert {
+                it[UsersTable.name] = name
+                it[UsersTable.email] = email
+                it[UsersTable.password] = password
+                it[UsersTable.role] = "USER"
+            }
+        }
+    }
 
+    fun getPriceByFoodID(): Map<Int, Int> {
+        val result: MutableMap<Int, Int> = mutableMapOf()
+            transaction {
+            addLogger(StdOutSqlLogger) // log SQL query
+            FoodsTable.selectAll().map {
+                result[it[FoodsTable.foodsID].toInt()] = it[FoodsTable.price].toInt()
+            }
+            commit()
+        }
+        return result
+    }
 }

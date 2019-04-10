@@ -6,7 +6,11 @@ import globals.order.Basket
 import globals.order.OrderService
 import globals.ui.ElementFactory.button
 import globals.ui.ElementFactory.div
+import globals.ui.ElementFactory.icon
 import globals.ui.ElementFactory.label
+import globals.ui.ElementFactory.span
+import globals.ui.Lang
+import globals.ui.RouterService
 import globals.ui.Routes
 import models.database.FoodModel
 import org.w3c.dom.HTMLDivElement
@@ -17,6 +21,7 @@ class FoodsView: View() {
     private var foods: Array<FoodModel> = arrayOf()
     private var foodDest: HTMLDivElement = div()
     private var basketDest: HTMLDivElement = div()
+    lateinit var priceDest: HTMLDivElement
 
     override fun onShow() {
         Basket.clear()
@@ -31,26 +36,32 @@ class FoodsView: View() {
         foodDest = root.div {
             addClass("food")
             div {
-                addClass("foods-label-wrapper")
-                label("FOODS") {
+                addClass("title-container")
+                label(Lang.getText("foods-foods")) {
                     addClass("title")
                 }
             }
         }
         root.div{
-            label("BASKET") {
-                addClass("title")
+            div {
+                addClass("title-container")
+                label(Lang.getText("foods-basket")) {
+                    addClass("title")
+                }
             }
             addClass("basket")
             basketDest = div {
                 addClass("basket-item-container")
             }
+            priceDest = div {
+                addClass("price-dest")
+            }
             div {
                 addClass("order-button-wrapper")
-                button("Proceed to Checkout") {
+                button(Lang.getText("foods-checkout")) {
                     addClass("default-button")
                     addEventListener("click", {
-                        OrderService.makeOrder()
+                        RouterService.navigate(Routes.CHECKOUT)
                     })
                 }
             }
@@ -58,25 +69,46 @@ class FoodsView: View() {
     }
 
     private fun generateFoods() {
-        foods.forEach {
-            foodDest.div {
-                addClass("food-item")
-                label(it.name)
-                button("Add to Basket") {
-                    addClass("default-button")
-                    addEventListener("click", {event -> addToBasket(it)})
+        with(foodDest) {
+            div {
+                addClass("food-item-container")
+                foods.forEach {
+                    div {
+                        addClass("food-item")
+                        label(it.name)
+                        div {
+                            addClass("add-to-cart-container")
+                            span("${it.price} Ft ")
+                            icon("cart") {
+                                addClass("icon-button to-basket")
+                                addEventListener("click", { _ -> addToBasket(it)})
+                            }
+                        }
+                    }
                 }
             }
         }
+
     }
     private fun generateBasket() {
-        while (basketDest.firstChild != null) basketDest.removeChild(basketDest.firstChild!!)
+        basketDest.innerHTML = ""
+        priceDest.innerHTML = ""
+
+        var sum = 0
         Basket.getFoods().forEach {
             basketDest.div {
                 addClass("basket-item")
                 label(it.second.name)
-                label(it.third.toString())
+                div {
+                    label("${it.third} x ")
+                    label("${it.second.price} Ft = ")
+                    label("${it.second.price * it.third} Ft")
+                }
             }
+            sum += it.second.price * it.third
+        }
+        priceDest.span("${Lang.getText("foods-sum")}: $sum Ft"){
+            addClass("price-sum")
         }
     }
 

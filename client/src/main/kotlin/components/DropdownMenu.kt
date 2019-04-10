@@ -25,6 +25,7 @@ object DropdownMenu {
         dropdownContainer.innerHTML = ""
         when(role) {
             "ADMIN" -> adminMenu()
+            "USER"  -> userMenu()
             else -> defaultMenu()
         }
     }
@@ -34,6 +35,25 @@ object DropdownMenu {
             addClass("dropdown-wrapper")
             div {
                 addClass("dropdown-collection")
+                appendChild(logout())
+            }
+        }
+    }
+
+    fun userMenu() {
+        with(dropdownContainer) {
+            addClass("dropdown-wrapper")
+            div {
+                addClass("dropdown-collection")
+                div {
+                    icon("package-variant-closed")
+                    span(Lang.getText("dropdown-myorders"))
+                    addClass("dropdown-item")
+                    addEventListener("click", {
+                        RouterService.navigate(Routes.MYORDERS)
+                        hide()
+                    })
+                }
                 appendChild(logout())
             }
         }
@@ -53,7 +73,7 @@ object DropdownMenu {
     fun logout(): HTMLDivElement {
         return with(div()) {
             icon("logout")
-            span(Lang.getText("logout"))
+            span(Lang.getText("logout").toUpperCase())
             addClass("dropdown-item")
             addEventListener("click", {
                 UserService.logout()

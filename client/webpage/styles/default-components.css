@@ -110,7 +110,7 @@
 }
 
 .invalid {
-    border: 1px solid rgba(244, 67, 54,0.9);
+    border: 1px solid rgba(244, 67, 54, 1);
     box-shadow: inset 0 0 4px 0 #ef5350;
     transition: box-shadow 200ms ease-in-out, border 200ms ease-in-out;
 }

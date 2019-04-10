@@ -192,7 +192,7 @@ object DatabaseManager {
     }
 
     fun startSession(token: String, userID: Int): String {
-        var sessionID: String = ""
+        var sessionID = ""
         transaction {
             sessionID = SessionsTable.insert {
                 it[SessionsTable.sessionID] = token

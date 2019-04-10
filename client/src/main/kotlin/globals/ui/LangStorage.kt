@@ -45,6 +45,11 @@ object LangStorage {
         "checkout-payment"              to  Word("Fizetési mód", "Payment"),
         "checkout-credit-card"          to  Word("BANKKÁRTYA", "CREDIT CARD"),
         "checkout-cash"                 to  Word("KÉSZPÉNZ", "CASH"),
-        "checkout-order"                to  Word("RENDELÉS", "MAKE ORDER")
+        "checkout-order"                to  Word("RENDELÉS", "MAKE ORDER"),
+        "checkout-done"                 to  Word("SIKERES RENDELÉS", "CHECKOUT DONE"),
+
+        "dropdown-myorders"             to  Word("RENDELÉSEIM", "MY ORDERS")
+
+
     )
 }

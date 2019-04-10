@@ -35,6 +35,11 @@ object Endpoints {
         ctx.json(DatabaseManager.getFoodsByOrder(oID.toInt()))
     }
 
+    fun getMyOrders(ctx: Context) {
+        val id = getUser(ctx) ?: throw UnauthorizedResponse()
+
+    }
+
     fun getUser(ctx: Context): Int? {
         val token = Auth.getToken(ctx)
         return if (token != "") {

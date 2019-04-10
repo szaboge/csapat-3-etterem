@@ -24,6 +24,9 @@ fun main() {
             path(":id") {
                 get(Endpoints::getOrdersById, roles(ApiRole.ANYONE))
             }
+            path("myorders") {
+                get(Endpoints::getMyOrders, roles(ApiRole.USER))
+            }
         }
         path("login") {
             post(Endpoints::login, roles(ApiRole.ANYONE))
@@ -35,11 +38,11 @@ fun main() {
             path("restaurant") {
                 post(Endpoints::insertRestaurant, roles(ApiRole.ANYONE))
             }
-            path("order"){
+            path("order") {
                 post(Endpoints::insertOrder, roles(ApiRole.ANYONE))
             }
         }
-        path("register"){
+        path("register") {
             post(Endpoints::register, roles(ApiRole.ANYONE))
         }
     }

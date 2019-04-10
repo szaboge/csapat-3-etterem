@@ -141,8 +141,6 @@ class CheckoutView : View() {
                 }
             }
 
-            pay = if (cash.checked) "cash" else "credit-card"
-
             div {
                 button(Lang.getText("checkout-order" )) {
                     addClass("default-button")
@@ -162,7 +160,7 @@ class CheckoutView : View() {
         val city: String = telepulesField.value
         val street: String = utcaField.value
         val strnumber: String = hazszamField.value
-        val payment: String = pay
+        val payment: String = if (cash.checked) "cash" else "credit-card"
 
         if (nevField.validateByClass("name", "valid", "invalid")
             && emailField.validateByClass("email", "valid", "invalid")

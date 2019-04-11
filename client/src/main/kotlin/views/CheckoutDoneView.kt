@@ -19,10 +19,10 @@ class CheckoutDoneView:View() {
             span(Lang.getText("checkout-done")) {
                 addClass("checkout-done-title")
             }
-            button(Lang.getText("login")) {
+            button("RENDELÉSEIM") {
                 addClass("default-button")
                 addEventListener("click", {
-                    RouterService.navigate(Routes.LOGIN)
+                    RouterService.navigate(Routes.MYORDERS)
                 })
             }
         }

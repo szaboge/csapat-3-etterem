@@ -10,7 +10,7 @@ object OrderService {
     fun makeOrder(name: String, email: String, phone: String, zipcode: String, city:String, street: String, strnumber:String, payment:String) {
         var foodsCount: MutableList<FoodsCountModel> = mutableListOf()
         Basket.basket.forEach { food ->
-            foodsCount.add(FoodsCountModel(food.second.foodID, food.second.restaurantID,food.second.name,food.third))
+            foodsCount.add(FoodsCountModel(food.second.foodID, food.second.restaurantID,food.second.name,food.third,food.second.price))
         }
         val order = MakeOrderModel(name, email,phone,zipcode,city,street,strnumber, payment, foodsCount)
 

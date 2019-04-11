@@ -30,14 +30,9 @@ object Endpoints {
         ctx.json(DatabaseManager.getOrders())
     }
 
-    fun getOrdersById(ctx: Context) {
-        val oID = ctx.pathParam("id")
-        ctx.json(DatabaseManager.getFoodsByOrder(oID.toInt()))
-    }
-
     fun getMyOrders(ctx: Context) {
         val id = getUser(ctx) ?: throw UnauthorizedResponse()
-
+        ctx.json(DatabaseManager.getOrdersByUserID(id))
     }
 
     fun getUser(ctx: Context): Int? {
@@ -84,7 +79,7 @@ object Endpoints {
         if(userList.count() > 0) {
             val user = userList.last()
             val sessionID = Auth.login(user.userID, ctx)
-            ctx.json(UserByTokenModel(user.userID, user.role, sessionID))
+            ctx.json(UserByTokenModel(user.userID,user.name!!, user.role, sessionID))
         } else {
             throw BadRequestResponse()
         }
@@ -96,7 +91,7 @@ object Endpoints {
     }
 
     fun insertOrder(ctx: Context){
-        var userID = 0
+        var userID: Int
         val body = ctx.body()
         val myOrderModel: MakeOrderModel?
         val myFoodsList: MutableList<FoodsCountModel> = mutableListOf()

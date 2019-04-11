@@ -1,5 +1,6 @@
 import globals.UserService
 import globals.communication.HttpClient
+import models.communication.GetOrderModel
 import models.database.FoodModel
 import models.database.OrderModel
 import models.database.RestaurantModel
@@ -49,6 +50,13 @@ object ApiService {
     fun register(obj: Any,callback: (XMLHttpRequest) -> Unit) {
         HttpClient.post("register", obj) {
             callback.invoke(it)
+        }
+    }
+
+    fun getMyOrders(callback: (Array<GetOrderModel>) -> Unit) {
+        HttpClient.get("orders/myorders") {
+            val orders = JSON.parse<Array<GetOrderModel>>(it.responseText)
+            callback.invoke(orders)
         }
     }
 }

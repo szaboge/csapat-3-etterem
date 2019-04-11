@@ -21,9 +21,6 @@ fun main() {
         }
         path("orders") {
             get(Endpoints::getOrders, roles(ApiRole.ANYONE))
-            path(":id") {
-                get(Endpoints::getOrdersById, roles(ApiRole.ANYONE))
-            }
             path("myorders") {
                 get(Endpoints::getMyOrders, roles(ApiRole.USER))
             }

@@ -30,7 +30,7 @@ object Utils {
     }
 
     fun createPassword(password: String): String {
-        return Utils.sha256("$password${Utils.sha256(magicword)}")
+        return sha256("$password${sha256(magicword)}")
     }
 
     fun isEmailValid(email: String): Boolean {

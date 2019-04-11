@@ -20,6 +20,7 @@ import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLInputElement
 import org.w3c.dom.HTMLMenuElement
 import org.w3c.dom.HTMLMenuItemElement
+import kotlin.browser.document
 import kotlin.dom.addClass
 import kotlin.dom.removeClass
 

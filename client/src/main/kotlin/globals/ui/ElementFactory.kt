@@ -1,5 +1,6 @@
 package globals.ui
 
+import globals.ui.ElementFactory.img
 import globals.validation.Validators
 import org.w3c.dom.*
 import kotlin.browser.document
@@ -68,6 +69,14 @@ object ElementFactory {
     fun HTMLElement.img(src: String, op: HTMLImageElement.() -> Unit = {}): HTMLImageElement {
         val item = document.createElement("img") as HTMLImageElement
         item.src = src
+        this.appendChild(item)
+        op.invoke(item)
+        return item
+    }
+
+    fun HTMLElement.p(text: String = "",op: HTMLParagraphElement.() -> Unit = {}): HTMLParagraphElement {
+        val item = document.createElement("p") as HTMLParagraphElement
+        item.textContent = text
         this.appendChild(item)
         op.invoke(item)
         return item

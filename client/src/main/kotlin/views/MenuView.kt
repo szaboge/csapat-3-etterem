@@ -32,7 +32,7 @@ class MenuView: View(), UserChangeListener {
         DropdownMenu.generate(newValue.role)
         with(userControl) {
             div {
-                span(newValue.role) {
+                span(newValue.name) {
                     addClass("user-item")
                 }
                 icon("chevron-down")

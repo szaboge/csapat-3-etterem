@@ -19,7 +19,7 @@ object UserService {
     }
     fun subscribe(listener: UserChangeListener) = listeners.add(listener)
     fun logout() {
-        setUser(UserByTokenModel(-1, "UNAUTHORIZED", ""))
+        setUser(UserByTokenModel(-1, "","UNAUTHORIZED", ""))
     }
 
     fun notify(newUser: UserByTokenModel) = listeners.forEach { it.onUserChange(newUser) }

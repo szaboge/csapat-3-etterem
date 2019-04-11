@@ -5,7 +5,7 @@ import org.jetbrains.exposed.sql.Table
 
 object FoodsTable: Table("foods") {
     val foodsID: Column<Int> = integer("foodID").autoIncrement().primaryKey()
-    val restaurantID: Column<Int?> = integer("restaurantID").nullable()
+    val restaurantID: Column<Int> = integer("restaurantID")
     val name: Column<String> = text("name")
     val price: Column<Int> = integer("price")
 }

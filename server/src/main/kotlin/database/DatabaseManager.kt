@@ -4,12 +4,11 @@ import auth.ApiRole
 import database.tables.*
 import globals.format
 import io.javalin.InternalServerErrorResponse
+import models.communication.FoodsCountModel
+import models.communication.GetOrderModel
 import models.communication.MakeOrderModel
 import models.communication.UserByTokenModel
-import models.database.FoodModel
-import models.database.OrderModel
-import models.database.RestaurantModel
-import models.database.UserModel
+import models.database.*
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -58,7 +57,7 @@ object DatabaseManager {
             addLogger(StdOutSqlLogger) // log SQL query
             val id = RestaurantsTable.insert {
                 it[name] = restaurantName
-            } get RestaurantsTable.restaurantID
+            } get RestaurantsTable.restaurantID ?: throw InternalServerErrorResponse()
 
             FoodsTable.insert {
                 it[restaurantID] = id
@@ -77,17 +76,17 @@ object DatabaseManager {
                 sum += it.price * it.count
             }
             val id = OrdersTable.insert {
-                it[OrdersTable.name] = myModel.name
-                it[OrdersTable.email] = myModel.email
-                it[OrdersTable.phone] = myModel.phone
-                it[OrdersTable.zipcode] = myModel.zipcode
-                it[OrdersTable.city] = myModel.city
-                it[OrdersTable.street] = myModel.street
-                it[OrdersTable.strnumber] = myModel.strnumber
-                it[OrdersTable.payment] = myModel.payment
-                it[OrdersTable.amount] = sum
-                it[OrdersTable.userID] = myModel.userID
-            } get OrdersTable.orderID
+                it[name] = myModel.name
+                it[email] = myModel.email
+                it[phone] = myModel.phone
+                it[zipcode] = myModel.zipcode
+                it[city] = myModel.city
+                it[street] = myModel.street
+                it[strnumber] = myModel.strnumber
+                it[payment] = myModel.payment
+                it[amount] = sum
+                it[userID] = myModel.userID
+            } get OrdersTable.orderID ?: throw InternalServerErrorResponse()
             list.forEach {
                 insertFood(id, it.foodID, it.count, it.price)
             }
@@ -95,7 +94,7 @@ object DatabaseManager {
         }
     }
 
-    private fun insertFood(orderID: Int?, foodID: Int, count: Int, price: Int) {
+    private fun insertFood(orderID: Int, foodID: Int, count: Int, price: Int) {
         FoodsOfOrderTable.insert {
             it[FoodsOfOrderTable.orderID] = orderID
             it[FoodsOfOrderTable.foodID] = foodID
@@ -129,20 +128,6 @@ object DatabaseManager {
         return result
     }
 
-    fun getFoodsByOrder(orderID: Int?): MutableList<Pair<Int, String>> {
-        val result: MutableList<Pair<Int, String>> = mutableListOf()
-        transaction {
-            addLogger(StdOutSqlLogger) // log SQL query
-            result.addAll((FoodsTable innerJoin FoodsOfOrderTable)
-                .slice(FoodsTable.name, FoodsTable.foodsID)
-                .select { FoodsTable.foodsID eq FoodsOfOrderTable.foodID }
-                .map {
-                    Pair(it[FoodsTable.foodsID], it[FoodsTable.name])
-                })
-        }
-        return result
-    }
-
     fun insertGuest(name: String, email: String): Int {
         var id = 0
         transaction {
@@ -160,11 +145,12 @@ object DatabaseManager {
         val result = mutableListOf<UserByTokenModel>()
         transaction {
             result.addAll((SessionsTable innerJoin UsersTable)
-                .slice(UsersTable.userID, UsersTable.role, SessionsTable.sessionID)
+                .slice(UsersTable.userID, UsersTable.role, SessionsTable.sessionID, UsersTable.name)
                 .select { SessionsTable.sessionID eq token }
                 .map {
                     UserByTokenModel(
                         it[UsersTable.userID],
+                        it[UsersTable.name]!!,
                         it[UsersTable.role],
                         it[SessionsTable.sessionID]
                     )
@@ -222,6 +208,48 @@ object DatabaseManager {
             }
             commit()
         }
+        return result
+    }
+
+    fun getOrdersByUserID(userID: Int): MutableList<GetOrderModel> {
+        val result: MutableList<GetOrderModel> = mutableListOf()
+        transaction {
+            result.addAll(OrdersTable
+                .select { OrdersTable.userID eq userID}
+                .map {
+                    GetOrderModel(
+                        it[OrdersTable.orderID],
+                        it[OrdersTable.date].format(),
+                        it[OrdersTable.name],
+                        it[OrdersTable.email],
+                        it[OrdersTable.phone],
+                        it[OrdersTable.zipcode],
+                        it[OrdersTable.city],
+                        it[OrdersTable.street],
+                        it[OrdersTable.strnumber],
+                        it[OrdersTable.payment],
+                        it[OrdersTable.amount],
+                        it[OrdersTable.userID],
+                        getFoodsByOrder(it[OrdersTable.orderID])
+                    )
+                })
+        }
+        return result
+    }
+
+    fun getFoodsByOrder(orderID: Int): MutableList<FoodsCountModel> {
+        val result: MutableList<FoodsCountModel> = mutableListOf()
+        result.addAll((FoodsOfOrderTable innerJoin FoodsTable)
+            .select { FoodsOfOrderTable.orderID eq orderID }
+            .map {
+                FoodsCountModel(
+                    it[FoodsOfOrderTable.foodID],
+                    it[FoodsTable.restaurantID],
+                    it[FoodsTable.name],
+                    it[FoodsOfOrderTable.count],
+                    it[FoodsOfOrderTable.price]
+                )
+            })
         return result
     }
 }

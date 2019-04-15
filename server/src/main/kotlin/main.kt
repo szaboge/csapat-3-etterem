@@ -24,6 +24,12 @@ fun main() {
             path("myorders") {
                 get(Endpoints::getMyOrders, roles(ApiRole.USER))
             }
+            path("kitchen") {
+                post(Endpoints::updateStatus, roles(ApiRole.KITCHEN))
+            }
+            path("rider") {
+                post(Endpoints::updateStatus, roles(ApiRole.RIDER))
+            }
         }
         path("login") {
             post(Endpoints::login, roles(ApiRole.ANYONE))

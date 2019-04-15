@@ -91,7 +91,7 @@ object Endpoints {
     }
 
     fun insertOrder(ctx: Context){
-        var userID: Int
+        val userID: Int
         val body = ctx.body()
         val myOrderModel: MakeOrderModel?
         val myFoodsList: MutableList<FoodsCountModel> = mutableListOf()
@@ -138,6 +138,7 @@ object Endpoints {
                                         json["strnumber"].toString(),
                                         json["payment"].toString(),
                                         userID,
+                                        "DONE",
                                         myFoodsList)
             DatabaseManager.insertOrder(myOrderModel)
         }catch (e: RuntimeException) {
@@ -165,5 +166,17 @@ object Endpoints {
             true -> DatabaseManager.makeUser(name, email, Utils.createPassword(password))
             else -> throw BadRequestResponse()
         }
+    }
+
+    fun updateStatus(ctx: Context){
+        val body = ctx.body()
+        val json = try {
+            Klaxon().parseJsonObject(StringReader(body))
+        } catch (e: Exception) {
+            throw BadRequestResponse()
+        }
+        val status: String = json["status"].toString()
+        val orderID: Int = json["orderID"].toString().toInt()
+        DatabaseManager.updateStatus(status, orderID)
     }
 }

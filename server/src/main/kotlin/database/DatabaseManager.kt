@@ -2,6 +2,7 @@ package database
 
 import auth.ApiRole
 import database.tables.*
+import globals.Statuses
 import globals.format
 import io.javalin.InternalServerErrorResponse
 import models.communication.FoodsCountModel
@@ -86,6 +87,7 @@ object DatabaseManager {
                 it[payment] = myModel.payment
                 it[amount] = sum
                 it[userID] = myModel.userID
+                it[status] = Statuses.ARRIVING.toString()
             } get OrdersTable.orderID ?: throw InternalServerErrorResponse()
             list.forEach {
                 insertFood(id, it.foodID, it.count, it.price)
@@ -121,7 +123,8 @@ object DatabaseManager {
                         it[OrdersTable.strnumber],
                         it[OrdersTable.payment],
                         it[OrdersTable.amount],
-                        it[OrdersTable.userID]
+                        it[OrdersTable.userID],
+                        it[OrdersTable.status]
                     )
                 }
         }
@@ -230,6 +233,7 @@ object DatabaseManager {
                         it[OrdersTable.payment],
                         it[OrdersTable.amount],
                         it[OrdersTable.userID],
+                        it[OrdersTable.status],
                         getFoodsByOrder(it[OrdersTable.orderID])
                     )
                 })
@@ -251,5 +255,15 @@ object DatabaseManager {
                 )
             })
         return result
+    }
+
+    fun updateStatus(newStatus: String, orderID: Int){
+        transaction {
+            addLogger(StdOutSqlLogger)
+            OrdersTable.update({OrdersTable.orderID eq orderID}){
+                it[OrdersTable.status] = newStatus
+            }
+            commit()
+        }
     }
 }

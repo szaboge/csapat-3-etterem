@@ -17,4 +17,5 @@ object OrdersTable: Table("orders") {
     val payment: Column<String> = text("payment")
     val amount: Column<Int> = integer("amount")
     val userID: Column<Int> = integer("userID")
+    val status: Column<String> = text("status")
 }

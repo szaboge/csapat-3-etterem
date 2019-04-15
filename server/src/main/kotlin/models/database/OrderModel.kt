@@ -11,4 +11,5 @@ class OrderModel(val orderID: Int,
                  val strnumber: String,
                  val payment: String,
                  val amount: Int,
-                 val userID: Int)
+                 val userID: Int,
+                 val status: String)

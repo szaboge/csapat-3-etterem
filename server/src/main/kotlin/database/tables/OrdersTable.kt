@@ -18,4 +18,5 @@ object OrdersTable: Table("orders") {
     val amount: Column<Int> = integer("amount")
     val userID: Column<Int> = integer("userID")
     val status: Column<String> = text("status")
+    val restaurantID: Column<Int> = integer("restaurantID").references(RestaurantsTable.restaurantID)
 }

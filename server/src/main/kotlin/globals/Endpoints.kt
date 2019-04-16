@@ -138,7 +138,7 @@ object Endpoints {
                                         json["strnumber"].toString(),
                                         json["payment"].toString(),
                                         userID,
-                                        "DONE",
+                                        "ARRIVING",
                                         myFoodsList)
             DatabaseManager.insertOrder(myOrderModel)
         }catch (e: RuntimeException) {

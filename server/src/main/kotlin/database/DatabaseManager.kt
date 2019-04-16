@@ -76,6 +76,7 @@ object DatabaseManager {
             list.forEach {
                 sum += it.price * it.count
             }
+            val resID = myModel.foods[0].restaurantID
             val id = OrdersTable.insert {
                 it[name] = myModel.name
                 it[email] = myModel.email
@@ -88,6 +89,7 @@ object DatabaseManager {
                 it[amount] = sum
                 it[userID] = myModel.userID
                 it[status] = Statuses.ARRIVING.toString()
+                it[restaurantID] = resID
             } get OrdersTable.orderID ?: throw InternalServerErrorResponse()
             list.forEach {
                 insertFood(id, it.foodID, it.count, it.price)
@@ -124,7 +126,8 @@ object DatabaseManager {
                         it[OrdersTable.payment],
                         it[OrdersTable.amount],
                         it[OrdersTable.userID],
-                        it[OrdersTable.status]
+                        it[OrdersTable.status],
+                        it[OrdersTable.restaurantID]
                     )
                 }
         }
@@ -173,7 +176,8 @@ object DatabaseManager {
                         it[UsersTable.name],
                         it[UsersTable.email],
                         it[UsersTable.password],
-                        it[UsersTable.role]
+                        it[UsersTable.role],
+                        it[UsersTable.restaurantID]
                     )
                 })
         }
@@ -234,6 +238,7 @@ object DatabaseManager {
                         it[OrdersTable.amount],
                         it[OrdersTable.userID],
                         it[OrdersTable.status],
+                        it[OrdersTable.restaurantID],
                         getFoodsByOrder(it[OrdersTable.orderID])
                     )
                 })

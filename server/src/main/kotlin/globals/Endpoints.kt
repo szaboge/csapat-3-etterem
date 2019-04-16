@@ -27,20 +27,22 @@ object Endpoints {
     }
 
     fun getOrders(ctx: Context) {
-        ctx.json(DatabaseManager.getOrders())
+        val user = getUser(ctx)!!
+        ctx.json(DatabaseManager.getOrders(user.restaurantID))
     }
 
     fun getMyOrders(ctx: Context) {
-        val id = getUser(ctx) ?: throw UnauthorizedResponse()
+        val user = getUser(ctx) ?: throw UnauthorizedResponse()
+        val id = user.userID
         ctx.json(DatabaseManager.getOrdersByUserID(id))
     }
 
-    fun getUser(ctx: Context): Int? {
+    fun getUser(ctx: Context): UserByTokenModel? {
         val token = Auth.getToken(ctx)
         return if (token != "") {
             val list = DatabaseManager.getUserByToken(token)
             if (list.count() > 0) {
-                list.last().userID
+                list.last()
             } else {
                 null
             }
@@ -79,7 +81,7 @@ object Endpoints {
         if(userList.count() > 0) {
             val user = userList.last()
             val sessionID = Auth.login(user.userID, ctx)
-            ctx.json(UserByTokenModel(user.userID,user.name!!, user.role, sessionID))
+            ctx.json(UserByTokenModel(user.userID,user.name!!, user.role, sessionID, user.restaurantID))
         } else {
             throw BadRequestResponse()
         }
@@ -118,8 +120,8 @@ object Endpoints {
                 && validStrnumber && validPayment) {
                 false -> throw BadRequestResponse()
             }
-
-            userID = getUser(ctx) ?: DatabaseManager.insertGuest(json["name"].toString(), json["email"].toString())
+            val user = getUser(ctx) ?: DatabaseManager.insertGuest(json["name"].toString(), json["email"].toString())
+            userID = user.userID
             val array = json["foods"] as JsonArray<*>
             array.forEach { food ->
                 if (food is JsonObject) {

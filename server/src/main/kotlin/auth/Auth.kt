@@ -25,7 +25,6 @@ object Auth {
 
     fun authentication(ctx: Context): UserByTokenModel {
         val token = getToken(ctx)
-        println(token)
         if (token == "") {
             throw ForbiddenResponse()
         } else {

@@ -10,6 +10,7 @@ import models.communication.GetOrderModel
 import models.communication.MakeOrderModel
 import models.communication.UserByTokenModel
 import models.database.*
+import netscape.security.UserTarget
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -107,12 +108,13 @@ object DatabaseManager {
         }
     }
 
-    fun getOrders(): List<OrderModel> {
-        var result = listOf<OrderModel>()
+    fun getOrders(resID: Int): List<OrderModel> {
+        val result = mutableListOf<OrderModel>()
         transaction {
             addLogger(StdOutSqlLogger) // log SQL query
-            result = OrdersTable.selectAll()
-                .map {
+            result.addAll(OrdersTable.select{
+                OrdersTable.restaurantID eq resID
+            }.map {
                     OrderModel(
                         it[OrdersTable.orderID],
                         it[OrdersTable.date].format(),
@@ -129,12 +131,12 @@ object DatabaseManager {
                         it[OrdersTable.status],
                         it[OrdersTable.restaurantID]
                     )
-                }
+                })
         }
         return result
     }
 
-    fun insertGuest(name: String, email: String): Int {
+    fun insertGuest(name: String, email: String): UserByTokenModel {
         var id = 0
         transaction {
             id = UsersTable.insert {
@@ -144,7 +146,7 @@ object DatabaseManager {
             } get UsersTable.userID ?: throw InternalServerErrorResponse()
             commit()
         }
-        return id
+        return UserByTokenModel(id, name, ApiRole.GUEST.toString(), "", 0)
     }
 
     fun getUserByToken(token: String): MutableList<UserByTokenModel> {
@@ -158,7 +160,8 @@ object DatabaseManager {
                         it[UsersTable.userID],
                         it[UsersTable.name]!!,
                         it[UsersTable.role],
-                        it[SessionsTable.sessionID]
+                        it[SessionsTable.sessionID],
+                        it[UsersTable.restaurantID]
                     )
                 })
         }

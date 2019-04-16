@@ -20,17 +20,15 @@ fun main() {
             }
         }
         path("orders") {
-            get(Endpoints::getOrders, roles(ApiRole.ANYONE))
+            get(Endpoints::getOrders, roles(ApiRole.KITCHEN, ApiRole.RIDER))
             path("myorders") {
                 get(Endpoints::getMyOrders, roles(ApiRole.USER))
             }
             path("kitchen") {
                 post(Endpoints::updateStatus, roles(ApiRole.KITCHEN))
-                get(Endpoints::getOrders, roles(ApiRole.KITCHEN))
             }
             path("rider") {
                 post(Endpoints::updateStatus, roles(ApiRole.RIDER))
-                get(Endpoints::getOrders, roles(ApiRole.RIDER))
             }
         }
         path("login") {

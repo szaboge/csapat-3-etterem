@@ -9,5 +9,5 @@ object UsersTable: Table("users") {
     val email: Column<String?> = varchar("email", 40).nullable()
     val password: Column<String?> = varchar("password", 64).nullable()
     val role: Column<String> = varchar("role",30)
-    val restaurantID: Column<Int> = integer("restaurantID").references(RestaurantsTable.restaurantID).default(0)
+    val restaurantID: Column<Int> = integer("restaurantID").references(RestaurantsTable.restaurantID)
 }

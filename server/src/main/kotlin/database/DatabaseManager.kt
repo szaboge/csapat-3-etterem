@@ -143,6 +143,7 @@ object DatabaseManager {
                 it[UsersTable.name] = name
                 it[UsersTable.email] = email
                 it[UsersTable.role] = ApiRole.GUEST.toString()
+                it[UsersTable.restaurantID] = 0
             } get UsersTable.userID ?: throw InternalServerErrorResponse()
             commit()
         }
@@ -153,7 +154,6 @@ object DatabaseManager {
         val result = mutableListOf<UserByTokenModel>()
         transaction {
             result.addAll((SessionsTable innerJoin UsersTable)
-                .slice(UsersTable.userID, UsersTable.role, SessionsTable.sessionID, UsersTable.name)
                 .select { SessionsTable.sessionID eq token }
                 .map {
                     UserByTokenModel(

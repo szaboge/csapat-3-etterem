@@ -9,6 +9,7 @@ import globals.ui.ElementFactory.icon
 import globals.ui.ElementFactory.label
 import globals.ui.ElementFactory.radiobutton
 import globals.ui.ElementFactory.textfield
+import globals.ui.ElementFactory.span
 import globals.ui.ElementFactory.img
 import globals.ui.ElementFactory.validate
 import globals.ui.ElementFactory.validateByClass
@@ -52,6 +53,12 @@ class CheckoutView : View() {
                 label("Személyes adatok")
                 div{
                     addClass("checkout-section-items")
+                    div{
+                    addClass("tooltip")
+                    span("Minta János")
+                    {
+                        addClass("tooltiptext")
+                    }
                     nevField = textfield {
                         addClass("default-textfield")
                         placeholder = "Név"
@@ -59,19 +66,34 @@ class CheckoutView : View() {
                             validateByClass("name", "valid", "invalid")
                         })
                     }
-                    emailField = textfield {
-                        addClass("default-textfield")
-                        placeholder = "Email"
-                        addEventListener("keyup", {
-                            validateByClass("email", "valid", "invalid")
-                        })
                     }
-                    telefonszamField = textfield {
-                        addClass("default-textfield")
-                        placeholder = "Telefonszám"
-                        addEventListener("keyup", {
-                            validateByClass("phone", "valid", "invalid")
-                        })
+                    div {
+                        addClass("tooltip")
+                        span("minta@minta.hu")
+                        {
+                            addClass("tooltiptext")
+                        }
+                        emailField = textfield {
+                            addClass("default-textfield")
+                            placeholder = "Email"
+                            addEventListener("keyup", {
+                                validateByClass("email", "valid", "invalid")
+                            })
+                        }
+                    }
+                    div {
+                        addClass("tooltip")
+                        span("06709999999")
+                        {
+                            addClass("tooltiptext")
+                        }
+                        telefonszamField = textfield {
+                            addClass("default-textfield")
+                            placeholder = "Telefonszám"
+                            addEventListener("keyup", {
+                                validateByClass("phone", "valid", "invalid")
+                            })
+                        }
                     }
                 }
             }

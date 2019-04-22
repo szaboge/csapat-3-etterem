@@ -51,38 +51,113 @@ class HomeView: View() {
             div {
                 div{
                     addClass("slideshow-container")
-
                     div {
                         addClass("mySlides fade")
-                        img("../webpage/img/homeview/first.jpeg")
+                        img("../webpage/img/homeview/1.jpeg")
+                        button(Lang.getText("home-title")) {
+                            addClass("btn")
+                            addEventListener("click", {
+                                RouterService.navigate(Routes.RESTAURANTS)
+                            })
+                        }
                     }
                     div {
                         addClass("mySlides fade")
-                        img("../webpage/img/homeview/second.jpeg")
+                        img("../webpage/img/homeview/2.jpeg")
+                        button(Lang.getText("home-title")) {
+                            addClass("btn")
+                            addEventListener("click", {
+                                RouterService.navigate(Routes.RESTAURANTS)
+                            })
+                        }
                     }
                     div {
                         addClass("mySlides fade")
-                        img("../webpage/img/homeview/third.jpeg")
+                        img("../webpage/img/homeview/3.jpeg")
+                        button(Lang.getText("home-title")) {
+                            addClass("btn")
+                            addEventListener("click", {
+                                RouterService.navigate(Routes.RESTAURANTS)
+                            })
+                        }
+                    }
+                    div {
+                        addClass("mySlides fade")
+                        img("../webpage/img/homeview/4.jpeg")
+                        button(Lang.getText("home-title")) {
+                            addClass("btn")
+                            addEventListener("click", {
+                                RouterService.navigate(Routes.RESTAURANTS)
+                            })
+                        }
+                    }
+                    div {
+                        addClass("mySlides fade")
+                        img("../webpage/img/homeview/5.jpeg")
+                        button(Lang.getText("home-title")) {
+                            addClass("btn")
+                            addEventListener("click", {
+                                RouterService.navigate(Routes.RESTAURANTS)
+                            })
+                        }
+                    }
+                    div {
+                        addClass("mySlides fade")
+                        img("../webpage/img/homeview/6.jpeg")
+                        button(Lang.getText("home-title")) {
+                            addClass("btn")
+                            addEventListener("click", {
+                                RouterService.navigate(Routes.RESTAURANTS)
+                            })
+                        }
+                    }
+                    div {
+                        addClass("mySlides fade")
+                        img("../webpage/img/homeview/7.jpeg")
+                        button(Lang.getText("home-title")) {
+                            addClass("btn")
+                            addEventListener("click", {
+                                RouterService.navigate(Routes.RESTAURANTS)
+                            })
+                        }
+                    }
+                    div {
+                        addClass("mySlides fade")
+                        img("../webpage/img/homeview/8.jpeg")
+                        button(Lang.getText("home-title")) {
+                            addClass("btn")
+                            addEventListener("click", {
+                                RouterService.navigate(Routes.RESTAURANTS)
+                            })
+                        }
+                    }
+                    div {
+                        addClass("mySlides fade")
+                        img("../webpage/img/homeview/9.jpeg")
+                        button(Lang.getText("home-title")) {
+                            addClass("btn")
+                            addEventListener("click", {
+                                RouterService.navigate(Routes.RESTAURANTS)
+                            })
+                        }
+                    }
+                    div {
+                        addClass("mySlides fade")
+                        img("../webpage/img/homeview/10.jpeg")
+                        button(Lang.getText("home-title")) {
+                            addClass("btn")
+                            addEventListener("click", {
+                                RouterService.navigate(Routes.RESTAURANTS)
+                            })
+                        }
                     }
                 }
             }
         }
-        println("onshowrun")
         showSlides()
     }
 
     override fun render() {
-
-        with(root) {
-            addClass("home")
-            button(Lang.getText("home-title")) {
-                addClass("default-button get-started")
-                addEventListener("click", {
-                    RouterService.navigate(Routes.RESTAURANTS)
-                })
-            }
-
-        }
 
     }
 }

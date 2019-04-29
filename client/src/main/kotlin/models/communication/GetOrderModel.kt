@@ -12,4 +12,6 @@ class GetOrderModel(val orderID: Int,
                     var payment: String,
                     val amount: Int,
                     var userID: Int,
+                    var status: String,
+                    var restaurantID: Int,
                     var foods: Array<FoodsCountModel>)

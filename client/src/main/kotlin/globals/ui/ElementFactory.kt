@@ -81,6 +81,24 @@ object ElementFactory {
         op.invoke(item)
         return item
     }
+    fun HTMLElement.table(op: HTMLTableElement.() -> Unit = {}): HTMLTableElement {
+        val item = document.createElement("table") as HTMLTableElement
+        this.appendChild(item)
+        op.invoke(item)
+        return item
+    }
+    fun HTMLElement.tr(op: HTMLTableRowElement.() -> Unit = {}): HTMLTableRowElement {
+        val item = document.createElement("tr") as HTMLTableRowElement
+        this.appendChild(item)
+        op.invoke(item)
+        return item
+    }
+    fun HTMLElement.td(op: HTMLTableCellElement.() -> Unit = {}): HTMLTableCellElement {
+        val item = document.createElement("td") as HTMLTableCellElement
+        this.appendChild(item)
+        op.invoke(item)
+        return item
+    }
 
     fun HTMLInputElement.validate(type: String): Boolean =
     when(type) {

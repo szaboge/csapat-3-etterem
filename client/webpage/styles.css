@@ -38,4 +38,4 @@ button, button:active, button:focus, input, input:active, input:focus {
 
 .menu { grid-area: menu; }
 
-.root { grid-area: root; overflow: hidden}
+.root { grid-area: root; overflow: scroll}

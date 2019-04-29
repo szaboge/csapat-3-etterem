@@ -19,6 +19,7 @@ enum class Routes {
 
 object RouterService {
     private val routes: MutableList<View> = mutableListOf()
+    private var previous: View? = null
 
     init {
         routes.add(HomeView())
@@ -34,6 +35,7 @@ object RouterService {
     }
 
     fun navigate(route: Routes) {
-        routes.find { it.routeType == route }?.show()
+        previous?.onDestroy()
+        previous = routes.find { it.routeType == route }?.show()
     }
 }

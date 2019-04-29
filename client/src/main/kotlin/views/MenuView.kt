@@ -68,12 +68,6 @@ class MenuView: View(), UserChangeListener {
                         RouterService.navigate(Routes.RESTAURANTS)
                     })
                 }
-                button(Lang.getText("menu-orders")) {
-                    addClass("menu-item")
-                    addEventListener("click", {
-                        RouterService.navigate(Routes.ORDERS)
-                    })
-                }
             }
             userControl = div {
                 addClass("user-control")

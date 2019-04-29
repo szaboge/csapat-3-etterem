@@ -11,14 +11,16 @@ abstract class View() {
     abstract val routeType: Routes
     abstract fun render()
     abstract fun onShow()
+    open fun onDestroy() {}
 
     var root: HTMLElement = document.createElement("div") as HTMLDivElement
     fun add(item: HTMLElement) = root.appendChild(item)
 
-    fun show() {
+    fun show(): View {
         build()
         Presenter.present(root)
         onShow()
+        return this
     }
 
     fun build(): View {

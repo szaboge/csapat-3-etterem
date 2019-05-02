@@ -181,4 +181,15 @@ object Endpoints {
         val orderID: Int = json["orderID"].toString().toInt()
         DatabaseManager.updateStatus(status, orderID)
     }
+
+    fun deleteUser(ctx: Context){
+        val body = ctx.body()
+        val json = try {
+            Klaxon().parseJsonObject(StringReader(body))
+        } catch (e: Exception) {
+            throw BadRequestResponse()
+        }
+        val userID: Int = json["userID"].toString().toInt()
+        DatabaseManager.deleteUser(userID)
+    }
 }

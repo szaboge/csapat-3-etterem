@@ -274,4 +274,11 @@ object DatabaseManager {
             commit()
         }
     }
+
+    fun deleteUser(userID: Int){
+        transaction {
+            UsersTable.deleteWhere { UsersTable.userID eq userID }
+            commit()
+        }
+    }
 }

@@ -48,5 +48,10 @@ fun main() {
         path("register") {
             post(Endpoints::register, roles(ApiRole.ANYONE))
         }
+        path("delete") {
+            path("user") {
+                delete(Endpoints::deleteUser, roles(ApiRole.ADMIN))
+            }
+        }
     }
 }

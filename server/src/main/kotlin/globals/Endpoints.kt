@@ -192,4 +192,13 @@ object Endpoints {
         val userID: Int = json["userID"].toString().toInt()
         DatabaseManager.deleteUser(userID)
     }
+
+    fun getUserInfo(ctx: Context){
+        val user = getUser(ctx)!!
+        ctx.json(DatabaseManager.getUserInfo(user.userID))
+    }
+
+    fun getUsers(ctx: Context){
+
+    }
 }

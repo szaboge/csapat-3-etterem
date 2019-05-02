@@ -4,6 +4,7 @@ import globals.Endpoints
 import io.javalin.Javalin
 import io.javalin.apibuilder.ApiBuilder.*
 import io.javalin.security.SecurityUtil.roles
+import org.eclipse.jetty.io.EndPoint
 
 
 fun main() {
@@ -51,6 +52,12 @@ fun main() {
         path("delete") {
             path("user") {
                 delete(Endpoints::deleteUser, roles(ApiRole.ADMIN))
+            }
+        }
+        path("user"){
+            get(Endpoints::getUsers, roles(ApiRole.ANYONE))//Admin
+            path("info"){
+                get(Endpoints::getUserInfo, roles(ApiRole.ANYONE))//User
             }
         }
     }

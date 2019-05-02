@@ -5,12 +5,9 @@ import database.tables.*
 import globals.Statuses
 import globals.format
 import io.javalin.InternalServerErrorResponse
-import models.communication.FoodsCountModel
-import models.communication.GetOrderModel
-import models.communication.MakeOrderModel
-import models.communication.UserByTokenModel
+import kotlinx.coroutines.selects.select
+import models.communication.*
 import models.database.*
-import netscape.security.UserTarget
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.TransactionManager
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -280,5 +277,40 @@ object DatabaseManager {
             UsersTable.deleteWhere { UsersTable.userID eq userID }
             commit()
         }
+    }
+
+    fun getUserInfo(userID: Int): UserInfosModel{
+        val phoneNumbers = mutableListOf<String>()
+        val addresses = mutableListOf<AddressesModel>()
+        val names = mutableListOf<String>()
+        val emails = mutableListOf<String>()
+        transaction {
+            addLogger(StdOutSqlLogger) // log SQL query
+            //phones
+            phoneNumbers.addAll(OrdersTable.select{
+                OrdersTable.userID eq userID
+            }.map { it[OrdersTable.phone] })
+            //addresses
+            addresses.addAll(OrdersTable.select {
+                OrdersTable.userID eq userID
+            }.map {
+                AddressesModel(
+                    it[OrdersTable.zipcode],
+                    it[OrdersTable.city],
+                    it[OrdersTable.street],
+                    it[OrdersTable.strnumber]
+                )
+            })
+            //names
+            names.addAll(OrdersTable.select {
+                OrdersTable.userID eq userID
+            }.map { it[OrdersTable.name] })
+            //emails
+            emails.addAll(OrdersTable.select {
+                OrdersTable.userID eq userID
+            }.map { it[OrdersTable.email] })
+            commit()
+        }
+        return UserInfosModel(phoneNumbers.distinct(), addresses.distinct(), names.distinct(), emails.distinct())
     }
 }

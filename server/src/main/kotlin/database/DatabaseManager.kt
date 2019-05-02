@@ -315,4 +315,23 @@ object DatabaseManager {
         }
         return UserInfosModel(phoneNumbers.distinct(), addresses.distinct(), names.distinct(), emails.distinct())
     }
+
+    fun getUsers(): MutableList<UserModel>{
+        val result: MutableList<UserModel> = mutableListOf()
+        transaction {
+            addLogger(StdOutSqlLogger) // log SQL query
+            result.addAll(UsersTable.selectAll().map {
+                UserModel(
+                    it[UsersTable.userID],
+                    it[UsersTable.name],
+                    it[UsersTable.email],
+                    it[UsersTable.password],
+                    it[UsersTable.role],
+                    it[UsersTable.restaurantID]
+                )
+            })
+            commit()
+        }
+        return result
+    }
 }

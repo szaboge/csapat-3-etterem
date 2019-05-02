@@ -52,9 +52,11 @@ fun main() {
             }
         }
         path("user"){
-            get(Endpoints::getUsers, roles(ApiRole.ANYONE))//Admin
+            path("all"){
+                get(Endpoints::getUsers, roles(ApiRole.ANYONE))//Admin
+            }
             path("info"){
-                get(Endpoints::getUserInfo, roles(ApiRole.ANYONE))//User
+                get(Endpoints::getUserInfo, roles(ApiRole.USER))
             }
         }
     }

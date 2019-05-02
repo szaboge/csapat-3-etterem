@@ -6,7 +6,9 @@ import java.security.MessageDigest
 import java.util.regex.Pattern
 
 
-fun DateTime.format(): String = Utils.fmt.print(this)
+fun DateTime.format(): String {
+    return Utils.fmt.print(this.plusHours(2))
+}
 
 object Utils {
     val magicword: String = "tits"

@@ -199,6 +199,6 @@ object Endpoints {
     }
 
     fun getUsers(ctx: Context){
-
+        ctx.json(DatabaseManager.getUsers())
     }
 }

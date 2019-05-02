@@ -1,6 +1,5 @@
 package views
 
-import ApiService
 import abstracts.View
 import globals.Enums
 import globals.ui.ElementFactory.button
@@ -16,12 +15,13 @@ import globals.ui.Routes
 import models.communication.GetOrderModel
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
+import org.w3c.dom.HTMLSpanElement
 import org.w3c.dom.get
 import kotlin.browser.document
 import kotlin.dom.addClass
 
-class MyOrdersView : View() {
-    override val routeType: Routes = Routes.MYORDERS
+class RiderOrdersView : View() {
+    override val routeType: Routes = Routes.RIDERORDERS
     lateinit var destination: HTMLDivElement
 
     override fun render() {
@@ -29,7 +29,7 @@ class MyOrdersView : View() {
             addClass("myorders-root")
             div {
                 addClass("myorders-container")
-                label("Rendeléseim") {
+                label("Aktív rendelések") {
                     addClass("title")
                 }
                 destination = div {
@@ -60,6 +60,7 @@ class MyOrdersView : View() {
     }
 
     fun createAccordion(parent: HTMLElement, element: GetOrderModel) {
+        lateinit var titleState: HTMLSpanElement
         with(parent) {
             button {
                 addClass("myorders-accordion")
@@ -69,7 +70,7 @@ class MyOrdersView : View() {
                         span(element.orderID.toString() + " ")
                         span(element.name)
                     }
-                    span(Enums.Statuses.valueOf(element.status).value())
+                    titleState = span(Enums.Statuses.valueOf(element.status).value())
                 }
                 div {
                     addClass("myorders-chevron-container")
@@ -82,7 +83,7 @@ class MyOrdersView : View() {
                 addClass("myorders-panel")
                 div {
                     addClass("myorders-panel-container")
-                    div {
+                    val progress = div {
                         addClass("myorders-panel-title")
                         createProgress(element.status, this)
                     }
@@ -170,6 +171,21 @@ class MyOrdersView : View() {
                             }
                         }
                     }
+                    div {
+                        addClass("riderorders-footer")
+                        button("SZÁLLÍTÁS ALATT") {
+                            addClass("default-button riderorders-in-shipping")
+                            addEventListener("click", {
+                                modifyState(Enums.Statuses.SHIPPING, progress, titleState, element.orderID)
+                            })
+                        }
+                        button("KISZÁLLÍTVA") {
+                            addClass("default-button")
+                            addEventListener("click", {
+                                modifyState(Enums.Statuses.DONE, progress, titleState, element.orderID)
+                            })
+                        }
+                    }
                 }
             }
         }
@@ -242,14 +258,30 @@ class MyOrdersView : View() {
         }
     }
 
+    fun modifyState(
+        state: Enums.Statuses,
+        progress: HTMLDivElement,
+        title: HTMLSpanElement,
+        orderID: Int
+    ) {
+        val newState = object {
+            val status: String = state.name
+            val orderID: Int = orderID
+        }
+        ApiService.updateState(newState) {}
+        progress.innerHTML = ""
+        createProgress(state.name, progress)
+        title.innerText = state.value()
+
+    }
+
     override fun onShow() {
-        ApiService.getMyOrders {
+        ApiService.getOrders {
             val data = it
             data.forEach { order ->
                 createAccordion(destination, order)
             }
             initialize()
         }
-
     }
 }

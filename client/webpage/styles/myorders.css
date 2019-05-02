@@ -6,6 +6,7 @@
 .myorders-container {
     max-width: 1100px;
     width: 95%;
+    padding-top: 24px;
 }
 
 .myorders-accordion-title {
@@ -16,7 +17,7 @@
 }
 
 .myorders-accordions-container {
-    margin-top: 10px;
+    margin-top: 24px;
     border-radius: 10px;
     overflow: hidden;
 }
@@ -77,6 +78,7 @@
 .myorders-info-title {
     padding: 10px;
     display: flex;
+    align-items: center;
     justify-content: space-between;
 }
 
@@ -96,11 +98,21 @@
 .myorders-panel-info {
     width: 100%;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
 }
 
 .myorders-panel-title {
     padding: 10px;
+}
+
+.myorders-foods-item {
+    padding: 0 5px 0 0;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.myorders-info-icon {
+    font-size: 24px;
 }
 
 .progress-container {

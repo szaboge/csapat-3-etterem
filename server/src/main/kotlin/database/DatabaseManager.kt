@@ -105,14 +105,14 @@ object DatabaseManager {
         }
     }
 
-    fun getOrders(resID: Int): List<OrderModel> {
-        val result = mutableListOf<OrderModel>()
+    fun getOrders(resID: Int): List<GetOrderModel> {
+        val result = mutableListOf<GetOrderModel>()
         transaction {
             addLogger(StdOutSqlLogger) // log SQL query
             result.addAll(OrdersTable.select{
                 OrdersTable.restaurantID eq resID
             }.map {
-                    OrderModel(
+                    GetOrderModel(
                         it[OrdersTable.orderID],
                         it[OrdersTable.date].format(),
                         it[OrdersTable.name],
@@ -126,7 +126,8 @@ object DatabaseManager {
                         it[OrdersTable.amount],
                         it[OrdersTable.userID],
                         it[OrdersTable.status],
-                        it[OrdersTable.restaurantID]
+                        it[OrdersTable.restaurantID],
+                        getFoodsByOrder(it[OrdersTable.orderID])
                     )
                 })
         }
@@ -223,6 +224,7 @@ object DatabaseManager {
         transaction {
             result.addAll(OrdersTable
                 .select { OrdersTable.userID eq userID}
+                .orderBy(OrdersTable.date to SortOrder.DESC)
                 .map {
                     GetOrderModel(
                         it[OrdersTable.orderID],

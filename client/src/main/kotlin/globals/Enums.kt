@@ -1,10 +1,19 @@
 package globals
 
 class Enums {
-    enum class Statuses(val s: String) {
-        ARRIVING("Feldolgozás alatt"),
-        MAKING("Készítés alatt"),
-        SHIPPING("Szállítás alatt"),
-        DONE("Kiszállítva")
+    enum class Statuses {
+        ARRIVING{
+            override fun value(): String = "Feldolgozás alatt"
+        },
+        MAKING {
+            override fun value(): String = "Készítés alatt"
+        },
+        SHIPPING{
+            override fun value(): String = "Szállítás alatt"
+        },
+        DONE {
+            override fun value(): String = "Kiszállítva"
+        };
+        abstract fun value(): String
     }
 }

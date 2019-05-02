@@ -1,0 +1,9 @@
+.riderorders-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+}
+
+.riderorders-in-shipping {
+    margin-right: 10px;
+}

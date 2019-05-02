@@ -20,15 +20,19 @@ object ApiService {
         }
     }
     fun makeOrder(obj: Any,callback: (XMLHttpRequest) -> Unit) {
-        println(JSON.stringify(obj))
         HttpClient.post("insert/order", obj) {
             callback.invoke(it)
         }
     }
-    fun getOrders(callback: (Array<OrderModel>) -> Unit) {
+    fun getOrders(callback: (Array<GetOrderModel>) -> Unit) {
         HttpClient.get("orders") {
-            val orders = JSON.parse<Array<OrderModel>>(it.responseText)
+            val orders = JSON.parse<Array<GetOrderModel>>(it.responseText)
             callback.invoke(orders)
+        }
+    }
+    fun updateState(obj: Any,callback: (XMLHttpRequest) -> Unit) {
+        HttpClient.post("orders/modifystate", obj) {
+            callback.invoke(it)
         }
     }
     fun login(obj: Any,callback: (XMLHttpRequest) -> Unit) {

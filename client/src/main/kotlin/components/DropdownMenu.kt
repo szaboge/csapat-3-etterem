@@ -10,6 +10,7 @@ import globals.ui.ElementFactory.span
 import globals.ui.Lang
 import globals.ui.RouterService
 import globals.ui.Routes
+import org.w3c.dom.HTMLDListElement
 import org.w3c.dom.HTMLDivElement
 import kotlin.browser.document
 import kotlin.dom.addClass
@@ -26,7 +27,30 @@ object DropdownMenu {
         when(role) {
             "ADMIN" -> adminMenu()
             "USER"  -> userMenu()
+            "RIDER" -> riderMenu()
+            "KITCHEN" -> kitchenMenu()
             else -> defaultMenu()
+        }
+    }
+
+    private fun kitchenMenu() {
+        with(dropdownContainer) {
+            addClass("dropdown-wrapper")
+            div {
+                addClass("dropdown-collection")
+                appendChild(logout())
+            }
+        }
+    }
+
+    private fun riderMenu() {
+        with(dropdownContainer) {
+            addClass("dropdown-wrapper")
+            div {
+                addClass("dropdown-collection")
+                appendChild(createMenuItem("package-variant-closed", "AKTÍV RENDELÉSEK",  Routes.RIDERORDERS))
+                appendChild(logout())
+            }
         }
     }
 
@@ -45,17 +69,22 @@ object DropdownMenu {
             addClass("dropdown-wrapper")
             div {
                 addClass("dropdown-collection")
-                div {
-                    icon("package-variant-closed")
-                    span(Lang.getText("dropdown-myorders"))
-                    addClass("dropdown-item")
-                    addEventListener("click", {
-                        RouterService.navigate(Routes.MYORDERS)
-                        hide()
-                    })
-                }
+                appendChild(createMenuItem("package-variant-closed", Lang.getText("dropdown-myorders"), Routes.MYORDERS))
                 appendChild(logout())
             }
+        }
+    }
+
+    fun createMenuItem(icon:String, text: String, route: Routes): HTMLDivElement {
+        return with(div()) {
+            icon(icon)
+            span(text)
+            addClass("dropdown-item")
+            addEventListener("click", {
+                RouterService.navigate(route)
+                hide()
+            })
+            this
         }
     }
 

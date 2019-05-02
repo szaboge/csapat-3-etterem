@@ -4,11 +4,12 @@ import abstracts.View
 import globals.ui.Routes
 import globals.ui.ElementFactory.div
 import globals.ui.ElementFactory.label
+import models.communication.GetOrderModel
 import models.database.OrderModel
 
 class OrdersView: View() {
     override val routeType: Routes = Routes.ORDERS
-    var orders: Array<OrderModel> = arrayOf()
+    var orders: Array<GetOrderModel> = arrayOf()
     var orderDiv = div()
 
     override fun render() {

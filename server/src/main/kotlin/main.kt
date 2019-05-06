@@ -31,6 +31,9 @@ fun main() {
             path("all") {
                 get(Endpoints::getAllOrders, roles(ApiRole.ADMIN))
             }
+            path("modifydetails"){
+                post(Endpoints::modifyDetails, roles(ApiRole.ADMIN))
+            }
         }
         path("login") {
             post(Endpoints::login, roles(ApiRole.ANYONE))

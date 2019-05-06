@@ -402,4 +402,18 @@ object DatabaseManager {
             commit()
         }
     }
+
+    fun modifyDetails(orderID: Int, phone: String, zipcode: Int, city: String, street: String, strnumber: String){
+        transaction {
+            addLogger(StdOutSqlLogger)
+            OrdersTable.update({OrdersTable.orderID eq orderID}){
+                if(phone != "") it[OrdersTable.phone] = phone
+                if(zipcode.toString() != "") it[OrdersTable.zipcode] = zipcode
+                if(city != "") it[OrdersTable.city] = city
+                if(street != "") it[OrdersTable.street] = street
+                if(strnumber != "") it[OrdersTable.strnumber] = strnumber
+            }
+            commit()
+        }
+    }
 }

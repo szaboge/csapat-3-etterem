@@ -11,22 +11,20 @@ import globals.ui.ElementFactory.radiobutton
 import globals.ui.ElementFactory.textfield
 import globals.ui.ElementFactory.span
 import globals.ui.ElementFactory.img
+import globals.ui.ElementFactory.input
 import globals.ui.ElementFactory.validate
 import globals.ui.ElementFactory.validateByClass
 import globals.ui.Lang
 import globals.ui.RouterService
 import globals.ui.Routes
 import models.communication.FoodsCountModel
-import org.w3c.dom.HTMLDivElement
-import org.w3c.dom.HTMLInputElement
-import org.w3c.dom.HTMLMenuElement
-import org.w3c.dom.HTMLMenuItemElement
+import org.w3c.dom.*
 import kotlin.browser.document
 import kotlin.dom.addClass
 import kotlin.dom.removeClass
 
-class CheckoutView : View() {
-    override val routeType: Routes = Routes.CHECKOUT
+class CheckoutWithInfoView : View() {
+    override val routeType: Routes = Routes.CHECKOUTWITHINFO
     lateinit var nevField: HTMLInputElement
     lateinit var emailField: HTMLInputElement
     lateinit var telefonszamField: HTMLInputElement
@@ -38,6 +36,10 @@ class CheckoutView : View() {
     lateinit var card: HTMLInputElement
     lateinit var pay: String
 
+    var phoneToggle = false
+    var nameToggle = false
+    var emailToggle = false
+    var addressToggle = false
 
     override fun render() {
         root.div {
@@ -52,47 +54,19 @@ class CheckoutView : View() {
                 addClass("checkout-section")
                 label("Személyes adatok")
                 div {
-                    addClass("checkout-section-items")
-                    div{
-                    addClass("tooltip")
-                    span("Magyar abc betűi")
-                    {
-                        addClass("tooltiptext")
-                    }
-                    nevField = textfield {
-                        addClass("default-textfield")
-                        placeholder = "Név"
-                        addEventListener("keyup", {
-                            validateByClass("name", "valid", "invalid")
-                        })
-                    }
+                    div {
+                        nevField = getTextField(this, "Név", "name", "Minta János")
                     }
                     div {
-                        addClass("tooltip")
-                        span("email@email.hu")
-                        {
-                            addClass("tooltiptext")
-                        }
-                        emailField = textfield {
-                            addClass("default-textfield")
-                            placeholder = "Email"
-                            addEventListener("keyup", {
-                                validateByClass("email", "valid", "invalid")
-                            })
-                        }
+                        emailField = getTextField(this, "Email", "email", "minta@minta.hu")
                     }
-                    div {
-                        addClass("tooltip")
-                        span("06709999999")
-                        {
-                            addClass("tooltiptext")
+
+                    div("checkout-item-container") {
+                        div {
+                            telefonszamField = getTextField(this, "Telefonszám", "phone", "06709999999")
                         }
-                        telefonszamField = textfield {
-                            addClass("default-textfield")
-                            placeholder = "Telefonszám"
-                            addEventListener("keyup", {
-                                validateByClass("phone", "valid", "invalid")
-                            })
+                        div {
+                            createCheckbox(this, "phone", "Új")
                         }
                     }
                 }
@@ -102,62 +76,19 @@ class CheckoutView : View() {
                 label("Szállítási cím")
                 div {
                     addClass("checkout-section-items")
-                    div{
-                        addClass("tooltip")
-                        span("4 darab számjegy")
-                        {
-                            addClass("tooltiptext")
-                        }
-                        irszamField = textfield {
-                            addClass("default-textfield")
-                            placeholder = "Irányítószám"
-                            addEventListener("keyup", {
-                                validateByClass("zipcode", "valid", "invalid")
-                            })
-                        }
+                    irszamField = textfield {
+                        addClass("default-textfield")
+                        placeholder = "Irányítószám"
+                        addEventListener("keyup", {
+                            validateByClass("zipcode", "valid", "invalid")
+                        })
                     }
-                    div {
-                        addClass("tooltip")
-                        span("Magyar abc betűi")
-                        {
-                            addClass("tooltiptext")
-                        }
-                        telepulesField = textfield {
-                            addClass("default-textfield")
-                            placeholder = "Település"
-                            addEventListener("keyup", {
-                                validateByClass("city", "valid", "invalid")
-                            })
-                        }
-                    }
-
-                    div {
-                        addClass("tooltip")
-                        span("Magyar abc betűi")
-                        {
-                            addClass("tooltiptext")
-                        }
-                        utcaField = textfield {
-                            addClass("default-textfield")
-                            placeholder = "Utca"
-                            addEventListener("keyup", {
-                                validateByClass("street", "valid", "invalid")
-                            })
-                        }
-                    }
-                    div {
-                        addClass("tooltip")
-                        span("Szám formátum")
-                        {
-                            addClass("tooltiptext")
-                        }
-                        hazszamField = textfield {
-                            addClass("default-textfield")
-                            placeholder = "Házszám"
-                            addEventListener("keyup", {
-                                validateByClass("street_number", "valid", "invalid")
-                            })
-                        }
+                    telepulesField = textfield {
+                        addClass("default-textfield")
+                        placeholder = "Település"
+                        addEventListener("keyup", {
+                            validateByClass("city", "valid", "invalid")
+                        })
                     }
                 }
             }
@@ -204,6 +135,38 @@ class CheckoutView : View() {
         }
     }
 
+    fun createCheckbox(root: HTMLElement, name: String, text: String) {
+        with(root) {
+            input("checkbox") {
+                id = name
+                addEventListener("change", {
+
+                })
+            }
+            label(text) {
+                setAttribute("for", name)
+            }
+        }
+    }
+
+    fun getTextField(root: HTMLElement, name: String, validationType: String, tooltipText: String): HTMLInputElement {
+        lateinit var item: HTMLInputElement
+        root.div {
+            addClass("tooltip")
+            span(tooltipText) {
+                addClass("tooltiptext")
+            }
+            item = textfield {
+                addClass("default-textfield")
+                placeholder = name
+                addEventListener("keyup", {
+                    validateByClass(validationType, "valid", "invalid")
+                })
+            }
+        }
+        return item
+    }
+
     fun continue_checkout() {
         val name: String = nevField.value
         val email: String = emailField.value
@@ -227,5 +190,6 @@ class CheckoutView : View() {
     }
 
     override fun onShow() {
+
     }
 }

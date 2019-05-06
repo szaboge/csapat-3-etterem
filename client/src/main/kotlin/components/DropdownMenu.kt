@@ -60,6 +60,7 @@ object DropdownMenu {
             addClass("dropdown-wrapper")
             div {
                 addClass("dropdown-collection")
+                appendChild(createMenuItem("package-variant-closed", "ÖSSZES RENDELÉS",  Routes.ADMINORDERS))
                 appendChild(logout())
             }
         }

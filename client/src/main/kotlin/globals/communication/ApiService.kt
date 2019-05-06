@@ -1,6 +1,7 @@
 import globals.UserService
 import globals.communication.HttpClient
 import models.communication.GetOrderModel
+import models.communication.UserInfosModel
 import models.database.FoodModel
 import models.database.OrderModel
 import models.database.RestaurantModel
@@ -30,6 +31,17 @@ object ApiService {
             callback.invoke(orders)
         }
     }
+    fun getAllOrders(callback: (Array<GetOrderModel>) -> Unit) {
+        HttpClient.get("orders/all") {
+            val orders = JSON.parse<Array<GetOrderModel>>(it.responseText)
+            callback.invoke(orders)
+        }
+    }
+    fun deleteOrder(obj: Any,callback: (XMLHttpRequest) -> Unit) {
+        HttpClient.post("delete/order", obj) {
+            callback.invoke(it)
+        }
+    }
     fun updateState(obj: Any,callback: (XMLHttpRequest) -> Unit) {
         HttpClient.post("orders/modifystate", obj) {
             callback.invoke(it)
@@ -47,10 +59,14 @@ object ApiService {
             } else {
                 UserService.token = ""
             }
-
         }
     }
-
+    fun getUserInfo(callback: (UserInfosModel) -> Unit) {
+        HttpClient.get("user/info") {
+            val item = JSON.parse<UserInfosModel>(it.responseText)
+            callback.invoke(item)
+        }
+    }
     fun register(obj: Any,callback: (XMLHttpRequest) -> Unit) {
         HttpClient.post("register", obj) {
             callback.invoke(it)

@@ -45,7 +45,12 @@ object DatabaseManager {
             result.addAll(FoodsTable.select {
                 FoodsTable.restaurantID.eq(restaurantID)
             }.map {
-                FoodModel(it[FoodsTable.foodsID], it[FoodsTable.restaurantID], it[FoodsTable.name], it[FoodsTable.price])
+                FoodModel(
+                    it[FoodsTable.foodsID],
+                    it[FoodsTable.restaurantID],
+                    it[FoodsTable.name],
+                    it[FoodsTable.price]
+                )
             })
         }
         return result
@@ -104,27 +109,27 @@ object DatabaseManager {
         val result = mutableListOf<GetOrderModel>()
         transaction {
             addLogger(StdOutSqlLogger) // log SQL query
-            result.addAll(OrdersTable.select{
+            result.addAll(OrdersTable.select {
                 OrdersTable.restaurantID eq resID
             }.map {
-                    GetOrderModel(
-                        it[OrdersTable.orderID],
-                        it[OrdersTable.date].format(),
-                        it[OrdersTable.name],
-                        it[OrdersTable.email],
-                        it[OrdersTable.phone],
-                        it[OrdersTable.zipcode],
-                        it[OrdersTable.city],
-                        it[OrdersTable.street],
-                        it[OrdersTable.strnumber],
-                        it[OrdersTable.payment],
-                        it[OrdersTable.amount],
-                        it[OrdersTable.userID],
-                        it[OrdersTable.status],
-                        it[OrdersTable.restaurantID],
-                        getFoodsByOrder(it[OrdersTable.orderID])
-                    )
-                })
+                GetOrderModel(
+                    it[OrdersTable.orderID],
+                    it[OrdersTable.date].format(),
+                    it[OrdersTable.name],
+                    it[OrdersTable.email],
+                    it[OrdersTable.phone],
+                    it[OrdersTable.zipcode],
+                    it[OrdersTable.city],
+                    it[OrdersTable.street],
+                    it[OrdersTable.strnumber],
+                    it[OrdersTable.payment],
+                    it[OrdersTable.amount],
+                    it[OrdersTable.userID],
+                    it[OrdersTable.status],
+                    it[OrdersTable.restaurantID],
+                    getFoodsByOrder(it[OrdersTable.orderID])
+                )
+            })
         }
         return result
     }
@@ -191,7 +196,7 @@ object DatabaseManager {
         return sessionID
     }
 
-    fun makeUser(name: String, email: String, password: String){
+    fun makeUser(name: String, email: String, password: String) {
         transaction {
             UsersTable.insert {
                 it[UsersTable.name] = name
@@ -204,7 +209,7 @@ object DatabaseManager {
 
     fun getPriceByFoodID(): Map<Int, Int> {
         val result: MutableMap<Int, Int> = mutableMapOf()
-            transaction {
+        transaction {
             addLogger(StdOutSqlLogger) // log SQL query
             FoodsTable.selectAll().map {
                 result[it[FoodsTable.foodsID].toInt()] = it[FoodsTable.price].toInt()
@@ -218,7 +223,7 @@ object DatabaseManager {
         val result: MutableList<GetOrderModel> = mutableListOf()
         transaction {
             result.addAll(OrdersTable
-                .select { OrdersTable.userID eq userID}
+                .select { OrdersTable.userID eq userID }
                 .orderBy(OrdersTable.date to SortOrder.DESC)
                 .map {
                     GetOrderModel(
@@ -259,24 +264,24 @@ object DatabaseManager {
         return result
     }
 
-    fun updateStatus(newStatus: String, orderID: Int){
+    fun updateStatus(newStatus: String, orderID: Int) {
         transaction {
             addLogger(StdOutSqlLogger)
-            OrdersTable.update({OrdersTable.orderID eq orderID}){
+            OrdersTable.update({ OrdersTable.orderID eq orderID }) {
                 it[OrdersTable.status] = newStatus
             }
             commit()
         }
     }
 
-    fun deleteUser(userID: Int){
+    fun deleteUser(userID: Int) {
         transaction {
             UsersTable.deleteWhere { UsersTable.userID eq userID }
             commit()
         }
     }
 
-    fun getUserInfo(userID: Int): UserInfosModel{
+    fun getUserInfo(userID: Int): UserInfosModel {
         val phoneNumbers = mutableListOf<String>()
         val addresses = mutableListOf<AddressesModel>()
         val names = mutableListOf<String>()
@@ -284,7 +289,7 @@ object DatabaseManager {
         transaction {
             addLogger(StdOutSqlLogger) // log SQL query
             //phones
-            phoneNumbers.addAll(OrdersTable.select{
+            phoneNumbers.addAll(OrdersTable.select {
                 OrdersTable.userID eq userID
             }.map { it[OrdersTable.phone] })
             //addresses
@@ -311,7 +316,7 @@ object DatabaseManager {
         return UserInfosModel(phoneNumbers.distinct(), addresses.distinct(), names.distinct(), emails.distinct())
     }
 
-    fun getUsers(): MutableList<UserModel>{
+    fun getUsers(): MutableList<UserModel> {
         val result: MutableList<UserModel> = mutableListOf()
         transaction {
             addLogger(StdOutSqlLogger) // log SQL query
@@ -330,7 +335,7 @@ object DatabaseManager {
         return result
     }
 
-    fun deleteOrder(orderID: Int){
+    fun deleteOrder(orderID: Int) {
         transaction {
             addLogger(StdOutSqlLogger) // log SQL query
             OrdersTable.deleteWhere { OrdersTable.orderID eq orderID }
@@ -338,9 +343,9 @@ object DatabaseManager {
         }
     }
 
-    fun modifyUserRole(newRole: String, userID: Int, newRestaurantID: Int){
-        transaction{
-            UsersTable.update({UsersTable.userID eq userID}){
+    fun modifyUserRole(newRole: String, userID: Int, newRestaurantID: Int) {
+        transaction {
+            UsersTable.update({ UsersTable.userID eq userID }) {
                 it[UsersTable.role] = newRole
                 it[UsersTable.restaurantID] = newRestaurantID
             }
@@ -348,12 +353,12 @@ object DatabaseManager {
         }
     }
 
-    fun getAllOrders(): MutableList<OrderModel>{
-        val result: MutableList<OrderModel> = mutableListOf()
+    fun getAllOrders(): MutableList<GetOrderModel> {
+        val result: MutableList<GetOrderModel> = mutableListOf()
         transaction {
             addLogger(StdOutSqlLogger) // log SQL query
             result.addAll(OrdersTable.selectAll().map {
-                OrderModel(
+                GetOrderModel(
                     it[OrdersTable.orderID],
                     it[OrdersTable.date].format(),
                     it[OrdersTable.name],
@@ -367,7 +372,8 @@ object DatabaseManager {
                     it[OrdersTable.amount],
                     it[OrdersTable.userID],
                     it[OrdersTable.status],
-                    it[OrdersTable.restaurantID]
+                    it[OrdersTable.restaurantID],
+                    getFoodsByOrder(it[OrdersTable.orderID])
                 )
             })
             commit()
@@ -375,7 +381,7 @@ object DatabaseManager {
         return result
     }
 
-    fun addFood(restaurantID: Int, name: String, price: Int){
+    fun addFood(restaurantID: Int, name: String, price: Int) {
         transaction {
             addLogger(StdOutSqlLogger) // log SQL query
             val id = FoodsTable.insert {

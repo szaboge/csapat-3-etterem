@@ -28,8 +28,9 @@ object ElementFactory {
         return item
     }
 
-    fun HTMLElement.div(op: HTMLDivElement.() -> Unit = {}): HTMLDivElement {
+    fun HTMLElement.div(className: String = "", op: HTMLDivElement.() -> Unit = {}): HTMLDivElement {
         val div = document.createElement("div") as HTMLDivElement
+        div.addClass(className)
         this.appendChild(div)
         op.invoke(div)
         return div
@@ -59,6 +60,14 @@ object ElementFactory {
     }
 
     fun HTMLElement.textfield(type: String = "", op: HTMLInputElement.() -> Unit = {}): HTMLInputElement {
+        val item = document.createElement("input") as HTMLInputElement
+        item.type = type
+        this.appendChild(item)
+        op.invoke(item)
+        return item
+    }
+
+    fun HTMLElement.input(type: String = "", op: HTMLInputElement.() -> Unit = {}): HTMLInputElement {
         val item = document.createElement("input") as HTMLInputElement
         item.type = type
         this.appendChild(item)

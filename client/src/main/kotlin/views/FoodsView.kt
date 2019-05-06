@@ -2,6 +2,7 @@ package views
 
 import ApiService
 import abstracts.View
+import globals.UserService
 import globals.order.Basket
 import globals.order.OrderService
 import globals.ui.ElementFactory.button
@@ -28,6 +29,11 @@ class FoodsView: View() {
         ApiService.getFoods(OrderService.actualRestaurant) {
             foods = it
             generateFoods()
+        }
+        if (UserService.user.role == "USER") {
+            ApiService.getUserInfo {
+                UserService.userInfo = it
+            }
         }
     }
 
@@ -61,7 +67,13 @@ class FoodsView: View() {
                 button(Lang.getText("foods-checkout")) {
                     addClass("default-button")
                     addEventListener("click", {
-                        RouterService.navigate(Routes.CHECKOUT)
+                        if(UserService.user.role == "USER" && UserService.userInfo != null
+                            && UserService.userInfo!!.names.count() > 0) {
+                            RouterService.navigate(Routes.CHECKOUTWITHINFO)
+                        } else {
+                            RouterService.navigate(Routes.CHECKOUT)
+                        }
+
                     })
                 }
             }

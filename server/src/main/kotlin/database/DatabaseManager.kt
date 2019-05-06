@@ -373,4 +373,16 @@ object DatabaseManager {
         }
         return result
     }
+
+    fun addFood(restaurantID: Int, name: String, price: Int){
+        transaction {
+            addLogger(StdOutSqlLogger) // log SQL query
+            val id = FoodsTable.insert {
+                it[FoodsTable.restaurantID] = restaurantID
+                it[FoodsTable.name] = name
+                it[FoodsTable.price] = price
+            } get FoodsTable.foodsID ?: throw InternalServerErrorResponse()
+            commit()
+        }
+    }
 }

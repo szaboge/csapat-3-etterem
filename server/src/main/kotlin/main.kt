@@ -46,7 +46,7 @@ fun main() {
                 post(Endpoints::insertOrder, roles(ApiRole.ADMIN))
             }
             path("food"){
-
+                post(Endpoints::addFood, roles(ApiRole.ADMIN))
             }
         }
         path("register") {

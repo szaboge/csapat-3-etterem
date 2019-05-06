@@ -237,4 +237,17 @@ object Endpoints {
     fun getAllOrders(ctx: Context){
         ctx.json(DatabaseManager.getAllOrders())
     }
+
+    fun addFood(ctx: Context){
+        val body = ctx.body()
+        val json = try {
+            Klaxon().parseJsonObject(StringReader(body))
+        } catch (e: Exception) {
+            throw BadRequestResponse()
+        }
+        val restaurantID: Int = json["restaurantID"].toString().toInt()
+        val name: String = json["name"].toString()
+        val price: Int = json["price"].toString().toInt()
+        DatabaseManager.addFood(restaurantID, name, price)
+    }
 }

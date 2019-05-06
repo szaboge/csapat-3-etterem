@@ -55,7 +55,7 @@ class CheckoutView : View() {
                     addClass("checkout-section-items")
                     div{
                     addClass("tooltip")
-                    span("Minta János")
+                    span("Magyar abc betűi")
                     {
                         addClass("tooltiptext")
                     }
@@ -69,7 +69,7 @@ class CheckoutView : View() {
                     }
                     div {
                         addClass("tooltip")
-                        span("minta@minta.hu")
+                        span("email@email.hu")
                         {
                             addClass("tooltiptext")
                         }
@@ -102,33 +102,62 @@ class CheckoutView : View() {
                 label("Szállítási cím")
                 div {
                     addClass("checkout-section-items")
-                    irszamField = textfield {
-                        addClass("default-textfield")
-                        placeholder = "Irányítószám"
-                        addEventListener("keyup", {
-                            validateByClass("zipcode", "valid", "invalid")
-                        })
+                    div{
+                        addClass("tooltip")
+                        span("4 darab számjegy")
+                        {
+                            addClass("tooltiptext")
+                        }
+                        irszamField = textfield {
+                            addClass("default-textfield")
+                            placeholder = "Irányítószám"
+                            addEventListener("keyup", {
+                                validateByClass("zipcode", "valid", "invalid")
+                            })
+                        }
                     }
-                    telepulesField = textfield {
-                        addClass("default-textfield")
-                        placeholder = "Település"
-                        addEventListener("keyup", {
-                            validateByClass("city", "valid", "invalid")
-                        })
+                    div {
+                        addClass("tooltip")
+                        span("Magyar abc betűi")
+                        {
+                            addClass("tooltiptext")
+                        }
+                        telepulesField = textfield {
+                            addClass("default-textfield")
+                            placeholder = "Település"
+                            addEventListener("keyup", {
+                                validateByClass("city", "valid", "invalid")
+                            })
+                        }
                     }
-                    utcaField = textfield {
-                        addClass("default-textfield")
-                        placeholder = "Utca"
-                        addEventListener("keyup", {
-                            validateByClass("street", "valid", "invalid")
-                        })
+
+                    div {
+                        addClass("tooltip")
+                        span("Magyar abc betűi")
+                        {
+                            addClass("tooltiptext")
+                        }
+                        utcaField = textfield {
+                            addClass("default-textfield")
+                            placeholder = "Utca"
+                            addEventListener("keyup", {
+                                validateByClass("street", "valid", "invalid")
+                            })
+                        }
                     }
-                    hazszamField = textfield {
-                        addClass("default-textfield")
-                        placeholder = "Házszám"
-                        addEventListener("keyup", {
-                            validateByClass("street_number", "valid", "invalid")
-                        })
+                    div {
+                        addClass("tooltip")
+                        span("Szám formátum")
+                        {
+                            addClass("tooltiptext")
+                        }
+                        hazszamField = textfield {
+                            addClass("default-textfield")
+                            placeholder = "Házszám"
+                            addEventListener("keyup", {
+                                validateByClass("street_number", "valid", "invalid")
+                            })
+                        }
                     }
                 }
             }

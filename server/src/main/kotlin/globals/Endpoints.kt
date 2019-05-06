@@ -212,4 +212,16 @@ object Endpoints {
         val orderID: Int = json["orderID"].toString().toInt()
         DatabaseManager.deleteOrder(orderID)
     }
+
+    fun modifyUserRole(ctx: Context){
+        val body = ctx.body()
+        val json = try {
+            Klaxon().parseJsonObject(StringReader(body))
+        } catch (e: Exception) {
+            throw BadRequestResponse()
+        }
+        val role: String = json["role"].toString()
+        val userID: Int = json["userID"].toString().toInt()
+        DatabaseManager.modifyUserRole(role, userID)
+    }
 }

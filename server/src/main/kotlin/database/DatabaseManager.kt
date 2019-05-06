@@ -341,4 +341,13 @@ object DatabaseManager {
             commit()
         }
     }
+
+    fun modifyUserRole(newRole: String, userID: Int){
+        transaction{
+            UsersTable.update({UsersTable.userID eq userID}){
+                it[UsersTable.role] = newRole
+            }
+            commit()
+        }
+    }
 }

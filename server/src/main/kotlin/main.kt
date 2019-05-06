@@ -61,6 +61,9 @@ fun main() {
             path("info"){
                 get(Endpoints::getUserInfo, roles(ApiRole.USER))
             }
+            path("modify"){
+                post(Endpoints::modifyUserRole, roles(ApiRole.ANYONE))//Admin
+            }
         }
     }
 }

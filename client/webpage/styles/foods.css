@@ -86,3 +86,13 @@
 .price-sum {
     padding-right: 10%;
 }
+
+.basket-item-price {
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+}
+
+.remove-basket {
+    margin-right: 5px;
+}

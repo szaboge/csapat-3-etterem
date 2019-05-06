@@ -15,7 +15,8 @@ enum class Routes {
     CHECKOUTDONE,
     REGISTRATIONDONE,
     MYORDERS,
-    RIDERORDERS
+    RIDERORDERS,
+    KITCHENORDERS
 }
 
 object RouterService {
@@ -34,6 +35,7 @@ object RouterService {
         routes.add(RegistrationDoneView())
         routes.add(MyOrdersView())
         routes.add(RiderOrdersView())
+        routes.add(KitchenOrdersView())
     }
 
     fun navigate(route: Routes) {

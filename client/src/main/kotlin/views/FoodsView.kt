@@ -100,6 +100,16 @@ class FoodsView: View() {
                 addClass("basket-item")
                 label(it.second.name)
                 div {
+                    addClass("basket-item-price")
+                    icon("minus-circle-outline") {
+                        addClass("icon-button to-basket remove-basket")
+                        addEventListener("click", { _ ->
+                            run {
+                                Basket.removeFood(it)
+                                generateBasket()
+                            }
+                        })
+                    }
                     label("${it.third} x ")
                     label("${it.second.price} Ft = ")
                     label("${it.second.price * it.third} Ft")

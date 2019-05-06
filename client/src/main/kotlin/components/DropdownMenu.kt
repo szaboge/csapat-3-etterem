@@ -38,6 +38,7 @@ object DropdownMenu {
             addClass("dropdown-wrapper")
             div {
                 addClass("dropdown-collection")
+                appendChild(createMenuItem("package-variant-closed", "AKTÍV RENDELÉSEK",  Routes.KITCHENORDERS))
                 appendChild(logout())
             }
         }

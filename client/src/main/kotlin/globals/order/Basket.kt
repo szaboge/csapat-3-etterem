@@ -17,6 +17,16 @@ object Basket {
         }
     }
 
+    fun removeFood(food: Triple<Int, FoodModel, Int>) {
+        if (food.third - 1 < 1) {
+            basket.remove(food)
+        } else {
+            val newTriple = food.copy(third = food.third-1)
+            basket.remove(food)
+            basket.add(newTriple)
+        }
+    }
+
     fun getFoods(): MutableList<Triple<Int, FoodModel, Int>> {
         basket.sortByDescending { it.third }
         return basket

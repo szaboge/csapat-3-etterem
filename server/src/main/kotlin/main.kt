@@ -26,7 +26,10 @@ fun main() {
                 get(Endpoints::getMyOrders, roles(ApiRole.USER))
             }
             path("modifystate") {
-                post(Endpoints::updateStatus, roles(ApiRole.KITCHEN, ApiRole.RIDER))
+                post(Endpoints::updateStatus, roles(ApiRole.KITCHEN, ApiRole.RIDER, ApiRole.ADMIN))
+            }
+            path("all") {
+                get(Endpoints::getAllOrders, roles(ApiRole.ADMIN))
             }
         }
         path("login") {
@@ -37,10 +40,13 @@ fun main() {
         }
         path("insert") {
             path("restaurant") {
-                post(Endpoints::insertRestaurant, roles(ApiRole.ANYONE))
+                post(Endpoints::insertRestaurant, roles(ApiRole.ADMIN))
             }
             path("order") {
-                post(Endpoints::insertOrder, roles(ApiRole.ANYONE))
+                post(Endpoints::insertOrder, roles(ApiRole.ADMIN))
+            }
+            path("food"){
+
             }
         }
         path("register") {
@@ -62,7 +68,7 @@ fun main() {
                 get(Endpoints::getUserInfo, roles(ApiRole.USER))
             }
             path("modify"){
-                post(Endpoints::modifyUserRole, roles(ApiRole.ANYONE))//Admin
+                post(Endpoints::modifyUserRole, roles(ApiRole.ADMIN))
             }
         }
     }

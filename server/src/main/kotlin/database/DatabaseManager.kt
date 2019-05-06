@@ -51,17 +51,12 @@ object DatabaseManager {
         return result
     }
 
-    fun insertRestaurant(restaurantName: String) {
+    fun insertRestaurant(name: String) {
         transaction {
             addLogger(StdOutSqlLogger) // log SQL query
             val id = RestaurantsTable.insert {
-                it[name] = restaurantName
+                it[RestaurantsTable.name] = name
             } get RestaurantsTable.restaurantID ?: throw InternalServerErrorResponse()
-
-            FoodsTable.insert {
-                it[restaurantID] = id
-                it[name] = "Valami kaja"
-            }
             commit()
         }
     }
@@ -350,5 +345,32 @@ object DatabaseManager {
             }
             commit()
         }
+    }
+
+    fun getAllOrders(): MutableList<OrderModel>{
+        val result: MutableList<OrderModel> = mutableListOf()
+        transaction {
+            addLogger(StdOutSqlLogger) // log SQL query
+            result.addAll(OrdersTable.selectAll().map {
+                OrderModel(
+                    it[OrdersTable.orderID],
+                    it[OrdersTable.date].format(),
+                    it[OrdersTable.name],
+                    it[OrdersTable.email],
+                    it[OrdersTable.phone],
+                    it[OrdersTable.zipcode],
+                    it[OrdersTable.city],
+                    it[OrdersTable.street],
+                    it[OrdersTable.strnumber],
+                    it[OrdersTable.payment],
+                    it[OrdersTable.amount],
+                    it[OrdersTable.userID],
+                    it[OrdersTable.status],
+                    it[OrdersTable.restaurantID]
+                )
+            })
+            commit()
+        }
+        return result
     }
 }

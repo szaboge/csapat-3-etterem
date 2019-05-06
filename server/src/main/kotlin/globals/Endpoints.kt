@@ -88,7 +88,13 @@ object Endpoints {
     }
 
     fun insertRestaurant(ctx: Context) {
-        val name = ""
+        val body = ctx.body()
+        val json = try {
+            Klaxon().parseJsonObject(StringReader(body))
+        } catch (e: Exception) {
+            throw BadRequestResponse()
+        }
+        val name: String = json["name"].toString()
         DatabaseManager.insertRestaurant(name)
     }
 
@@ -226,5 +232,9 @@ object Endpoints {
         if ((role == "USER") || (role == "ADMIN") || (role == "GUEST")) restaurantID = 0
         if (((role == "KITCHEN") || (role == "RIDER")) && restaurantID == 0) throw BadRequestResponse()
         DatabaseManager.modifyUserRole(role, userID, restaurantID)
+    }
+
+    fun getAllOrders(ctx: Context){
+        ctx.json(DatabaseManager.getAllOrders())
     }
 }

@@ -201,4 +201,15 @@ object Endpoints {
     fun getUsers(ctx: Context){
         ctx.json(DatabaseManager.getUsers())
     }
+
+    fun deleteOrder(ctx: Context){
+        val body = ctx.body()
+        val json = try {
+            Klaxon().parseJsonObject(StringReader(body))
+        } catch (e: Exception) {
+            throw BadRequestResponse()
+        }
+        val orderID: Int = json["orderID"].toString().toInt()
+        DatabaseManager.deleteOrder(orderID)
+    }
 }

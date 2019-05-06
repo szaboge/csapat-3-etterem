@@ -334,4 +334,11 @@ object DatabaseManager {
         }
         return result
     }
+
+    fun deleteOrder(orderID: Int){
+        transaction {
+            OrdersTable.deleteWhere { OrdersTable.orderID eq orderID }
+            commit()
+        }
+    }
 }

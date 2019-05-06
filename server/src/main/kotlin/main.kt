@@ -48,12 +48,15 @@ fun main() {
         }
         path("delete") {
             path("user") {
-                delete(Endpoints::deleteUser, roles(ApiRole.ADMIN))
+                post(Endpoints::deleteUser, roles(ApiRole.ADMIN))
+            }
+            path("order"){
+                post(Endpoints::deleteOrder, roles(ApiRole.ADMIN))
             }
         }
         path("user"){
             path("all"){
-                get(Endpoints::getUsers, roles(ApiRole.ANYONE))//Admin
+                get(Endpoints::getUsers, roles(ApiRole.ADMIN))
             }
             path("info"){
                 get(Endpoints::getUserInfo, roles(ApiRole.USER))

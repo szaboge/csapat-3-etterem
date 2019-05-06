@@ -280,17 +280,23 @@ object Endpoints {
         } catch (e: Exception) {
             throw BadRequestResponse()
         }
-        var zipcode: Int = 0
         val orderID: Int = json["orderID"].toString().toInt()
         val phone: String = json["phone"].toString()
-        try {
-            zipcode = json["zipcode"].toString().toInt()
-        } catch (e: Exception){
-
-        }
+        val zipcode: Int = json["zipcode"].toString().toInt()
         val city: String = json["city"].toString()
         val street: String = json["street"].toString()
         val strnumber: String = json["strnumber"].toString()
         DatabaseManager.modifyDetails(orderID, phone, zipcode, city, street, strnumber)
+    }
+
+    fun getOneOrder(ctx: Context){
+        val body = ctx.body()
+        val json = try {
+            Klaxon().parseJsonObject(StringReader(body))
+        } catch (e: Exception) {
+            throw BadRequestResponse()
+        }
+        val orderID: Int = json["orderID"].toString().toInt()
+        ctx.json(DatabaseManager.getOneOrder(orderID))
     }
 }

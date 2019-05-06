@@ -422,4 +422,32 @@ object DatabaseManager {
             commit()
         }
     }
+
+    fun getOneOrder(orderID: Int): GetOrderModel{
+        val result: MutableList<GetOrderModel> = mutableListOf()
+        transaction {
+            addLogger(StdOutSqlLogger) // log SQL query
+            result.addAll(OrdersTable.select{ OrdersTable.orderID eq orderID }.map {
+                GetOrderModel(
+                    it[OrdersTable.orderID],
+                    it[OrdersTable.date].format(),
+                    it[OrdersTable.name],
+                    it[OrdersTable.email],
+                    it[OrdersTable.phone],
+                    it[OrdersTable.zipcode],
+                    it[OrdersTable.city],
+                    it[OrdersTable.street],
+                    it[OrdersTable.strnumber],
+                    it[OrdersTable.payment],
+                    it[OrdersTable.amount],
+                    it[OrdersTable.userID],
+                    it[OrdersTable.status],
+                    it[OrdersTable.restaurantID],
+                    getFoodsByOrder(it[OrdersTable.orderID])
+                )
+            })
+            commit()
+        }
+        return result.first()
+    }
 }

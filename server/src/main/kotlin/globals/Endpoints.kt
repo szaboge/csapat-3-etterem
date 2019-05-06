@@ -222,6 +222,9 @@ object Endpoints {
         }
         val role: String = json["role"].toString()
         val userID: Int = json["userID"].toString().toInt()
-        DatabaseManager.modifyUserRole(role, userID)
+        var restaurantID: Int = json["restaurantID"].toString().toInt()
+        if ((role == "USER") || (role == "ADMIN") || (role == "GUEST")) restaurantID = 0
+        if (((role == "KITCHEN") || (role == "RIDER")) && restaurantID == 0) throw BadRequestResponse()
+        DatabaseManager.modifyUserRole(role, userID, restaurantID)
     }
 }

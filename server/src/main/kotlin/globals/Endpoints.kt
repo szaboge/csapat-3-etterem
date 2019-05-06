@@ -250,4 +250,26 @@ object Endpoints {
         val price: Int = json["price"].toString().toInt()
         DatabaseManager.addFood(restaurantID, name, price)
     }
+
+    fun deleteFood(ctx: Context){
+        val body = ctx.body()
+        val json = try {
+            Klaxon().parseJsonObject(StringReader(body))
+        } catch (e: Exception) {
+            throw BadRequestResponse()
+        }
+        val foodID: Int = json["foodID"].toString().toInt()
+        DatabaseManager.deleteFood(foodID)
+    }
+
+    fun deleteRestaurant(ctx: Context){
+        val body = ctx.body()
+        val json = try {
+            Klaxon().parseJsonObject(StringReader(body))
+        } catch (e: Exception) {
+            throw BadRequestResponse()
+        }
+        val restaurantID: Int = json["restaurantID"].toString().toInt()
+        DatabaseManager.deleteRestaurant(restaurantID)
+    }
 }

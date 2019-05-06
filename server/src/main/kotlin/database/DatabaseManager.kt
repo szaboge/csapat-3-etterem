@@ -332,6 +332,7 @@ object DatabaseManager {
 
     fun deleteOrder(orderID: Int){
         transaction {
+            addLogger(StdOutSqlLogger) // log SQL query
             OrdersTable.deleteWhere { OrdersTable.orderID eq orderID }
             commit()
         }
@@ -382,6 +383,22 @@ object DatabaseManager {
                 it[FoodsTable.name] = name
                 it[FoodsTable.price] = price
             } get FoodsTable.foodsID ?: throw InternalServerErrorResponse()
+            commit()
+        }
+    }
+
+    fun deleteFood(foodID: Int){
+        transaction {
+            addLogger(StdOutSqlLogger) // log SQL query
+            FoodsTable.deleteWhere { FoodsTable.foodsID eq foodID }
+            commit()
+        }
+    }
+
+    fun deleteRestaurant(restaurantID: Int){
+        transaction {
+            addLogger(StdOutSqlLogger) // log SQL query
+            RestaurantsTable.deleteWhere { RestaurantsTable.restaurantID eq restaurantID }
             commit()
         }
     }

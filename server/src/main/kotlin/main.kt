@@ -59,6 +59,12 @@ fun main() {
             path("order"){
                 post(Endpoints::deleteOrder, roles(ApiRole.ADMIN))
             }
+            path("food"){
+                post(Endpoints::deleteFood, roles(ApiRole.ADMIN))
+            }
+            path("restaurant"){
+                post(Endpoints::deleteRestaurant, roles(ApiRole.ADMIN))
+            }
         }
         path("user"){
             path("all"){

@@ -68,7 +68,7 @@ class KitchenOrdersView : View() {
                     addClass("myorders-accordion-title")
                     div {
                         span(element.orderID.toString() + " ")
-                        span(element.name)
+                        span(element.name + " - " + element.restaurantName)
                     }
                     titleState = span(Enums.Statuses.valueOf(element.status).value())
                 }

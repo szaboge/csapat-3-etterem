@@ -9,6 +9,7 @@
 @import "styles/checkout.css";
 @import "styles/myorders.css";
 @import "styles/riderorders.css";
+@import "styles/modifyusers.css";
 
 @font-face {
     font-family: RobotoRegular;

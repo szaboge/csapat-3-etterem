@@ -436,6 +436,7 @@ object DatabaseManager {
             addLogger(StdOutSqlLogger) // log SQL query
             result.addAll((OrdersTable innerJoin RestaurantsTable)
                 .select{ OrdersTable.orderID eq orderID }
+                .orderBy(OrdersTable.date to SortOrder.DESC)
                 .map {
                 GetOrderModel(
                     it[OrdersTable.orderID],

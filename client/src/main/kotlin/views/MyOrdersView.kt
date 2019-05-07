@@ -67,7 +67,7 @@ class MyOrdersView : View() {
                     addClass("myorders-accordion-title")
                     div {
                         span(element.orderID.toString() + " ")
-                        span(element.name)
+                        span(element.name + " - " + element.restaurantName)
                     }
                     span(Enums.Statuses.valueOf(element.status).value())
                 }

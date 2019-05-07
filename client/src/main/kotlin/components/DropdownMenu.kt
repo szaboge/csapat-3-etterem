@@ -38,7 +38,8 @@ object DropdownMenu {
             addClass("dropdown-wrapper")
             div {
                 addClass("dropdown-collection")
-                appendChild(createMenuItem("package-variant-closed", "AKTÍV RENDELÉSEK",  Routes.KITCHENORDERS))
+                appendChild(createMenuItem("package-variant-closed", Lang.getText("dropdown-myorders"), Routes.MYORDERS))
+                appendChild(createMenuItem("package-variant-closed", "RENDELÉSEK",  Routes.KITCHENORDERS))
                 appendChild(logout())
             }
         }
@@ -49,7 +50,8 @@ object DropdownMenu {
             addClass("dropdown-wrapper")
             div {
                 addClass("dropdown-collection")
-                appendChild(createMenuItem("package-variant-closed", "AKTÍV RENDELÉSEK",  Routes.RIDERORDERS))
+                appendChild(createMenuItem("package-variant-closed", Lang.getText("dropdown-myorders"), Routes.MYORDERS))
+                appendChild(createMenuItem("package-variant-closed", "RENDELÉSEK",  Routes.RIDERORDERS))
                 appendChild(logout())
             }
         }
@@ -60,6 +62,7 @@ object DropdownMenu {
             addClass("dropdown-wrapper")
             div {
                 addClass("dropdown-collection")
+                appendChild(createMenuItem("package-variant-closed", Lang.getText("dropdown-myorders"), Routes.MYORDERS))
                 appendChild(createMenuItem("package-variant-closed", "ÖSSZES RENDELÉS",  Routes.ADMINORDERS))
                 appendChild(logout())
             }

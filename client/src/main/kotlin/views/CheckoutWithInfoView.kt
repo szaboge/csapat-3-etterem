@@ -139,7 +139,7 @@ class CheckoutWithInfoView : View() {
                                 hazszamField = getTextField(this, "Házszám", "street_number", "Szám formátum")
                             }
                             val item2 = div("checkout-chips-container") {
-                                UserService.userInfo?.adresses?.forEachIndexed { index, element ->
+                                UserService.userInfo?.addresses?.forEachIndexed { index, element ->
                                     val chip = createAddress(element, index, "address")
                                     addChips("address", chip)
                                     appendChild(chip)
@@ -292,7 +292,7 @@ class CheckoutWithInfoView : View() {
                     "email" -> email = UserService.userInfo!!.emails[choosed[it.key]!!]
                     "phone" -> phone = UserService.userInfo!!.phones[choosed[it.key]!!]
                     "address" -> {
-                        val obj = UserService.userInfo!!.adresses[choosed[it.key]!!]
+                        val obj = UserService.userInfo!!.addresses[choosed[it.key]!!]
                         zipcode = obj.zipcode.toString()
                         city = obj.city
                         street = obj.street

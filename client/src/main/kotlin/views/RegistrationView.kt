@@ -99,7 +99,7 @@ class RegistrationView: View() {
         submitButton.disabled = valid
     }
 
-    fun submit() {
+    private fun submit() {
         val data = object {
             val name = nameField.value
             val email = emailField.value

@@ -30,7 +30,7 @@ class FoodsView: View() {
             foods = it
             generateFoods()
         }
-        if (UserService.user.role == "USER") {
+        if (UserService.user.role != "UNAUTHORIZED") {
             ApiService.getUserInfo {
                 UserService.userInfo = it
             }
@@ -67,7 +67,7 @@ class FoodsView: View() {
                 button(Lang.getText("foods-checkout")) {
                     addClass("default-button")
                     addEventListener("click", {
-                        if(UserService.user.role == "USER" && UserService.userInfo != null
+                        if(UserService.user.role != "UNAUTHORIZED" && UserService.userInfo != null
                             && UserService.userInfo!!.names.count() > 0) {
                             RouterService.navigate(Routes.CHECKOUTWITHINFO)
                         } else {

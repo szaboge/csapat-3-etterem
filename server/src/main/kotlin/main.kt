@@ -23,7 +23,7 @@ fun main() {
         path("orders") {
             get(Endpoints::getOrders, roles(ApiRole.KITCHEN, ApiRole.RIDER))
             path("myorders") {
-                get(Endpoints::getMyOrders, roles(ApiRole.USER))
+                get(Endpoints::getMyOrders, roles(ApiRole.USER, ApiRole.KITCHEN, ApiRole.RIDER, ApiRole.ADMIN))
             }
             path("modifystate") {
                 post(Endpoints::updateStatus, roles(ApiRole.KITCHEN, ApiRole.RIDER, ApiRole.ADMIN))
@@ -77,7 +77,7 @@ fun main() {
                 get(Endpoints::getUsers, roles(ApiRole.ADMIN))
             }
             path("info"){
-                get(Endpoints::getUserInfo, roles(ApiRole.USER))
+                get(Endpoints::getUserInfo, roles(ApiRole.USER, ApiRole.KITCHEN, ApiRole.RIDER, ApiRole.ADMIN))
             }
             path("modify"){
                 post(Endpoints::modifyUserRole, roles(ApiRole.ADMIN))

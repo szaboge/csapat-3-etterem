@@ -44,7 +44,7 @@ class LoginView : View() {
         }
     }
 
-    fun login() {
+    private fun login() {
         val data = object {
             val email: String = emailField.value
             val password: String = passwordField.value

@@ -10,16 +10,16 @@ import globals.ui.ElementFactory.label
 import globals.ui.ElementFactory.radiobutton
 import globals.ui.ElementFactory.textfield
 import globals.ui.ElementFactory.span
-import globals.ui.ElementFactory.img
 import globals.ui.ElementFactory.input
-import globals.ui.ElementFactory.validate
+import globals.ui.ElementFactory.table
+import globals.ui.ElementFactory.td
+import globals.ui.ElementFactory.tr
 import globals.ui.ElementFactory.validateByClass
 import globals.ui.Lang
-import globals.ui.RouterService
 import globals.ui.Routes
-import models.communication.FoodsCountModel
+import globals.validation.Validators
+import models.communication.AddressesModel
 import org.w3c.dom.*
-import kotlin.browser.document
 import kotlin.dom.addClass
 import kotlin.dom.removeClass
 
@@ -36,10 +36,10 @@ class CheckoutWithInfoView : View() {
     lateinit var card: HTMLInputElement
     lateinit var pay: String
 
-    var phoneToggle = false
-    var nameToggle = false
-    var emailToggle = false
-    var addressToggle = false
+    var items: MutableMap<String, Pair<HTMLDivElement, HTMLDivElement>> = mutableMapOf()
+    var chips: MutableMap<String, MutableList<HTMLElement>> = mutableMapOf()
+    var checks: MutableMap<String, Boolean> = mutableMapOf()
+    var choosed: MutableMap<String, Int> = mutableMapOf()
 
     override fun render() {
         root.div {
@@ -53,19 +53,70 @@ class CheckoutWithInfoView : View() {
             div {
                 addClass("checkout-section")
                 label("Személyes adatok")
-                div {
-                    div {
-                        nevField = getTextField(this, "Név", "name", "Minta János")
-                    }
-                    div {
-                        emailField = getTextField(this, "Email", "email", "minta@minta.hu")
-                    }
+                table {
+                    tr {
+                        addClass("checkout-tr")
+                        td("checkout-td1") {
 
-                    div("checkout-item-container") {
-                        div {
-                            telefonszamField = getTextField(this, "Telefonszám", "phone", "06709999999")
                         }
-                        div {
+                        td("checkout-td-main") {
+                            val item1 = div("checkout-hide") {
+                                nevField = getTextField(this, "Név", "name", "Minta János")
+                            }
+                            val item2 = div("checkout-chips-container") {
+                                UserService.userInfo?.names?.forEachIndexed { index, element ->
+                                    val chip = createChips(element, index, "name")
+                                    addChips("name", chip)
+                                    appendChild(chip)
+                                }
+                            }
+                            items["name"] = Pair(item1, item2)
+                        }
+
+                        td("checkout-td1") {
+                            createCheckbox(this, "name", "Új")
+                        }
+                    }
+                    tr {
+                        td("checkout-td1") {
+
+                        }
+                        td("checkout-td-main") {
+                            val item1 = div("checkout-hide") {
+                                emailField = getTextField(this, "Email", "email", "minta@minta.hu")
+                            }
+                            val item2 = div("checkout-chips-container") {
+                                UserService.userInfo?.emails?.forEachIndexed {index, element ->
+                                    val chip = createChips(element,index, "email")
+                                    addChips("email", chip)
+                                    appendChild(chip)
+                                }
+                            }
+                            items["email"] = Pair(item1, item2)
+                        }
+                        td("checkout-td1") {
+                            createCheckbox(this, "email", "Új")
+                        }
+                    }
+                    tr {
+                        td("checkout-td1") {
+
+                        }
+                        td("checkout-td-main") {
+                            val item1 = div("checkout-hide") {
+                                telefonszamField = getTextField(this, "Telefonszám", "phone", "06709999999")
+                            }
+                            val item2 =  div("checkout-chips-container") {
+
+                                UserService.userInfo?.phones?.forEachIndexed { index, element ->
+                                    val chip = createChips(element, index,"phone")
+                                    addChips("phone", chip)
+                                    appendChild(chip)
+                                }
+                            }
+                            items["phone"] = Pair(item1, item2)
+                        }
+                        td("checkout-td1") {
                             createCheckbox(this, "phone", "Új")
                         }
                     }
@@ -74,21 +125,32 @@ class CheckoutWithInfoView : View() {
             div {
                 addClass("checkout-section")
                 label("Szállítási cím")
-                div {
-                    addClass("checkout-section-items")
-                    irszamField = textfield {
-                        addClass("default-textfield")
-                        placeholder = "Irányítószám"
-                        addEventListener("keyup", {
-                            validateByClass("zipcode", "valid", "invalid")
-                        })
-                    }
-                    telepulesField = textfield {
-                        addClass("default-textfield")
-                        placeholder = "Település"
-                        addEventListener("keyup", {
-                            validateByClass("city", "valid", "invalid")
-                        })
+                table {
+                    tr {
+                        addClass("checkout-tr")
+                        td("checkout-td1") {
+
+                        }
+                        td("checkout-td-main") {
+                            val item1 = div("checkout-hide checkout-normal-container") {
+                                irszamField = getTextField(this, "Irányítószám", "zipcode", "4 darab számjegy")
+                                telepulesField = getTextField(this, "Település", "city", "Magyar abc betűi")
+                                utcaField = getTextField(this, "Utca", "street", "Magyar abc betűi")
+                                hazszamField = getTextField(this, "Házszám", "street_number", "Szám formátum")
+                            }
+                            val item2 = div("checkout-chips-container") {
+                                UserService.userInfo?.adresses?.forEachIndexed { index, element ->
+                                    val chip = createAddress(element, index, "address")
+                                    addChips("address", chip)
+                                    appendChild(chip)
+                                }
+                            }
+                            items["address"] = Pair(item1, item2)
+                        }
+
+                        td("checkout-td1") {
+                            createCheckbox(this, "address", "Új")
+                        }
                     }
                 }
             }
@@ -135,18 +197,63 @@ class CheckoutWithInfoView : View() {
         }
     }
 
+    private fun createAddress(item: AddressesModel,index: Int, type: String): HTMLElement {
+        return with(div()) {
+            addClass("default-chips checkout-address")
+            label(item.zipcode.toString())
+            label(item.city)
+            label(item.street + " " + item.strnumber)
+            addEventListener("click", {
+                chips[type]!!.forEach {
+                    it.removeClass("chips-highlight")
+                }
+                addClass("chips-highlight")
+                choosed[type] = index
+            })
+            this
+        }
+    }
+
+    private fun addChips(text: String, chip: HTMLElement) {
+        if (!chips.containsKey(text)) chips[text] = mutableListOf()
+        chips[text]!!.add(chip)
+    }
+
     fun createCheckbox(root: HTMLElement, name: String, text: String) {
         with(root) {
+            addClass("checkbox-container")
             input("checkbox") {
                 id = name
                 addEventListener("change", {
-
+                    checks[name] = (it.target as HTMLInputElement).checked
+                    toggleDivs(name)
                 })
+                checks[name] = false
             }
             label(text) {
                 setAttribute("for", name)
             }
         }
+    }
+
+    fun createChips(text: String, index: Int, type: String): HTMLButtonElement {
+        return with(button()) {
+            addClass("default-chips")
+            textContent = text
+            addEventListener("click", {
+                chips[type]!!.forEach {
+                    it.removeClass("chips-highlight")
+                }
+                addClass("chips-highlight")
+                choosed[type] = index
+            })
+            this
+        }
+    }
+
+    private fun toggleDivs(name: String) {
+        items[name]!!.first.classList.toggle("checkout-hide")
+        items[name]!!.second.classList.toggle("checkout-hide")
     }
 
     fun getTextField(root: HTMLElement, name: String, validationType: String, tooltipText: String): HTMLInputElement {
@@ -168,24 +275,41 @@ class CheckoutWithInfoView : View() {
     }
 
     fun continue_checkout() {
-        val name: String = nevField.value
-        val email: String = emailField.value
-        val phone: String = telefonszamField.value
-        val zipcode: String = irszamField.value
-        val city: String = telepulesField.value
-        val street: String = utcaField.value
-        val strnumber: String = hazszamField.value
-        val payment: String = if (cash.checked) "cash" else "credit-card"
+        var name: String = nevField.value
+        var email: String = emailField.value
+        var phone: String = telefonszamField.value
+        var zipcode: String = irszamField.value
+        var city: String = telepulesField.value
+        var street: String = utcaField.value
+        var strnumber: String = hazszamField.value
+        var payment: String = if (cash.checked) "cash" else "credit-card"
 
-        if (nevField.validateByClass("name", "valid", "invalid")
-            && emailField.validateByClass("email", "valid", "invalid")
-            && telefonszamField.validateByClass("phone", "valid", "invalid")
-            && irszamField.validateByClass("zipcode", "valid", "invalid")
-            && telepulesField.validateByClass("city", "valid", "invalid")
-            && utcaField.validateByClass("street", "valid", "invalid")
-            && hazszamField.validateByClass("street_number", "valid", "invalid")
-        ) {
-            OrderService.makeOrder(name, email, phone, zipcode, city, street, strnumber, payment)
+        checks.forEach {
+            if (!it.value && !choosed.containsKey(it.key)) return
+            if (!it.value) {
+                when(it.key) {
+                    "name" -> name = UserService.userInfo!!.names[choosed[it.key]!!]
+                    "email" -> email = UserService.userInfo!!.emails[choosed[it.key]!!]
+                    "phone" -> phone = UserService.userInfo!!.phones[choosed[it.key]!!]
+                    "address" -> {
+                        val obj = UserService.userInfo!!.adresses[choosed[it.key]!!]
+                        zipcode = obj.zipcode.toString()
+                        city = obj.city
+                        street = obj.street
+                        strnumber = obj.strnumber
+                    }
+                    else -> console.error("wtf")
+                }
+            }
+        }
+
+        with(Validators) {
+            if (oneCharOrMore(name) && email(email)
+                && phone(phone) && zipcode(zipcode)
+                && oneCharOrMore(city) && oneCharOrMore(street)
+                && streetnumber(strnumber)) {
+                OrderService.makeOrder(name, email, phone, zipcode, city, street, strnumber, payment)
+            }
         }
     }
 

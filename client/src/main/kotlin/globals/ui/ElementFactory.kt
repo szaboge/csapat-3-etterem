@@ -102,8 +102,9 @@ object ElementFactory {
         op.invoke(item)
         return item
     }
-    fun HTMLElement.td(op: HTMLTableCellElement.() -> Unit = {}): HTMLTableCellElement {
+    fun HTMLElement.td(className: String = "",op: HTMLTableCellElement.() -> Unit = {}): HTMLTableCellElement {
         val item = document.createElement("td") as HTMLTableCellElement
+        item.addClass(className)
         this.appendChild(item)
         op.invoke(item)
         return item
@@ -134,4 +135,5 @@ object ElementFactory {
     }
 
     fun div() = document.createElement("div") as HTMLDivElement
+    fun button() = document.createElement("button") as HTMLButtonElement
 }

@@ -109,9 +109,10 @@ object DatabaseManager {
         val result = mutableListOf<GetOrderModel>()
         transaction {
             addLogger(StdOutSqlLogger) // log SQL query
-            result.addAll(OrdersTable.select {
-                OrdersTable.restaurantID eq resID
-            }.map {
+            result.addAll(OrdersTable
+                .select { OrdersTable.restaurantID eq resID }
+                .orderBy(OrdersTable.date to SortOrder.DESC)
+                .map {
                 GetOrderModel(
                     it[OrdersTable.orderID],
                     it[OrdersTable.date].format(),
@@ -357,7 +358,10 @@ object DatabaseManager {
         val result: MutableList<GetOrderModel> = mutableListOf()
         transaction {
             addLogger(StdOutSqlLogger) // log SQL query
-            result.addAll(OrdersTable.selectAll().map {
+            result.addAll(OrdersTable
+                .selectAll()
+                .orderBy(OrdersTable.date to SortOrder.DESC)
+                .map {
                 GetOrderModel(
                     it[OrdersTable.orderID],
                     it[OrdersTable.date].format(),

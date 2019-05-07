@@ -49,7 +49,7 @@ fun main() {
                 post(Endpoints::insertRestaurant, roles(ApiRole.ADMIN))
             }
             path("order") {
-                post(Endpoints::insertOrder, roles(ApiRole.ADMIN))
+                post(Endpoints::insertOrder, roles(ApiRole.ANYONE))
             }
             path("food"){
                 post(Endpoints::addFood, roles(ApiRole.ADMIN))

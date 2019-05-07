@@ -1,0 +1,45 @@
+.users-root {
+    display: flex;
+    justify-content: center;
+}
+
+.users-container {
+    max-width: 1100px;
+    width: 95%;
+    padding-top: 24px;
+}
+
+.users-item-title {
+    margin: 10px 0px;
+    font-size: 20px;
+}
+
+.users-item-container {
+    color: white;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    margin: 6px 0;
+    background-color: #424242;
+    border-radius: 4px;
+    transition: background-color 400ms ease-in;
+    width: 100%;
+}
+
+.users-item-container:hover {
+    background-color: #616161;
+    transition: background-color 200ms ease-in;
+}
+
+.users-item-highlight {
+    box-shadow: 0 0 4px 1px rgba(255, 152, 0, 0.75);
+}
+
+.default-select {
+    background-color: transparent;
+    border: 0;
+    color: white;
+    font-size: 16px;
+}

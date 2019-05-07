@@ -25,7 +25,7 @@ body {
     width: 100vw;
     color: white;
 }
-button, button:active, button:focus, input, input:active, input:focus {
+button, button:active, button:focus, input, input:active, input:focus, select:active, select:focus {
     outline:none;
 }
 

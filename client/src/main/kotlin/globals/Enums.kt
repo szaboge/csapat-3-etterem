@@ -16,4 +16,5 @@ class Enums {
         };
         abstract fun value(): String
     }
+    enum class Roles(public val s: String) { USER ("Felhasználó"), ADMIN("Admin"), KITCHEN("Konyha"), GUEST("Vendég"), RIDER("Futár") }
 }

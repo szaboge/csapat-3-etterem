@@ -110,6 +110,22 @@ object ElementFactory {
         return item
     }
 
+    fun HTMLElement.select(op: HTMLSelectElement.() -> Unit = {}): HTMLSelectElement {
+        val item = document.createElement("select") as HTMLSelectElement
+        this.appendChild(item)
+        op.invoke(item)
+        return item
+    }
+
+    fun HTMLElement.option(text: String, value: String, op: HTMLOptionElement.() -> Unit = {}): HTMLOptionElement {
+        val item = document.createElement("option") as HTMLOptionElement
+        item.textContent = text
+        item.value = value
+        this.appendChild(item)
+        op.invoke(item)
+        return item
+    }
+
     fun HTMLInputElement.validate(type: String): Boolean =
     when(type) {
         "name" -> Validators.oneCharOrMore(this.value)
@@ -136,4 +152,5 @@ object ElementFactory {
 
     fun div() = document.createElement("div") as HTMLDivElement
     fun button() = document.createElement("button") as HTMLButtonElement
+    fun select() = document.createElement("select") as HTMLSelectElement
 }

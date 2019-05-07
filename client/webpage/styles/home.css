@@ -52,12 +52,12 @@ img {
     right: 5%;
     transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
-    background-color: orange;
+    background-color: #ef6c00;
     color: white;
     font-size: 25px;
     padding: 12px 24px;
     border: none;
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: 30px;
     text-align: center;
 }

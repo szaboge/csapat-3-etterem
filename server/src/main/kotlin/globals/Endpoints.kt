@@ -81,7 +81,7 @@ object Endpoints {
         if(userList.count() > 0) {
             val user = userList.last()
             val sessionID = Auth.login(user.userID, ctx)
-            ctx.json(UserByTokenModel(user.userID,user.name!!, user.role, sessionID, user.restaurantID))
+            ctx.json(UserByTokenModel(user.userID, user.name, user.role, sessionID, user.restaurantID))
         } else {
             throw BadRequestResponse()
         }
@@ -230,7 +230,7 @@ object Endpoints {
         val userID: Int = json["userID"].toString().toInt()
         var restaurantID: Int = json["restaurantID"].toString().toInt()
         if ((role == "USER") || (role == "ADMIN") || (role == "GUEST")) restaurantID = 0
-        if (((role == "KITCHEN") || (role == "RIDER")) && restaurantID == 0) throw BadRequestResponse()
+        // if (((role == "KITCHEN") || (role == "RIDER")) && restaurantID == 0) restaurantID = 1
         DatabaseManager.modifyUserRole(role, userID, restaurantID)
     }
 

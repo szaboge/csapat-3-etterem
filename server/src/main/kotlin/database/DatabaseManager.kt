@@ -59,9 +59,9 @@ object DatabaseManager {
     fun insertRestaurant(name: String) {
         transaction {
             addLogger(StdOutSqlLogger) // log SQL query
-            val id = RestaurantsTable.insert {
+            RestaurantsTable.insert {
                 it[RestaurantsTable.name] = name
-            } get RestaurantsTable.restaurantID ?: throw InternalServerErrorResponse()
+            }
             commit()
         }
     }
@@ -158,7 +158,7 @@ object DatabaseManager {
                 .map {
                     UserByTokenModel(
                         it[UsersTable.userID],
-                        it[UsersTable.name]!!,
+                        it[UsersTable.name],
                         it[UsersTable.role],
                         it[SessionsTable.sessionID],
                         it[UsersTable.restaurantID]
@@ -391,11 +391,11 @@ object DatabaseManager {
     fun addFood(restaurantID: Int, name: String, price: Int) {
         transaction {
             addLogger(StdOutSqlLogger) // log SQL query
-            val id = FoodsTable.insert {
+            FoodsTable.insert {
                 it[FoodsTable.restaurantID] = restaurantID
                 it[FoodsTable.name] = name
                 it[FoodsTable.price] = price
-            } get FoodsTable.foodsID ?: throw InternalServerErrorResponse()
+            }
             commit()
         }
     }

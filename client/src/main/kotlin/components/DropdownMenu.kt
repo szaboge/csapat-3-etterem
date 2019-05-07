@@ -65,6 +65,7 @@ object DropdownMenu {
                 appendChild(createMenuItem("package-variant-closed", Lang.getText("dropdown-myorders"), Routes.MYORDERS))
                 appendChild(createMenuItem("package-variant-closed", "ÖSSZES RENDELÉS",  Routes.ADMINORDERS))
                 appendChild(createMenuItem("account-edit", "FELHASZNÁLÓK",  Routes.MODIFYUSERS))
+                appendChild(createMenuItem("silverware-fork-knife", "ÉTTERMEK",  Routes.RESTAURANTSEDIT))
                 appendChild(logout())
             }
         }

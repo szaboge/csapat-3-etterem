@@ -84,6 +84,26 @@ object ApiService {
             callback.invoke(it)
         }
     }
+    fun addFood(obj: Any,callback: (XMLHttpRequest) -> Unit) {
+        HttpClient.post("insert/food", obj) {
+            callback.invoke(it)
+        }
+    }
+    fun removeFood(obj: Any,callback: (XMLHttpRequest) -> Unit) {
+        HttpClient.post("delete/food", obj) {
+            callback.invoke(it)
+        }
+    }
+    fun removeRestaurant(obj: Any,callback: (XMLHttpRequest) -> Unit) {
+        HttpClient.post("delete/restaurant", obj) {
+            callback.invoke(it)
+        }
+    }
+    fun addRestaurant(obj: Any,callback: (XMLHttpRequest) -> Unit) {
+        HttpClient.post("insert/restaurant", obj) {
+            callback.invoke(it)
+        }
+    }
     fun register(obj: Any,callback: (XMLHttpRequest) -> Unit) {
         HttpClient.post("register", obj) {
             callback.invoke(it)

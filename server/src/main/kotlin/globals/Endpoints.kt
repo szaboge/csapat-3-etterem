@@ -76,9 +76,9 @@ object Endpoints {
         val username: String = json["email"].toString()
         val password: String = json["password"].toString()
 
-        val userList = DatabaseManager.getLoginUser(username,Utils.createPassword(password))
+        val userList = DatabaseManager.getLoginUser(username, Utils.createPassword(password))
 
-        if(userList.count() > 0) {
+        if (userList.count() > 0) {
             val user = userList.last()
             val sessionID = Auth.login(user.userID, ctx)
             ctx.json(UserByTokenModel(user.userID, user.name, user.role, sessionID, user.restaurantID))
@@ -98,7 +98,7 @@ object Endpoints {
         DatabaseManager.insertRestaurant(name)
     }
 
-    fun insertOrder(ctx: Context){
+    fun insertOrder(ctx: Context) {
         val userID: Int
         val body = ctx.body()
         val myOrderModel: MakeOrderModel?
@@ -107,7 +107,7 @@ object Endpoints {
         try {
             val json = Klaxon().parseJsonObject(StringReader(body))
 
-            when(json.keys.contains("name") && json.keys.contains("email")
+            when (json.keys.contains("name") && json.keys.contains("email")
                     && json.keys.contains("phone") && json.keys.contains("zipcode") && json.keys.contains("city")
                     && json.keys.contains("street") && json.keys.contains("strnumber") && json.keys.contains("payment")) {
                 false -> throw BadRequestResponse()
@@ -123,7 +123,7 @@ object Endpoints {
             val validPayment = Utils.isPaymentValid(json["payment"].toString())
 
             when (validName && validEmail && validPhone && validZipcode && validCity && validStreet
-                && validStrnumber && validPayment) {
+                    && validStrnumber && validPayment) {
                 false -> throw BadRequestResponse()
             }
             val user = getUser(ctx) ?: DatabaseManager.insertGuest(json["name"].toString(), json["email"].toString())
@@ -132,30 +132,36 @@ object Endpoints {
             array.forEach { food ->
                 if (food is JsonObject) {
                     println(food.toJsonString(true))
-                    myFoodsList.add(FoodsCountModel(food["foodID"].toString().toInt(), food["restaurantID"].toString().toInt(),
-                        food["name"].toString(), food["count"].toString().toInt(),
-                        pricesOfFoods[food["foodID"].toString().toInt()] ?: throw BadRequestResponse()))
+                    myFoodsList.add(
+                        FoodsCountModel(
+                            food["foodID"].toString().toInt(), food["restaurantID"].toString().toInt(),
+                            food["name"].toString(), food["count"].toString().toInt(),
+                            pricesOfFoods[food["foodID"].toString().toInt()] ?: throw BadRequestResponse()
+                        )
+                    )
                 }
             }
-            myOrderModel = MakeOrderModel(json["name"].toString(),
-                                        json["email"].toString(),
-                                        json["phone"].toString(),
-                                        json["zipcode"].toString().toInt(),
-                                        json["city"].toString(),
-                                        json["street"].toString(),
-                                        json["strnumber"].toString(),
-                                        json["payment"].toString(),
-                                        userID,
-                                        "ARRIVING",
-                                        myFoodsList)
+            myOrderModel = MakeOrderModel(
+                json["name"].toString(),
+                json["email"].toString(),
+                json["phone"].toString(),
+                json["zipcode"].toString().toInt(),
+                json["city"].toString(),
+                json["street"].toString(),
+                json["strnumber"].toString(),
+                json["payment"].toString(),
+                userID,
+                "ARRIVING",
+                myFoodsList
+            )
             DatabaseManager.insertOrder(myOrderModel)
-        }catch (e: RuntimeException) {
+        } catch (e: RuntimeException) {
             e.printStackTrace()
             throw BadRequestResponse()
         }
     }
 
-    fun register(ctx: Context){
+    fun register(ctx: Context) {
         val body = ctx.body()
         val json = try {
             Klaxon().parseJsonObject(StringReader(body))
@@ -170,13 +176,13 @@ object Endpoints {
         val validEmail: Boolean = Utils.isEmailValid(email)
         val validPsw: Boolean = Utils.isPasswordValid(password)
 
-        when(name.isNotEmpty() && name.length < 41 && validEmail && email.length < 41 && validPsw) {
+        when (name.isNotEmpty() && name.length < 41 && validEmail && email.length < 41 && validPsw) {
             true -> DatabaseManager.makeUser(name, email, Utils.createPassword(password))
             else -> throw BadRequestResponse()
         }
     }
 
-    fun updateStatus(ctx: Context){
+    fun updateStatus(ctx: Context) {
         val body = ctx.body()
         val json = try {
             Klaxon().parseJsonObject(StringReader(body))
@@ -188,7 +194,7 @@ object Endpoints {
         DatabaseManager.updateStatus(status, orderID)
     }
 
-    fun deleteUser(ctx: Context){
+    fun deleteUser(ctx: Context) {
         val body = ctx.body()
         val json = try {
             Klaxon().parseJsonObject(StringReader(body))
@@ -199,16 +205,16 @@ object Endpoints {
         DatabaseManager.deleteUser(userID)
     }
 
-    fun getUserInfo(ctx: Context){
+    fun getUserInfo(ctx: Context) {
         val user = getUser(ctx)!!
         ctx.json(DatabaseManager.getUserInfo(user.userID))
     }
 
-    fun getUsers(ctx: Context){
+    fun getUsers(ctx: Context) {
         ctx.json(DatabaseManager.getUsers())
     }
 
-    fun deleteOrder(ctx: Context){
+    fun deleteOrder(ctx: Context) {
         val body = ctx.body()
         val json = try {
             Klaxon().parseJsonObject(StringReader(body))
@@ -219,7 +225,7 @@ object Endpoints {
         DatabaseManager.deleteOrder(orderID)
     }
 
-    fun modifyUserRole(ctx: Context){
+    fun modifyUserRole(ctx: Context) {
         val body = ctx.body()
         val json = try {
             Klaxon().parseJsonObject(StringReader(body))
@@ -234,11 +240,11 @@ object Endpoints {
         DatabaseManager.modifyUserRole(role, userID, restaurantID)
     }
 
-    fun getAllOrders(ctx: Context){
+    fun getAllOrders(ctx: Context) {
         ctx.json(DatabaseManager.getAllOrders())
     }
 
-    fun addFood(ctx: Context){
+    fun addFood(ctx: Context) {
         val body = ctx.body()
         val json = try {
             Klaxon().parseJsonObject(StringReader(body))
@@ -251,7 +257,7 @@ object Endpoints {
         DatabaseManager.addFood(restaurantID, name, price)
     }
 
-    fun deleteFood(ctx: Context){
+    fun deleteFood(ctx: Context) {
         val body = ctx.body()
         val json = try {
             Klaxon().parseJsonObject(StringReader(body))
@@ -262,7 +268,7 @@ object Endpoints {
         DatabaseManager.deleteFood(foodID)
     }
 
-    fun deleteRestaurant(ctx: Context){
+    fun deleteRestaurant(ctx: Context) {
         val body = ctx.body()
         val json = try {
             Klaxon().parseJsonObject(StringReader(body))
@@ -273,7 +279,7 @@ object Endpoints {
         DatabaseManager.deleteRestaurant(restaurantID)
     }
 
-    fun modifyDetails(ctx: Context){
+    fun modifyDetails(ctx: Context) {
         val body = ctx.body()
         val json = try {
             Klaxon().parseJsonObject(StringReader(body))
@@ -289,7 +295,7 @@ object Endpoints {
         DatabaseManager.modifyDetails(orderID, phone, zipcode, city, street, strnumber)
     }
 
-    fun getOneOrder(ctx: Context){
+    fun getOneOrder(ctx: Context) {
         val body = ctx.body()
         val json = try {
             Klaxon().parseJsonObject(StringReader(body))

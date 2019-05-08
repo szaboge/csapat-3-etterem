@@ -67,6 +67,7 @@ class FoodsView: View() {
                 button(Lang.getText("foods-checkout")) {
                     addClass("default-button")
                     addEventListener("click", {
+                        if (Basket.basket.size == 0) return@addEventListener
                         if(UserService.user.role != "UNAUTHORIZED" && UserService.userInfo != null
                             && UserService.userInfo!!.names.count() > 0) {
                             RouterService.navigate(Routes.CHECKOUTWITHINFO)
@@ -122,9 +123,7 @@ class FoodsView: View() {
                             }
                         })
                     }
-                    label("${it.third} x ")
-                    label("${it.second.price} Ft = ")
-                    label("${it.second.price * it.third} Ft")
+                    label("${it.third} x ${it.second.price} Ft = ${it.second.price * it.third} Ft")
                 }
             }
             sum += it.second.price * it.third

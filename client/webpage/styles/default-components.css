@@ -118,3 +118,12 @@
 .valid {
     transition: box-shadow 200ms ease-in-out, border 200ms ease-in-out;
 }
+
+.fadein {
+    animation: ease-in-out fadein 300ms forwards;
+}
+
+@keyframes fadein {
+    from {opacity: 0}
+    to {opacity: 1}
+}

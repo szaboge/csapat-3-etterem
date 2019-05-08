@@ -59,7 +59,7 @@ object ElementFactory {
         return item
     }
 
-    fun HTMLElement.textfield(type: String = "", op: HTMLInputElement.() -> Unit = {}): HTMLInputElement {
+    fun HTMLElement.textfield(type: String = "text", op: HTMLInputElement.() -> Unit = {}): HTMLInputElement {
         val item = document.createElement("input") as HTMLInputElement
         item.type = type
         this.appendChild(item)

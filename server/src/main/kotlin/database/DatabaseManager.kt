@@ -205,6 +205,7 @@ object DatabaseManager {
                 it[UsersTable.email] = email
                 it[UsersTable.password] = password
                 it[UsersTable.role] = "USER"
+                it[UsersTable.restaurantID] = 0
             }
         }
     }

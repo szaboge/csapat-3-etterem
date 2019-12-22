@@ -56,7 +56,7 @@ class RegistrationView: View() {
                         })
                         maxLength = 40
                     }
-                    passwordField = textfield {
+                    passwordField = textfield("password") {
                         addClass("default-textfield")
                         placeholder = Lang.getText("password")
                         addEventListener("keyup", {
@@ -65,7 +65,7 @@ class RegistrationView: View() {
                         })
                         maxLength = 40
                     }
-                    repasswordField = textfield {
+                    repasswordField = textfield("password") {
                         addClass("default-textfield with-hint")
                         placeholder = Lang.getText("repassword")
                         addEventListener("keyup", {
